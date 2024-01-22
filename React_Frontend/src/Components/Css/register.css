@@ -1,0 +1,32 @@
+.div{
+    width: 100%;
+    height: 100px;
+    background-color: rgb(192, 226, 43);
+}
+.input{
+    width: 250px;
+}
+.row{
+    margin-top: 40px;
+}
+/* .logcard{
+    height: 530px;
+    overflow: auto;   
+    border: none;
+} */
+.logcard .ant-card-body {
+    overflow: auto;
+    height: 500px;
+  }
+  
+.logcard .ant-card-head {
+    position: sticky;
+    top: 0;
+    background-color: rgb(255, 255, 255);
+    z-index: 1;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  

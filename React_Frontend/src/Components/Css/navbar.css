@@ -1,0 +1,19 @@
+.menu{
+    display: flex;
+}
+.menuitem1{
+    font-weight: bold;
+    font-size: 17px;
+    color: rgb(0, 191, 255);
+}
+.menuitem2{
+    justify-content: space-around;
+}
+.navbut,.navbutsub{
+    color: rgb(229, 229, 238);
+    font-weight: bold;
+    font-size: 14px;
+}
+.navbut:hover{
+    color: rgb(57, 143, 249);
+}

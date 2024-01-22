@@ -1,0 +1,30 @@
+/* html, */
+body {
+  background: linear-gradient(145deg, rgb(195, 240, 200), rgb(80, 155, 245));
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  margin: 0;
+}
+.footer {
+  background-color: rgb(27, 27, 44);
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: azure;
+}
+.content {
+  width: 100%;
+  background: linear-gradient(145deg, rgb(195, 240, 200), rgb(80, 155, 245));
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 90vh;
+}
+.header{
+    position: sticky;
+    top: 0;
+}

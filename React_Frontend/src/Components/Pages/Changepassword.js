@@ -1,0 +1,166 @@
+import { Button, Card, Col, Form, Input, Row, message } from "antd";
+import React, { useEffect, useState } from "react";
+import "../Css/changepass.css";
+import { UnlockOutlined } from "@ant-design/icons";
+import CryptoJS from "crypto-js";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+function Changepassword() {
+  const [data, setData] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const sessiondatas = sessionStorage.getItem("userdata");
+    const datas = sessiondatas ? JSON.parse(sessiondatas) : {};
+    console.log("session pass:",datas)
+    // const passphrase = "Praveen12GmqG7Io";
+    // const bytes = CryptoJS.AES.decrypt(datas.password, passphrase);
+    // const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    // console.log("old pass:",decrypted);
+    setData(datas);
+  }, []);
+
+  const onfinish = async (value) => {
+    console.log("change pass:", data);
+    console.log("change value:", value);
+    const passphrase = "Praveen12GmqG7Io";
+    const encrypted = CryptoJS.AES.encrypt(
+      value["password"],
+      passphrase
+    ).toString();
+    value["password"] = encrypted;
+    console.log(value["password"])
+    const send = { password: value.password };
+    if (value.opassword == data.password) {
+      await axios
+        .put(`http://localhost:8080/user/updatepass/${data.id}`, send)
+        .then((res) => {
+          console.log("put pass succ:", res);
+          message.open({
+            type:"success",
+            content:"Password changed",
+            duration:2
+          });
+          const cdata = res.data;
+          const getdata = ({...data,password:cdata.password});
+          sessionStorage.setItem("userdata",JSON.stringify(getdata))
+          navigate("/dashboard");
+        })
+        .catch((err) => console.log("put pass fail:", err));
+    } else {
+      message.open({
+        type: "error",
+        content: "Wrong Password",
+        duration:2
+      });
+    }
+  };
+
+  return (
+    <>
+      <Row className="pass-row">
+        <Col span={9} offset={8}>
+          <Card
+            title={
+              <h3 style={{ textAlign: "center" }}>
+                Change Password <UnlockOutlined />
+              </h3>
+            }
+            className="pass-logcards"
+          >
+            <Row>
+              <Col span={19} offset={2}>
+                <Form
+                  autoComplete="off"
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    flexDirection: "column",
+                  }}
+                  onFinish={onfinish}
+                >
+                  <Form.Item
+                    name={"opassword"}
+                    label={"Old Password"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please enter password",
+                        pattern:
+                          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
+                      },
+                    ]}
+                    initialValue={""}
+                    hasFeedback
+                  >
+                    <Input
+                      name="password"
+                      placeholder="Enter the old password"
+                      className="edit-input"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"password"}
+                    label={"New Password"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please enter password",
+                        pattern:
+                          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input.Password
+                      name="password"
+                      placeholder="Enter the new password"
+                      className="edit-input"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"cpassword"}
+                    label={"Confirm new Password"}
+                    dependencies={["password"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please enter password",
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error(`Password Does't match!`)
+                          );
+                        },
+                      }),
+                    ]}
+                    hasFeedback
+                  >
+                    <Input.Password
+                      name="password"
+                      placeholder="Enter the confirm password"
+                      className="edit-input"
+                    />
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
+}
+
+export default Changepassword;
