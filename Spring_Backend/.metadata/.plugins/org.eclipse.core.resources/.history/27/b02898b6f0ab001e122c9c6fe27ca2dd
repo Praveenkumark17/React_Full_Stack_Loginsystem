@@ -1,0 +1,32 @@
+package com.form.log_form.ServiceImp;
+
+import com.form.log_form.Model.PasswordData;
+import com.form.log_form.Model.User;
+import com.form.log_form.Repository.UserRepository;
+import com.form.log_form.Service.Userservice;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class UserserviceImp implements Userservice {
+
+    @Autowired
+    public UserRepository reposity;
+    @Override
+    public List<User> getUser(){
+        return reposity.findAll();
+    }
+    @Override
+    public User saveUser(User newuser){
+        return reposity.save(newuser);
+    }
+
+    @Override
+    public User passdata(PasswordData data){
+        User userdata = reposity.findByUserid(data.getUserid());
+        System.out.println(data.getUserid());
+        return userdata;
+    }
+}
