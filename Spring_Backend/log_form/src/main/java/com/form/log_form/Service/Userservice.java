@@ -5,7 +5,6 @@ import com.form.log_form.Model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface Userservice {
@@ -20,4 +19,6 @@ public interface Userservice {
     public User updatepass(Long id, User user);
 
     public User getId(Long id);
+
+    public String deleteUser(Long id);
 }

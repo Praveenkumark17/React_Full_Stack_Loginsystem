@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserserviceImp implements Userservice {
@@ -69,6 +68,15 @@ public class UserserviceImp implements Userservice {
     @Override
     public User getId(@PathVariable Long id){
         return  reposity.findById(id).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
+    }
+
+    @Override
+    public String deleteUser(@PathVariable Long id){
+        if(!reposity.existsById(id)){
+            throw new Usernotfoundexception("User id not found: "+ id);
+        }
+         reposity.deleteById(id);
+        return "User id: "+ id +" has been deleted";
     }
 
 }
