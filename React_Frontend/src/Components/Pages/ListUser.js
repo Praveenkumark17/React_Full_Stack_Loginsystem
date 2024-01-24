@@ -1,4 +1,4 @@
-import { Button, Col, Modal, Row, Space, Table } from "antd";
+import { Button, Col, Modal, QRCode, Row, Space, Table } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { HashLoader } from "react-spinners";
@@ -8,11 +8,24 @@ import { useNavigate } from "react-router-dom";
 function ListUser() {
   const [user, setUser] = useState();
 
+  const [sdata, setSdata] = useState();
+
   const [selectuser, Setselectuser] = useState();
+
+  const [qrvalues, SetQrvalues] = useState();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
+
+  const sessiondata = sessionStorage.getItem("userdata");
+
+  useEffect(() => {
+    const datas = sessiondata ? JSON.parse(sessiondata) : {};
+    setSdata(datas);
+    console.log(datas);
+    console.log("session admin:", datas.authorities.admin);
+  }, []);
 
   const onView = async (id) => {
     await axios
@@ -23,6 +36,13 @@ function ListUser() {
 
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    const qrvalue = { ...selectuser };
+    delete qrvalue["password"];
+    delete qrvalue["authorities"];
+    SetQrvalues(qrvalue);
+  }, [selectuser]);
 
   const onOk = () => {
     setIsModalOpen(false);
@@ -41,29 +61,29 @@ function ListUser() {
 
   useEffect(() => {
     const getUserList = async () => {
-      await axios.get("http://localhost:8080/user/getuser").then((res) => {
-        console.log("get U List:", res.data);
-        const data = res.data;
-        const final = data.map((user, index) => ({
-          ...user,
-          but: (
-            <div style={{ textAlign: "center" }}>
-              <Space size={"middle"}>
-                <Button type="primary" onClick={() => onView(user.id)}>
-                  View
-                </Button>
-                <Button type="primary" onClick={() => onRemove(user.id)} danger>
-                  Remove
-                </Button>
-              </Space>
-            </div>
-          ),
-        }));
-        setUser(final);
-      });
+      const list = await axios.get("http://localhost:8080/user/getuser");
+      console.log("get U List:", list.data);
+      const data = list.data;
+      const filter = data.filter((user) => user?.id !== sdata?.id);
+      const final = filter.map((user, index) => ({
+        ...user,
+        but: (
+          <div style={{ textAlign: "center" }}>
+            <Space size={"middle"}>
+              <Button type="primary" onClick={() => onView(user.id)}>
+                View
+              </Button>
+              <Button type="primary" onClick={() => onRemove(user.id)} danger>
+                Remove
+              </Button>
+            </Space>
+          </div>
+        ),
+      }));
+      setUser(final);
     };
     getUserList();
-  }, []);
+  }, [user]);
 
   const columns = [
     {
@@ -95,7 +115,6 @@ function ListUser() {
       title: () => <div style={{ textAlign: "center" }}>Action</div>,
       dataIndex: "but",
       key: "action",
-      // render: ()=>action
     },
   ];
 
@@ -103,7 +122,7 @@ function ListUser() {
     return (
       <>
         <Modal title="User Page" open={isModalOpen} onOk={onOk} onCancel={onOk}>
-          <h2>{selectuser?.firstname}</h2>
+          <QRCode value={JSON.stringify(qrvalues)} />
         </Modal>
         <Row className="list-row">
           <Col span={14} offset={5}>
