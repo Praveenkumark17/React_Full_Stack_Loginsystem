@@ -115,3 +115,36 @@ Add additional notes about how to deploy this on a live system.
 - Spring Boot - The web framework used
 - Maven - Dependency Management
 
+## UI for Frontend
+
+SignUp Page..
+
+![Screenshot (123)](https://github.com/Praveenkumark17/React_Full_Stack_Loginsystem/assets/95238197/4d3a1b60-d957-4ca3-a5bb-1cf647f681e4)
+
+SignIn Page..
+
+![Screenshot (124)](https://github.com/Praveenkumark17/React_Full_Stack_Loginsystem/assets/95238197/8cdcf4ab-ae82-4601-822f-d7232e6654d9)
+
+Dashboard Page.. (Admin can only view Get User List(Option..))
+
+![Screenshot (125)](https://github.com/Praveenkumark17/React_Full_Stack_Loginsystem/assets/95238197/1093f603-cc9d-44ee-b3a6-57d4ee12fb0d)
+
+View Profile..
+
+![Screenshot (127)](https://github.com/Praveenkumark17/React_Full_Stack_Loginsystem/assets/95238197/c0a89344-779a-434b-885f-e7f378c0cab9)
+
+Edit Profile..
+
+![Screenshot (128)](https://github.com/Praveenkumark17/React_Full_Stack_Loginsystem/assets/95238197/29d36f8d-0c15-4073-af03-b82977ba9616)
+
+Change Password..
+
+![Screenshot (131)](https://github.com/Praveenkumark17/React_Full_Stack_Loginsystem/assets/95238197/472951dd-f548-4009-8ee0-1fd1bb2dcb31)
+
+List User..
+
+![Screenshot (129)](https://github.com/Praveenkumark17/React_Full_Stack_Loginsystem/assets/95238197/11f946bf-96fe-47e3-b4fa-4028bcbaea15)
+
+View User Details..
+
+![Screenshot (130)](https://github.com/Praveenkumark17/React_Full_Stack_Loginsystem/assets/95238197/eeb4fba7-4461-43ea-9d31-2a97fc6d31b4)
