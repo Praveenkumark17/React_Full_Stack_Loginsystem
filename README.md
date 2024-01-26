@@ -1,6 +1,14 @@
-# Getting Started with Create React App
+# Getting Started with Create React App with Spring Boot
+
+## React with Spring (Login System With Admin Control)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+This project is a comprehensive application developed using React with Ant Design for the frontend and Spring Boot for the backend. The application is designed with a dual interface, catering to both administrators and users.
+
+Administrators have the privilege to view the user list and revoke access, with additional functionalities to be introduced soon. Users, on the other hand, have the ability to sign up and sign in, leading them to a personalized dashboard.
+
+Within the dashboard, users can perform various tasks such as editing their profile and changing their password. This application is designed to provide a seamless and secure user experience, ensuring that all interactions are intuitive and user-friendly. Future updates will introduce more features to enhance the overall functionality of the application. Stay tuned!😊
 
 ## Available Scripts
 
@@ -68,3 +76,42 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Spring Backend Folder as a connecting Backend for (React Frontend)
+
+This is a simple Spring Boot application.
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+What things you need to install the software and how to install them:
+
+- Java 20
+- Maven
+- Your favorite IDE (Eclipse, IntelliJ, etc.)
+
+### Installing
+
+A step by step series of examples that tell you how to get a development environment running:
+
+1. Clone the repository: `git clone https://github.com/yourusername/your-repo.git`
+2. Navigate to the directory: `cd your-repo`
+3. Build the project: `mvn clean install`
+4. Run the application: `mvn spring-boot:run`
+
+## Running the tests
+
+Explain how to run the automated tests for this system.
+
+## Deployment
+
+Add additional notes about how to deploy this on a live system.
+
+## Built With
+
+- Spring Boot - The web framework used
+- Maven - Dependency Management
+
