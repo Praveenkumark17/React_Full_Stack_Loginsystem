@@ -25,6 +25,8 @@ public class User {
     private String email;
     private String password;
 
+    private String imagepath;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "authority_id", referencedColumnName = "id")
     @JsonManagedReference
@@ -118,5 +120,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImagepath() {
+        return imagepath;
+    }
+
+    public void setImagepath(String imagepath) {
+        this.imagepath = imagepath;
     }
 }

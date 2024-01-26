@@ -1,10 +1,13 @@
 package com.form.log_form.Contoller;
 
+import com.form.log_form.Model.Image;
 import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,9 +23,9 @@ public class UserController {
     public List<User> getUser(){
         return service.getUser();
     }
-    @PostMapping("/postuser")
-    public  User saveUser(@RequestBody User newuser){
-        return service.saveUser(newuser);
+    @PostMapping(path = "/postuser", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public  User saveUser(@RequestPart("user") User newuser,@RequestPart("file") MultipartFile file){
+        return service.saveUser(newuser,file);
     }
     @PostMapping("/text")
     public User passdata(@RequestBody PasswordData data){
@@ -37,6 +40,7 @@ public class UserController {
     public User updatepass(@PathVariable Long id,@RequestBody User user){
         return  service.updatepass(id,user);
     }
+
     @GetMapping("/getuserid/{id}")
     public User getbyid(@PathVariable Long id){
         return service.getId(id);
@@ -46,4 +50,19 @@ public class UserController {
     public String deleteuser(@PathVariable Long id){
         return service.deleteUser(id);
     }
+
+//    @PostMapping("/uploads")
+//    public Image upload(@RequestParam("file") MultipartFile file){
+//        return  service.Upload(file);
+//    }
+//
+//    @GetMapping("/getimage")
+//    public List<Image> getimage(){
+//        return service.GetImage();
+//    }
+//
+//    @GetMapping("/getimageid/{id}")
+//    public Image getimgid(@PathVariable Long id){
+//        return  service.GetImgId(id);
+//    }
 }

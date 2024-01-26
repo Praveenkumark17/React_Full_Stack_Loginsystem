@@ -14,6 +14,7 @@ import Dashboard from "./Components/Pages/Dashboard";
 import Editprofile from "./Components/Pages/Editprofile";
 import Changepassword from "./Components/Pages/Changepassword";
 import ListUser from "./Components/Pages/ListUser";
+import Upimages from "./Components/Pages/Upimages";
 
 function Apps() {
   let routes = useRoutes([
@@ -28,6 +29,7 @@ function Apps() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Registration />} />
+              <Route path="/i" element={<Upimages />} />
             </Routes>
           </Content>
           <Footer className="footer">
@@ -38,6 +40,7 @@ function Apps() {
       children: [
         { path: "/", element: <Home /> },
         { path: "register", element: <Registration /> },
+        { path: "i", element: <Upimages /> },
       ],
     },
     {

@@ -39,4 +39,5 @@ public class Authorities {
     public void setAdmin(Integer admin) {
         this.admin = admin;
     }
+
 }

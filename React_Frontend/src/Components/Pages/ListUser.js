@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 function ListUser() {
   const [user, setUser] = useState();
 
-  const [sdata, setSdata] = useState();
+  const [getusers, Setgetusers] = useState();
 
   const [selectuser, Setselectuser] = useState();
 
@@ -16,16 +16,11 @@ function ListUser() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [imgurl, Setimgurl] = useState();
+
+  const [trigger, Settrigger] = useState(false);
+
   const navigate = useNavigate();
-
-  const sessiondata = sessionStorage.getItem("userdata");
-
-  useEffect(() => {
-    const datas = sessiondata ? JSON.parse(sessiondata) : {};
-    setSdata(datas);
-    console.log(datas);
-    console.log("session admin:", datas.authorities.admin);
-  }, []);
 
   const onView = async (id) => {
     await axios
@@ -40,6 +35,7 @@ function ListUser() {
   useEffect(() => {
     const qrvalue = { ...selectuser };
     delete qrvalue["password"];
+    delete qrvalue["id"];
     delete qrvalue["authorities"];
     SetQrvalues(qrvalue);
   }, [selectuser]);
@@ -53,37 +49,51 @@ function ListUser() {
       .delete(`http://localhost:8080/user/deleteuser/${id}`)
       .then((res) => {
         console.log(res.data);
-        const updatedUsers = user.filter((user) => user.id !== id);
-        setUser(updatedUsers);
+        Settrigger(true);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    const getUserList = async () => {
-      const list = await axios.get("http://localhost:8080/user/getuser");
-      console.log("get U List:", list.data);
-      const data = list.data;
-      const filter = data.filter((user) => user?.id !== sdata?.id);
-      const final = filter.map((user, index) => ({
-        ...user,
-        but: (
-          <div style={{ textAlign: "center" }}>
-            <Space size={"middle"}>
-              <Button type="primary" onClick={() => onView(user.id)}>
-                View
-              </Button>
-              <Button type="primary" onClick={() => onRemove(user.id)} danger>
-                Remove
-              </Button>
-            </Space>
-          </div>
-        ),
-      }));
-      setUser(final);
+    const updateuser = async () => {
+      await axios
+        .get("http://localhost:8080/user/getuser")
+        .then((res) => {
+          const result = res.data;
+          const users = result.filter((user) => user.authorities.admin !== 1);
+          Setgetusers(users);
+          console.log("final list:", users);
+        })
+        .catch((err) => console.log(err.data));
     };
-    getUserList();
-  }, [user]);
+    updateuser();
+  }, [trigger]);
+
+  useEffect(() => {
+    if (selectuser) {
+      const images = require(`../../Images/${selectuser?.imagepath}`);
+      Setimgurl(images);
+    }
+  }, [selectuser]);
+
+  useEffect(() => {
+    const final = getusers?.map((user, index) => ({
+      ...user,
+      but: (
+        <div style={{ textAlign: "center" }}>
+          <Space size={"middle"}>
+            <Button type="primary" onClick={() => onView(user.id)}>
+              View
+            </Button>
+            <Button type="primary" onClick={() => onRemove(user.id)} danger>
+              Remove
+            </Button>
+          </Space>
+        </div>
+      ),
+    }));
+    setUser(final);
+  }, [getusers]);
 
   const columns = [
     {
@@ -121,8 +131,14 @@ function ListUser() {
   if (user) {
     return (
       <>
-        <Modal title="User Page" open={isModalOpen} onOk={onOk} onCancel={onOk}>
-          <QRCode value={JSON.stringify(qrvalues)} />
+        <Modal
+          title={selectuser?.firstname + " " + selectuser?.lastname}
+          open={isModalOpen}
+          onOk={onOk}
+          onCancel={onOk}
+        >
+            <QRCode value={JSON.stringify(qrvalues)} />
+            <img src={imgurl} height={100}></img>
         </Modal>
         <Row className="list-row">
           <Col span={14} offset={5}>

@@ -1,15 +1,22 @@
 package com.form.log_form.ServiceImp;
 
 import com.form.log_form.Exception.Usernotfoundexception;
+//import com.form.log_form.Model.Image;
+import com.form.log_form.Model.Image;
 import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
+import com.form.log_form.Repository.ImageRepo;
 import com.form.log_form.Repository.UserRepository;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -17,13 +24,34 @@ public class UserserviceImp implements Userservice {
 
     @Autowired
     public UserRepository reposity;
+
+    @Autowired
+    public ImageRepo imagerepo;
+
     @Override
     public List<User> getUser(){
         return reposity.findAll();
     }
     @Override
-    public User saveUser(User newuser){
-        return reposity.save(newuser);
+    public User saveUser(User newuser,MultipartFile file){
+
+        try {
+            // Save the file locally
+            byte[] bytes = file.getBytes();
+            String File = file.getOriginalFilename();
+            Path path = Paths.get("../React_Frontend/src/Images/" + File);
+            Files.createDirectories(path.getParent()); //folder created When folder doesn't exist
+            Files.write(path, bytes);
+
+            // Save the file path to the database
+            newuser.setImagepath(File);
+            return reposity.save(newuser);
+        } catch (Exception e) {
+//            e.printStackTrace();
+            System.out.println(e);
+            System.out.println("Something wrong for upload file 😢😢");
+        }
+        return null;
     }
 
     @Override
@@ -79,4 +107,36 @@ public class UserserviceImp implements Userservice {
         return "User id: "+ id +" has been deleted";
     }
 
+    @Override
+    public Image Upload(MultipartFile file){
+        try {
+            // Save the file locally
+            byte[] bytes = file.getBytes();
+            String File = file.getOriginalFilename();
+            Path path = Paths.get("../React_Frontend/src/Images/" + File);
+            Files.createDirectories(path.getParent()); //folder created When folder doesn't exist
+            Files.write(path, bytes);
+
+            // Save the file path to the database
+            Image image = new Image();
+            image.setImagepath(File);
+            imagerepo.save(image);
+            return image;
+        } catch (Exception e) {
+//            e.printStackTrace();
+            System.out.println(e);
+            System.out.println("Something wrong for upload file 😢😢");
+        }
+        return null;
+    }
+
+    @Override
+    public List<Image> GetImage(){
+        return imagerepo.findAll();
+    }
+
+    @Override
+    public Image GetImgId(Long id){
+        return imagerepo.findById(id).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
+    }
 }

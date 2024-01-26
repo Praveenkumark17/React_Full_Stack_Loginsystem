@@ -10,6 +10,7 @@ import {
   QRCode,
   Row,
   Select,
+  Upload,
   message,
 } from "antd";
 import React, { useEffect, useState } from "react";
@@ -18,6 +19,8 @@ import Card from "antd/es/card/Card";
 import { Option } from "antd/es/mentions";
 import axios from "axios";
 import CryptoJS from "crypto-js";
+import { UploadOutlined } from "@ant-design/icons";
+import { json } from "react-router-dom";
 
 function Registration() {
   const [finaldatas, setfinalDatas] = useState();
@@ -30,8 +33,6 @@ function Registration() {
 
   let userids = user + date;
 
-  const [qrcode, setQrcode] = useState(null);
-
   const [forms] = Form.useForm();
 
   const [check, setCheck] = useState(false);
@@ -39,6 +40,9 @@ function Registration() {
   const [passhash, setPasshash] = useState();
 
   const [getdata, setGetdata] = useState();
+
+  const [fileList, setFileList] = useState([]);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const ondate = (dates) => {
     console.log("date:", String(dates.date()).padStart(2, "0"));
@@ -61,12 +65,6 @@ function Registration() {
   }, [finaldatas]);
 
   useEffect(() => {
-    if (finaldatas) {
-      setQrcode(<QRCode value={JSON.stringify(finaldatas)} />);
-    }
-  }, [finaldatas]);
-
-  useEffect(() => {
     const userdata = async () => {
       await axios
         .get("http://localhost:8080/user/getuser")
@@ -77,6 +75,20 @@ function Registration() {
     };
     userdata();
   }, []);
+
+  const props = {
+    name: "file",
+    onRemove: (file) => {
+      setFileList([]);
+      setImageUrl(null);
+    },
+    beforeUpload: (file) => {
+      setFileList([file]);
+      setImageUrl(URL.createObjectURL(file));
+      return false;
+    },
+    fileList,
+  };
 
   const oncheck = (e) => {
     console.log("check box", e.target.checked);
@@ -103,56 +115,51 @@ function Registration() {
     const useremail = getdata.find((user) => user.email === e.email);
     const usermobile = getdata.find((user) => user.mobile === e.mobile);
     console.log("user:", useremail);
-    if (check) 
-    {
-      if(useremail && usermobile)
-      {
-        message.open({
-          type:"error",
-          content:"Email and Mobile already registered"
-        })
-      }
-      else
-      {
-        if (useremail) 
-      {
+    if (check) {
+      if (useremail && usermobile) {
         message.open({
           type: "error",
-          content: "Email Already Registered",
+          content: "Email and Mobile already registered",
         });
-      } 
-      else 
-      {
-        if (usermobile) 
-        {
+      } else {
+        if (useremail) {
           message.open({
             type: "error",
-            content: "Mobile No. Already Registered",
+            content: "Email Already Registered",
           });
-        } 
-        else 
-        {
-          setfinalDatas(e);
+        } else {
+          if (usermobile) {
+            message.open({
+              type: "error",
+              content: "Mobile No. Already Registered",
+            });
+          } else {
+            setfinalDatas(e);
 
-          //Backend connect code for post
-          await axios
-            .post("http://localhost:8080/user/postuser", e)
-            .then((res) => console.log("Backend_Success", res))
-            .catch((err) => console.log("Backend_error", err));
+            const formData = new FormData();
+            formData.append("file", fileList[0]);
+            formData.append("user", new Blob([JSON.stringify(e)], { type: "application/json" }));
 
-          setCheck(false);
-          forms.resetFields();
-          message.open({
-            type: "success",
-            content: "Data Submitted Successfull",
-            duration: 2,
-          });
+            console.log("File",formData.getAll("file"))
+            console.log("user",formData.getAll("user"))
+
+            await axios
+              .post("http://localhost:8080/user/postuser", formData)
+              .then((res) => console.log("Backend_Success", res))
+              .catch((err) => console.log("Backend_error", err));
+
+            setCheck(false);
+            forms.resetFields();
+            setFileList([]);
+            message.open({
+              type: "success",
+              content: "Data Submitted Successfull",
+              duration: 2,
+            });
+          }
         }
       }
-      }
-    } 
-    else 
-    {
+    } else {
       message.open({
         type: "warning",
         content: "Agree the Remember",
@@ -355,6 +362,23 @@ function Registration() {
                         className="input"
                       />
                     </Form.Item>
+                    <Form.Item
+                      name={"file"}
+                      label={"Images"}
+                      rules={[
+                        {
+                          required: true,
+                          message: "please upload Image",
+                        },
+                      ]}
+                      hasFeedback
+                    >
+                      <Upload maxCount={1} {...props}>
+                        <Button icon={<UploadOutlined />} className="input">
+                          Click to Upload
+                        </Button>
+                      </Upload>
+                    </Form.Item>
                     <Flex justify="start">
                       <Form.Item
                         name={"remember"}
@@ -368,7 +392,6 @@ function Registration() {
                         </Button>
                       </Form.Item>
                     </Flex>
-                    {/* {qrcode} */}
                   </Form>
                 </Col>
               </Row>

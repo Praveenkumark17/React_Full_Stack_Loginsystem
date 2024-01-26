@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function Home() {
   const [data, setData] = useState();
 
-  const [getdataid, setgetDataid] = useState();
+  const [getsdata, setgetsData] = useState();
 
   const [getdata, setGetdata] = useState();
 
@@ -98,12 +98,12 @@ function Home() {
             >
               <Form.Item
                 name={"userid"}
-                rules={[{ required: true, message: "please enter user name" }]}
+                rules={[{ required: true, message: "please enter user id" }]}
               >
                 <Input
                   addonBefore={<UserOutlined />}
                   name="userid"
-                  placeholder="Enter the user name"
+                  placeholder="Enter the user id"
                 />
               </Form.Item>
               <Form.Item
