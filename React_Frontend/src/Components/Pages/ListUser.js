@@ -37,6 +37,7 @@ function ListUser() {
     delete qrvalue["password"];
     delete qrvalue["id"];
     delete qrvalue["authorities"];
+    delete qrvalue["imagepath"];
     SetQrvalues(qrvalue);
   }, [selectuser]);
 
