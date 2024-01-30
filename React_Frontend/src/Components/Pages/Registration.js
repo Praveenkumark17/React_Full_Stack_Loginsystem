@@ -7,7 +7,6 @@ import {
   Form,
   Input,
   InputNumber,
-  QRCode,
   Row,
   Select,
   Upload,
@@ -151,6 +150,7 @@ function Registration() {
             setCheck(false);
             forms.resetFields();
             setFileList([]);
+            setImageUrl(null);
             message.open({
               type: "success",
               content: "Data Submitted Successfull",
@@ -378,6 +378,7 @@ function Registration() {
                           Click to Upload
                         </Button>
                       </Upload>
+                      {imageUrl && <img src={imageUrl} height={100} alt="preview" />}
                     </Form.Item>
                     <Flex justify="start">
                       <Form.Item

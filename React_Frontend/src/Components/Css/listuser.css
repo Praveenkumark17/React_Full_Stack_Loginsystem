@@ -4,3 +4,14 @@
 .list-row-load{
     margin-top: 15%;
 }
+.list-avathar{
+    border-radius: 10px;
+    border: 2px solid #0e1630;
+    height: 157px;
+    width: 147px;
+}
+.table-col-style{
+    font-weight: bold;
+    font-size: 16.5px;
+    color: rgb(187, 0, 0);
+}

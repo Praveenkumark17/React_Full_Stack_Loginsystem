@@ -1,4 +1,4 @@
-import { Button, Col, Modal, QRCode, Row, Space, Table } from "antd";
+import { Button, Col, Flex, Modal, QRCode, Row, Space, Table } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { HashLoader } from "react-spinners";
@@ -18,14 +18,14 @@ function ListUser() {
 
   const [imgurl, Setimgurl] = useState();
 
-  const [trigger, Settrigger] = useState(false);
+  const [trigger, Settrigger] = useState();
 
   const navigate = useNavigate();
 
   const onView = async (id) => {
     await axios
       .get(`http://localhost:8080/user/getuserid/${id}`)
-      .then((res) => (console.log(res.data), Setselectuser(res.data)))
+      .then((res) => {console.log(res.data); Setselectuser(res.data)})
       .catch((err) => console.log(err));
     console.log(id);
 
@@ -43,6 +43,7 @@ function ListUser() {
 
   const onOk = () => {
     setIsModalOpen(false);
+    Setselectuser(null);     //use for security purpose
   };
 
   const onRemove = async (id) => {
@@ -50,7 +51,7 @@ function ListUser() {
       .delete(`http://localhost:8080/user/deleteuser/${id}`)
       .then((res) => {
         console.log(res.data);
-        Settrigger(true);
+        Settrigger(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -98,32 +99,32 @@ function ListUser() {
 
   const columns = [
     {
-      title: () => <div style={{ textAlign: "center" }}>FirstName</div>,
+      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">FirstName</p></div>,
       dataIndex: "firstname",
       key: "name",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}>LastName</div>,
+      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">LastName</p></div>,
       dataIndex: "lastname",
       key: "lastname",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}>Age</div>,
+      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">Age</p></div>,
       dataIndex: "age",
       key: "age",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}>Email</div>,
+      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">Email</p></div>,
       dataIndex: "email",
       key: "email",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}>Mobile</div>,
+      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">Mobile</p></div>,
       dataIndex: "mobile",
       key: "mobile",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}>Action</div>,
+      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">Action</p></div>,
       dataIndex: "but",
       key: "action",
     },
@@ -133,17 +134,36 @@ function ListUser() {
     return (
       <>
         <Modal
-          title={selectuser?.firstname + " " + selectuser?.lastname}
+          title={
+            <div>
+              <h3>Mr. {selectuser?.firstname + " " + selectuser?.lastname}</h3>
+            </div>
+          }
           open={isModalOpen}
           onOk={onOk}
           onCancel={onOk}
         >
+          <Flex justify="space-between">
             <QRCode value={JSON.stringify(qrvalues)} />
-            <img src={imgurl} height={100}></img>
+            {imgurl ? (
+              <img
+                className="list-avathar"
+                src={imgurl}
+                height={157}
+                width={147}
+              ></img>
+            ) : (
+              <div className="list-avathar">
+                <div style={{ marginTop: "25px", marginLeft: "25px" }}>
+                  <HashLoader color="#0e1630" loading size={100}/>
+                </div>
+              </div>
+            )}
+          </Flex>
         </Modal>
         <Row className="list-row">
           <Col span={14} offset={5}>
-            <Table
+            <Table style={{fontWeight:"bold"}}
               dataSource={user}
               columns={columns}
               pagination={{ pageSize: 5 }}
