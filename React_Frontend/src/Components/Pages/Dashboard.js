@@ -30,6 +30,10 @@ import {
 import Editprofile from "./Editprofile";
 import Changepassword from "./Changepassword";
 import ListUser from "./ListUser";
+import { LuUser2 } from "react-icons/lu";
+import { LuUsers2 } from "react-icons/lu";
+import { MdLockOpen } from "react-icons/md";
+import { FaPowerOff } from "react-icons/fa6";
 
 function Dashboard() {
   const [data, setData] = useState([]);
@@ -62,10 +66,18 @@ function Dashboard() {
   if (data?.authorities?.admin == 1) {
     getUserList = (
       <Menu.Item key="4">
-        <Link to={"listUser"}><Button type="link" className="dash-but">
-          <TeamOutlined />
-          Get User List
-        </Button></Link>
+        <Link to={"listUser"}>
+          <Button type="link" className="dash-but">
+            <Flex>
+              <Space>
+                <Flex align="center">
+                  <LuUsers2 size={18} />
+                </Flex>
+                <div>Get User List</div>
+              </Space>
+            </Flex>
+          </Button>
+        </Link>
       </Menu.Item>
     );
   }
@@ -75,8 +87,14 @@ function Dashboard() {
       <Menu.Item key="1">
         <Link to={`edit/${data.id}`}>
           <Button type="link" className="dash-but">
-            <UserAddOutlined />
-            Profile
+            <Flex>
+              <Space>
+                <Flex align="center">
+                  <LuUser2 size={18} />
+                </Flex>
+                <div>Profile</div>
+              </Space>
+            </Flex>
           </Button>
         </Link>
       </Menu.Item>
@@ -84,8 +102,14 @@ function Dashboard() {
       <Menu.Item key="2">
         <Link to="changepass">
           <Button type="link" className="dash-but">
-            <UnlockOutlined />
-            Change Password
+            <Flex>
+              <Space>
+                <Flex align="center">
+                  <MdLockOpen size={19} />
+                </Flex>
+                <div>Change Password</div>
+              </Space>
+            </Flex>
           </Button>
         </Link>
       </Menu.Item>
@@ -96,8 +120,14 @@ function Dashboard() {
           danger
           className="dash-out-but"
         >
-          <PoweroffOutlined />
-          Log Out
+          <Flex>
+            <Space>
+              <Flex align="center">
+                <FaPowerOff size={18} />
+              </Flex>
+              <div>Log Out</div>
+            </Space>
+          </Flex>
         </Button>
       </Menu.Item>
     </Menu>

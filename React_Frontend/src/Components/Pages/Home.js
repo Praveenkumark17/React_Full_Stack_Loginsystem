@@ -5,6 +5,8 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 import CryptoJS from "crypto-js";
 import { Link, useNavigate } from "react-router-dom";
+import { LuUser2 } from "react-icons/lu";
+import { MdLockOutline } from "react-icons/md";
 
 function Home() {
   const [data, setData] = useState();
@@ -87,7 +89,18 @@ function Home() {
       <Row className="rows">
         <Col span={8} offset={8}>
           <Card
-            title={<div style={{ textAlign: "center",fontSize:17 }}>Sign In</div>}
+            title={
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: 18,
+                  fontWeight: "600",
+                  color: "rgb(16, 127, 253)",
+                }}
+              >
+                Sign In
+              </div>
+            }
             className="logcards"
           >
             <Form
@@ -100,7 +113,7 @@ function Home() {
                 rules={[{ required: true, message: "please enter user id" }]}
               >
                 <Input
-                  addonBefore={<UserOutlined />}
+                  addonBefore={<LuUser2 size={20} />}
                   name="userid"
                   placeholder="Enter the user id"
                 />
@@ -110,7 +123,7 @@ function Home() {
                 rules={[{ required: true, message: "please enter password" }]}
               >
                 <Input.Password
-                  addonBefore={<LockOutlined />}
+                  addonBefore={<MdLockOutline size={20} />}
                   name="password"
                   placeholder="Enter the user password"
                 />
@@ -119,10 +132,14 @@ function Home() {
                 <Flex vertical>
                   <Form.Item>
                     <p className="new_user_but">
-                      <Link to={"/register"} className="but_newuser">New User? Sign Up</Link>
+                      <Link to={"/register"} className="but_newuser">
+                        New User? Sign Up
+                      </Link>
                     </p>
                     <p className="new_user_but">
-                      <Link to={"/forgot_Password"} className="but_forgotuser">Forgot Password?</Link>
+                      <Link to={"/forgot_Password"} className="but_forgotuser">
+                        Forgot Password?
+                      </Link>
                     </p>
                   </Form.Item>
                 </Flex>

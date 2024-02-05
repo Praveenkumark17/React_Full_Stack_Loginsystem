@@ -11,6 +11,8 @@ import {
   Select,
   DatePicker,
   message,
+  Flex,
+  Space,
 } from "antd";
 import { EditOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
@@ -19,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import "../Css/editprofile.css";
 import axios from "axios";
 import { LiaUserEditSolid } from "react-icons/lia";
+import { LuUser2 } from "react-icons/lu";
 
 function EditProfile() {
   const [edata, setEData] = useState([]);
@@ -75,10 +78,10 @@ function EditProfile() {
   };
 
   const onchanges = (value) => {
-    if(value){
+    if (value) {
       setEnabled(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (update) {
@@ -87,14 +90,14 @@ function EditProfile() {
       setEnable(true);
       setEnabled(true);
       message.open({
-        type:"success",
-        content:"Update data Success"
-      })
+        type: "success",
+        content: "Update data Success",
+      });
     }
   }, [update]);
 
   const onfinish = async (value) => {
-    const dob = value.dob.format('YYYY-MM-DD');
+    const dob = value.dob.format("YYYY-MM-DD");
     const newValue = { ...value, dob };
     console.log(value.dob);
     await axios
@@ -116,9 +119,25 @@ function EditProfile() {
                 <Row>
                   <Col span={8}></Col>
                   <Col span={8}>
-                    <h3 style={{ textAlign: "center" }}>
-                      Profile <UserAddOutlined />
-                    </h3>
+                    <Flex
+                      justify="center"
+                      align="center"
+                      style={{ height: "100%" }}
+                    >
+                      <Space>
+                        <div
+                          style={{
+                            fontSize: 18,
+                            fontWeight: "600",
+                          }}
+                        >
+                          Profile
+                        </div>
+                        <Flex align="center">
+                          <LuUser2 size={18} />
+                        </Flex>
+                      </Space>
+                    </Flex>
                   </Col>
                   <Col span={8}>
                     <h3
@@ -135,7 +154,13 @@ function EditProfile() {
                         <Button
                           shape="circle"
                           type="link"
-                          icon={enables?<LiaUserEditSolid size={20} color="gray"/>:<LiaUserEditSolid size={20} color="black"/>}
+                          icon={
+                            enables ? (
+                              <LiaUserEditSolid size={22} color="gray" />
+                            ) : (
+                              <LiaUserEditSolid size={22} color="black" />
+                            )
+                          }
                           size="middle"
                           onClick={onenable}
                           disabled={enables}

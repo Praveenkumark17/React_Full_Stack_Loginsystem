@@ -137,10 +137,13 @@ function Registration() {
 
             const formData = new FormData();
             formData.append("file", fileList[0]);
-            formData.append("user", new Blob([JSON.stringify(e)], { type: "application/json" }));
+            formData.append(
+              "user",
+              new Blob([JSON.stringify(e)], { type: "application/json" })
+            );
 
-            console.log("File",formData.getAll("file"))
-            console.log("user",formData.getAll("user"))
+            console.log("File", formData.getAll("file"));
+            console.log("user", formData.getAll("user"));
 
             await axios
               .post("http://localhost:8080/user/postuser", formData)
@@ -173,7 +176,18 @@ function Registration() {
       <Row className="row">
         <Col span={9} offset={8}>
           <Card
-            title={<div style={{ textAlign: "center",fontSize:17 }}>Sign Up</div>}
+            title={
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: 18,
+                  fontWeight: "600",
+                  color: "rgb(16, 127, 253)",
+                }}
+              >
+                Sign Up
+              </div>
+            }
             className="logcard"
           >
             <div className="cardrow">
@@ -378,7 +392,9 @@ function Registration() {
                           Click to Upload
                         </Button>
                       </Upload>
-                      {imageUrl && <img src={imageUrl} height={100} alt="preview" />}
+                      {imageUrl && (
+                        <img src={imageUrl} height={100} alt="preview" />
+                      )}
                     </Form.Item>
                     <Flex justify="start">
                       <Form.Item

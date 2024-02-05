@@ -1,10 +1,21 @@
-import { Button, Card, Col, Form, Input, Row, message } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Flex,
+  Form,
+  Input,
+  Row,
+  Space,
+  message,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import "../Css/changepass.css";
 import { UnlockOutlined } from "@ant-design/icons";
 import CryptoJS from "crypto-js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { MdLockOpen } from "react-icons/md";
 
 function Changepassword() {
   const [data, setData] = useState([]);
@@ -14,7 +25,7 @@ function Changepassword() {
   useEffect(() => {
     const sessiondatas = sessionStorage.getItem("userdata");
     const datas = sessiondatas ? JSON.parse(sessiondatas) : {};
-    console.log("session pass:",datas)
+    console.log("session pass:", datas);
     // const passphrase = "Praveen12GmqG7Io";
     // const bytes = CryptoJS.AES.decrypt(datas.password, passphrase);
     // const decrypted = bytes.toString(CryptoJS.enc.Utf8);
@@ -31,7 +42,7 @@ function Changepassword() {
       passphrase
     ).toString();
     value["password"] = encrypted;
-    console.log(value["password"])
+    console.log(value["password"]);
     const send = { password: value.password };
     if (value.opassword == data.password) {
       await axios
@@ -39,13 +50,13 @@ function Changepassword() {
         .then((res) => {
           console.log("put pass succ:", res);
           message.open({
-            type:"success",
-            content:"Password changed",
-            duration:2
+            type: "success",
+            content: "Password changed",
+            duration: 2,
           });
           const cdata = res.data;
-          const getdata = ({...data,password:cdata.password});
-          sessionStorage.setItem("userdata",JSON.stringify(getdata))
+          const getdata = { ...data, password: cdata.password };
+          sessionStorage.setItem("userdata", JSON.stringify(getdata));
           navigate("/dashboard");
         })
         .catch((err) => console.log("put pass fail:", err));
@@ -53,7 +64,7 @@ function Changepassword() {
       message.open({
         type: "error",
         content: "Wrong Password",
-        duration:2
+        duration: 2,
       });
     }
   };
@@ -64,9 +75,21 @@ function Changepassword() {
         <Col span={9} offset={8}>
           <Card
             title={
-              <h3 style={{ textAlign: "center" }}>
-                Change Password <UnlockOutlined />
-              </h3>
+              <Flex justify="center">
+                <Space>
+                  <div
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "600",
+                    }}
+                  >
+                    Change Password
+                  </div>
+                  <Flex align="center">
+                    <MdLockOpen size={18} />
+                  </Flex>
+                </Space>
+              </Flex>
             }
             className="pass-logcards"
           >
