@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import "../Css/editprofile.css";
 import axios from "axios";
+import { LiaUserEditSolid } from "react-icons/lia";
 
 function EditProfile() {
   const [edata, setEData] = useState([]);
@@ -134,7 +135,7 @@ function EditProfile() {
                         <Button
                           shape="circle"
                           type="link"
-                          icon={<EditOutlined />}
+                          icon={enables?<LiaUserEditSolid size={20} color="gray"/>:<LiaUserEditSolid size={20} color="black"/>}
                           size="middle"
                           onClick={onenable}
                           disabled={enables}

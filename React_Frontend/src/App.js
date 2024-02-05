@@ -15,6 +15,7 @@ import Editprofile from "./Components/Pages/Editprofile";
 import Changepassword from "./Components/Pages/Changepassword";
 import ListUser from "./Components/Pages/ListUser";
 import Upimages from "./Components/Pages/Upimages";
+import ForgotPassword from "./Components/Pages/ForgotPassword";
 
 function Apps() {
   let routes = useRoutes([
@@ -30,6 +31,7 @@ function Apps() {
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Registration />} />
               <Route path="/i" element={<Upimages />} />
+              <Route path="/forgot_Password" element={<ForgotPassword/>}/>
             </Routes>
           </Content>
           <Footer className="footer">
@@ -41,6 +43,7 @@ function Apps() {
         { path: "/", element: <Home /> },
         { path: "register", element: <Registration /> },
         { path: "i", element: <Upimages /> },
+        { path: "forgot_Password", element: <Upimages /> },
       ],
     },
     {

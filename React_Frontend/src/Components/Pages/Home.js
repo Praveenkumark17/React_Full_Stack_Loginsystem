@@ -4,7 +4,7 @@ import "../Css/home.css";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 import CryptoJS from "crypto-js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Home() {
   const [data, setData] = useState();
@@ -63,8 +63,8 @@ function Home() {
           content: "Login success",
           duration: 1,
         });
-        sessionStorage.setItem("userdata",JSON.stringify(getdata))
-        navigate('/dashboard')
+        sessionStorage.setItem("userdata", JSON.stringify(getdata));
+        navigate("/dashboard");
       } else {
         console.log("Log error:");
         message.open({
@@ -87,10 +87,9 @@ function Home() {
       <Row className="rows">
         <Col span={8} offset={8}>
           <Card
-            title={<div style={{ textAlign: "center" }}>Sign In</div>}
+            title={<div style={{ textAlign: "center",fontSize:17 }}>Sign In</div>}
             className="logcards"
           >
-            
             <Form
               onFinish={onfinished}
               autoComplete="off"
@@ -116,12 +115,24 @@ function Home() {
                   placeholder="Enter the user password"
                 />
               </Form.Item>
-              <Flex justify="flex-end">
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                </Form.Item>
+              <Flex justify="space-between" className="but_flex">
+                <Flex vertical>
+                  <Form.Item>
+                    <p className="new_user_but">
+                      <Link to={"/register"} className="but_newuser">New User? Sign Up</Link>
+                    </p>
+                    <p className="new_user_but">
+                      <Link to={"/forgot_Password"} className="but_forgotuser">Forgot Password?</Link>
+                    </p>
+                  </Form.Item>
+                </Flex>
+                <Flex justify="center" vertical>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                </Flex>
               </Flex>
             </Form>
           </Card>

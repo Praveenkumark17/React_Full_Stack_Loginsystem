@@ -173,7 +173,7 @@ function Registration() {
       <Row className="row">
         <Col span={9} offset={8}>
           <Card
-            title={<div style={{ textAlign: "center" }}>Sign Up</div>}
+            title={<div style={{ textAlign: "center",fontSize:17 }}>Sign Up</div>}
             className="logcard"
           >
             <div className="cardrow">
