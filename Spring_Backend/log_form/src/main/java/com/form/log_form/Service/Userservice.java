@@ -1,12 +1,11 @@
 package com.form.log_form.Service;
 
-import com.form.log_form.Model.Image;
 import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.font.ImageGraphicAttribute;
 import java.util.List;
 
 @Service
@@ -25,10 +24,12 @@ public interface Userservice {
 
     public String deleteUser(Long id);
 
-    public Image Upload(MultipartFile file);
+//    public Image Upload(MultipartFile file);
+//
+//    public List<Image> GetImage();
+//
+//    public Image GetImgId(Long id);
 
-    public List<Image> GetImage();
-
-    public Image GetImgId(Long id);
+    public ResponseEntity<?> findEmail(String email);
 
 }

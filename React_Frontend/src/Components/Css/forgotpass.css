@@ -2,6 +2,8 @@
   margin-top: 150px;
 }
 .edit-input {
-  width: 250px;
-  color: rgb(16, 127, 253);
+  width: 100%;
+}
+.for_row {
+  margin-top: 20px;
 }

@@ -6,10 +6,12 @@ import com.form.log_form.Model.User;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -23,14 +25,17 @@ public class UserController {
     public List<User> getUser(){
         return service.getUser();
     }
+
     @PostMapping(path = "/postuser", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public  User saveUser(@RequestPart("user") User newuser,@RequestPart("file") MultipartFile file){
         return service.saveUser(newuser,file);
     }
+
     @PostMapping("/text")
     public User passdata(@RequestBody PasswordData data){
         return service.passdata(data);
     }
+
     @PutMapping("/update/{id}")
     public User updatedata(@PathVariable Long id,@RequestBody User user){
         return  service.updatedata(id,user);
@@ -65,4 +70,9 @@ public class UserController {
 //    public Image getimgid(@PathVariable Long id){
 //        return  service.GetImgId(id);
 //    }
+
+    @GetMapping(path = "/findemail/{email}")
+    public ResponseEntity<?> findEmail(@PathVariable String email){
+        return service.findEmail(email);
+    }
 }
