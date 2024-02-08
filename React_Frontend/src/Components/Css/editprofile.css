@@ -12,3 +12,13 @@
 .edit-row {
   margin-top: 35px;
 }
+.default_in{
+  cursor: no-drop;
+}
+.default_in:hover{
+  border-color: lightgray;
+}
+.default_in:focus{
+  border-color: lightgray;
+  box-shadow: none;
+}

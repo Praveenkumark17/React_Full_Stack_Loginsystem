@@ -118,7 +118,7 @@ function Changepassword() {
                     initialValue={""}
                     hasFeedback
                   >
-                    <Input
+                    <Input.Password
                       name="password"
                       placeholder="Enter the old password"
                       className="change-input"
@@ -172,7 +172,7 @@ function Changepassword() {
                     />
                   </Form.Item>
                   <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" htmlType="submit" danger>
                       Change
                     </Button>
                   </Form.Item>

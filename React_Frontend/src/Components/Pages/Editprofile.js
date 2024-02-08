@@ -191,13 +191,14 @@ function EditProfile() {
                     rules={[
                       { required: true, message: "please enter user name" },
                     ]}
-                    hasFeedback
+                    hasFeedback={false}
                   >
                     <Input
                       name="firstname"
                       placeholder="Enter the first name"
                       style={{ width: "250px" }}
-                      disabled
+                      className="default_in"
+                      readOnly
                     />
                   </Form.Item>
                   <Form.Item
@@ -210,26 +211,28 @@ function EditProfile() {
                         pattern: /^[A-Za-z]{1,10}$/,
                       },
                     ]}
-                    hasFeedback
+                    hasFeedback={false}
                   >
                     <Input
                       name="lastname"
                       placeholder="Enter the Lastname"
                       style={{ width: "250px" }}
-                      disabled
+                      className="default_in"
+                      readOnly
                     />
                   </Form.Item>
                   <Form.Item
                     name={"dob"}
                     label={"Dob"}
                     rules={[{ required: true, message: "please pick dob" }]}
-                    hasFeedback
+                    hasFeedback={!enable}
                   >
                     <DatePicker
                       format={dateFormatList}
                       style={{ width: "250px" }}
                       disabled={enable}
                       onChange={onchanges}
+                      className="edit_in"
                     />
                   </Form.Item>
                   <Form.Item
@@ -238,17 +241,17 @@ function EditProfile() {
                     rules={[
                       {
                         required: true,
-                        message: "Age between 20 - 60",
-                        pattern: /^[2-6]\d{1}$/,
+                        message: "Age between 20 - 59",
+                        pattern: /^[2-5]\d{1}$/,
                       },
                     ]}
-                    hasFeedback
+                    hasFeedback={!enable}
                   >
-                    <InputNumber
+                    <Input
                       style={{ width: "250px" }}
-                      type="number"
                       placeholder="Enter the age"
-                      disabled={enable}
+                      className={enable?"default_in":""}
+                      readOnly={enable}
                       onChange={onchanges}
                     />
                   </Form.Item>
@@ -261,13 +264,14 @@ function EditProfile() {
                         message: "please select blood group",
                       },
                     ]}
-                    hasFeedback
+                    hasFeedback={!enable}
                   >
                     <Select
                       placeholder="Select Blood group"
                       style={{ width: "250px" }}
                       disabled={enable}
                       onChange={onchanges}
+                      className="edit_in"
                     >
                       <Option value="A+">A+</Option>
                       <Option value="A-">A-</Option>
@@ -292,26 +296,28 @@ function EditProfile() {
                         message: "Invalid Mobile Number",
                       },
                     ]}
-                    hasFeedback
+                    hasFeedback={!enable}
                   >
-                    <InputNumber
+                    <Input
                       style={{ width: "250px" }}
                       placeholder="Enter the mobile.no"
-                      disabled={enable}
+                      readOnly={enable}
                       onChange={onchanges}
+                      className={enable?"default_in":""}
                     />
                   </Form.Item>
                   <Form.Item
                     name={"email"}
                     label={"Email"}
                     rules={[{ required: true, message: "please enter email" }]}
-                    hasFeedback
+                    hasFeedback={false}
                   >
                     <Input
                       name="email"
                       placeholder="Enter the email"
                       style={{ width: "250px" }}
-                      disabled
+                      className="default_in"
+                      readOnly
                     />
                   </Form.Item>
                   <Form.Item>
