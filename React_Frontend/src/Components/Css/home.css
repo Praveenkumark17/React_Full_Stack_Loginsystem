@@ -3,22 +3,29 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 }
-.logcards:hover{
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+.logcards:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 .rows {
   margin-top: 150px;
 }
-.new_user_but{
+.new_user_but {
   font-weight: 600;
+  color: rgb(70, 142, 70);
 }
-.but_flex{
+.but_newuser {
+  color: rgb(70, 142, 70);
+}
+.but_newuser:hover {
+  color: rgb(128, 182, 128);
+}
+.but_flex {
   width: 100%;
   height: 100px;
 }
-.but_forgotuser{
+.but_forgotuser {
   color: rgb(255, 0, 0);
 }
-.but_forgotuser:hover{
+.but_forgotuser:hover {
   color: rgb(253, 129, 129);
 }

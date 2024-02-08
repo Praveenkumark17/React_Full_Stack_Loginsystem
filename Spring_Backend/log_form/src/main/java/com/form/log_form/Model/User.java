@@ -27,6 +27,8 @@ public class User {
 
     private String imagepath;
 
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "authority_id", referencedColumnName = "id")
     @JsonManagedReference

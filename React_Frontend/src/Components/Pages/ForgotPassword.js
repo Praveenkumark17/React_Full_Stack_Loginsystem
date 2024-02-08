@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import "../Css/forgotpass.css";
 import { LuKeyRound, LuMail } from "react-icons/lu";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
   const [disabled, setDisabled] = useState(true);
@@ -20,10 +21,25 @@ function ForgotPassword() {
 
   const [mail, setMail] = useState();
 
+  const [otp, setOtp] = useState();
+
+  const [sendData, setSendData] = useState();
+
+  const navigate = useNavigate();
+
   const onVerify = (e) => {
     delete e["mail"];
-    console.log("value", e);
-    console.log("value success");
+    console.log("otp val1:", otp);
+    console.log("otp val2:", e["otp"]);
+    if (otp == e["otp"]) {
+      message.open({ type: "success", content: "OTP verify Success" });
+      sessionStorage.setItem("forgotdata", JSON.stringify(sendData));
+      navigate("/reset_Password");
+      console.log("value", e);
+      console.log("value success");
+    } else {
+      message.open({ type: "error", content: "OTP verify fail" });
+    }
   };
 
   const onSend = async (e) => {
@@ -32,39 +48,58 @@ function ForgotPassword() {
 
     const random_num = Math.floor(100000 + Math.random() * 900000);
 
-    console.log("random", random_num);
+    console.log("random:", random_num);
+    setOtp(random_num);
+
+    const emailBody = `<div style="margin: 0; padding: 0">
+      <div style="width: 100%; display: flex; justify-content: center">
+        <div
+          style="
+            margin-top: 20px;
+            color: red;
+            font-size: x-large;
+            font-weight: 600;
+          "
+        >
+          User Logs
+        </div>
+      </div><br/>
+      <div style="
+      font-weight: bold;
+    ">Forgot Password OTP is <b>${random_num}</b></div>
+    </div>`;
 
     const config = {
-      // Username: "userlogs@yopmail.com",
-      // Password: "0A843C50F748F0C5D14A4FAE1CD9FACABD7B",
-      // Host: "smtp.elasticemail.com",
-      // Port: 2525,
       SecureToken: "0d0f0623-1ef6-4e56-8e17-2c3c277221c1",
       To: e["mail"],
       From: "praveenkumar24622@gmail.com",
       Subject: "Test Subject",
-      Body: `<div>
-        <h1
-          style={{ display: "flex", justifyContent: "center", color: "red" }}
-        >
-          User Logs
-        </h1>
-        <Flex><h3 style={{color:"blueviolet"}}>User Logs OTP is ${random_num} for Forgot Passwords</h3></Flex>
-      </div>`,
+      Body: emailBody,
       IsHtml: true,
     };
 
     await axios
       .get(`http://localhost:8080/user/findemail/${e["mail"]}`)
       .then((res) => {
-        console.log("success email:", res.data);
-        // message.open({ type: "success", content: "Email Send success" });
+        const result = res.data;
+        console.log("success email:", result);
+        console.log("ids:", result.id);
+        setSendData(result);
 
-        if (window.Email) {
-          window.Email.send(config)
-            .then((m) => message.open({ type: "success", content: "OTP Send" }))
-            .catch((err) => console.log(err));
-        }
+        // if (window.Email) {
+        //   window.Email.send(config)
+        //     .then((m) => {
+        //       message.open({ type: "success", content: "OTP Send" });
+        //       setIds(result.id)
+        //       setDisabled(false);
+        //       setFeed(true);
+        //       setMail(e["mail"]);
+        //     })
+        //     .catch((err) => {
+        //       console.log(err);
+        //       message.open({ type: "error", content: "Server Error" });
+        //     });
+        // }
 
         setDisabled(false);
         setFeed(true);
@@ -151,7 +186,10 @@ function ForgotPassword() {
                 />
               </Form.Item>
               <Form.Item>
-                <Flex justify="end">
+                <Flex justify="space-between">
+                  <Link to={"/"} className="but_back">
+                    Back To Sign In...
+                  </Link>
                   <Button type="primary" htmlType="submit">
                     {mail ? "Verify OTP" : "Send OTP"}
                   </Button>

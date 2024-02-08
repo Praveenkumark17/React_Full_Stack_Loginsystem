@@ -42,14 +42,28 @@ function Dashboard() {
 
   const navigate = useNavigate();
 
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
   const sessiondata = sessionStorage.getItem("userdata");
 
   useEffect(() => {
-    const datas = sessiondata ? JSON.parse(sessiondata) : {};
-    setData(datas);
-    console.log(datas);
-    console.log("session admin:", datas.authorities.admin);
-  }, []);
+    if (sessiondata) {
+      const datas = sessiondata ? JSON.parse(sessiondata) : {};
+      setData(datas);
+      console.log(datas);
+      console.log("session admin:", datas.authorities.admin);
+    }
+  }, [sessiondata]);
 
   const onlogout = () => {
     sessionStorage.clear();
@@ -144,6 +158,11 @@ function Dashboard() {
                   <Link to={"/dashboard"} className="dash-menuitem1">
                     Welcome Back!! {data.firstname} {data.lastname}
                   </Link>
+                </Item>
+              </Menu>
+              <Menu mode="horizontal" theme="dark">
+                <Item>
+                  <div className="dash_time">{time.toLocaleTimeString()}</div>
                 </Item>
               </Menu>
               <Menu mode="horizontal" theme="dark">

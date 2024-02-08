@@ -75,4 +75,5 @@ public class UserController {
     public ResponseEntity<?> findEmail(@PathVariable String email){
         return service.findEmail(email);
     }
+
 }

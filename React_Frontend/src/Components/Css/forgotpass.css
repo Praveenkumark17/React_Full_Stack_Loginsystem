@@ -7,3 +7,11 @@
 .for_row {
   margin-top: 20px;
 }
+.but_back{
+    font-size: 15px,;
+    font-weight: 600;
+    color: rgb(70, 142, 70);
+}
+.but_back:hover{
+  color: rgb(128, 182, 128);
+}

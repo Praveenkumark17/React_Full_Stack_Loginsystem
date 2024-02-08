@@ -16,6 +16,8 @@ import Changepassword from "./Components/Pages/Changepassword";
 import ListUser from "./Components/Pages/ListUser";
 import Upimages from "./Components/Pages/Upimages";
 import ForgotPassword from "./Components/Pages/ForgotPassword";
+import Demo from "./Components/Pages/Demo";
+import ResetPassword from "./Components/Pages/ResetPassword";
 
 function Apps() {
   let routes = useRoutes([
@@ -30,8 +32,9 @@ function Apps() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Registration />} />
-              <Route path="/i" element={<Upimages />} />
+              <Route path="/i" element={<Demo />} />
               <Route path="/forgot_Password" element={<ForgotPassword/>}/>
+              <Route path="/reset_Password" element={<ResetPassword/>}/>
             </Routes>
           </Content>
           <Footer className="footer">
@@ -42,8 +45,9 @@ function Apps() {
       children: [
         { path: "/", element: <Home /> },
         { path: "register", element: <Registration /> },
-        { path: "i", element: <Upimages /> },
-        { path: "forgot_Password", element: <Upimages /> },
+        { path: "i", element: <Demo /> },
+        { path: "forgot_Password", element: <ForgotPassword /> },
+        { path: "reset_Password", element: <ResetPassword /> },
       ],
     },
     {

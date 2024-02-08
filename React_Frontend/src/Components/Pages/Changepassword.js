@@ -94,7 +94,7 @@ function Changepassword() {
             className="pass-logcards"
           >
             <Row>
-              <Col span={19} offset={2}>
+              <Col span={20} offset={2}>
                 <Form
                   autoComplete="off"
                   style={{
@@ -121,7 +121,7 @@ function Changepassword() {
                     <Input
                       name="password"
                       placeholder="Enter the old password"
-                      className="edit-input"
+                      className="change-input"
                     />
                   </Form.Item>
                   <Form.Item
@@ -140,7 +140,7 @@ function Changepassword() {
                     <Input.Password
                       name="password"
                       placeholder="Enter the new password"
-                      className="edit-input"
+                      className="change-input"
                     />
                   </Form.Item>
                   <Form.Item
@@ -168,12 +168,12 @@ function Changepassword() {
                     <Input.Password
                       name="password"
                       placeholder="Enter the confirm password"
-                      className="edit-input"
+                      className="change-input"
                     />
                   </Form.Item>
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
-                      Submit
+                      Change
                     </Button>
                   </Form.Item>
                 </Form>

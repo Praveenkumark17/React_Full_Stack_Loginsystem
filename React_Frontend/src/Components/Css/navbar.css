@@ -1,19 +1,26 @@
-.menu{
-    display: flex;
+.menu {
+  display: flex;
 }
-.menuitem1{
-    font-weight: bold;
-    font-size: 17px;
-    color: rgb(0, 191, 255);
+.menuitem1 {
+  font-weight: bold;
+  font-size: 17px;
+  color: rgb(0, 191, 255);
 }
-.menuitem2{
-    justify-content: space-around;
+.menuitem2 {
+  justify-content: space-around;
 }
-.navbut,.navbutsub{
-    color: rgb(229, 229, 238);
-    font-weight: bold;
-    font-size: 14px;
+.navbut,
+.navbutsub {
+  color: rgb(229, 229, 238);
+  font-weight: bold;
+  font-size: 14px;
 }
-.navbut:hover{
-    color: rgb(57, 143, 249);
+.navbut:hover {
+  color: rgb(57, 143, 249);
+}
+.time {
+  font-weight: 600;
+  font-size: 16px;
+  margin-left: 150px;
+  color: rgb(165, 216, 165);
 }

@@ -179,7 +179,7 @@ function EditProfile() {
                   autoComplete="off"
                   style={{
                     display: "flex",
-                    alignItems: "flex-end",
+                    alignItems: "end",
                     flexDirection: "column",
                   }}
                   ref={formRef}
@@ -196,7 +196,7 @@ function EditProfile() {
                     <Input
                       name="firstname"
                       placeholder="Enter the first name"
-                      className="edit-input"
+                      style={{ width: "250px" }}
                       disabled
                     />
                   </Form.Item>
@@ -215,7 +215,7 @@ function EditProfile() {
                     <Input
                       name="lastname"
                       placeholder="Enter the Lastname"
-                      className="edit-input"
+                      style={{ width: "250px" }}
                       disabled
                     />
                   </Form.Item>
@@ -227,7 +227,7 @@ function EditProfile() {
                   >
                     <DatePicker
                       format={dateFormatList}
-                      className="edit-input"
+                      style={{ width: "250px" }}
                       disabled={enable}
                       onChange={onchanges}
                     />
@@ -245,7 +245,7 @@ function EditProfile() {
                     hasFeedback
                   >
                     <InputNumber
-                      className="edit-input"
+                      style={{ width: "250px" }}
                       type="number"
                       placeholder="Enter the age"
                       disabled={enable}
@@ -295,7 +295,7 @@ function EditProfile() {
                     hasFeedback
                   >
                     <InputNumber
-                      className="edit-input"
+                      style={{ width: "250px" }}
                       placeholder="Enter the mobile.no"
                       disabled={enable}
                       onChange={onchanges}
@@ -310,7 +310,7 @@ function EditProfile() {
                     <Input
                       name="email"
                       placeholder="Enter the email"
-                      className="edit-input"
+                      style={{ width: "250px" }}
                       disabled
                     />
                   </Form.Item>
