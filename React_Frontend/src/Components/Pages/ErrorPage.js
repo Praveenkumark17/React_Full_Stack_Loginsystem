@@ -1,11 +1,11 @@
-import React from 'react';
-import '../Css/ErrorPage.css'; 
+import React from "react";
+import "../Css/ErrorPage.css";
 
-const ErrorPage = () => {
+const ErrorPage = (props) => {
   return (
     <div className="error-page">
-      <h1 className="error-code">401</h1>
-      <p className="error-message">Unauthorized: Access is denied due to invalid credentials.</p>
+      <h1 className="error-code">ERROR: 401</h1>
+      <p className="error-message">Unauthorized: {props.error?props.error:"Access Denied to Reset the Password"}</p>
     </div>
   );
 };

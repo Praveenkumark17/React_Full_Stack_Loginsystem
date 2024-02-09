@@ -86,24 +86,24 @@ function ForgotPassword() {
         console.log("ids:", result.id);
         setSendData(result);
 
-        // if (window.Email) {
-        //   window.Email.send(config)
-        //     .then((m) => {
-        //       message.open({ type: "success", content: "OTP Send" });
-        //       setIds(result.id)
-        //       setDisabled(false);
-        //       setFeed(true);
-        //       setMail(e["mail"]);
-        //     })
-        //     .catch((err) => {
-        //       console.log(err);
-        //       message.open({ type: "error", content: "Server Error" });
-        //     });
-        // }
+        if (window.Email) {
+          window.Email.send(config)
+            .then((m) => {
+              message.open({ type: "success", content: "OTP Send" });
+              setSendData(result);
+              setDisabled(false);
+              setFeed(true);
+              setMail(e["mail"]);
+            })
+            .catch((err) => {
+              console.log(err);
+              message.open({ type: "error", content: "Server Error" });
+            });
+        }
 
-        setDisabled(false);
-        setFeed(true);
-        setMail(e["mail"]);
+        // setDisabled(false);
+        // setFeed(true);
+        // setMail(e["mail"]);
       })
       .catch((err) => {
         console.log("error:", err);
@@ -153,7 +153,7 @@ function ForgotPassword() {
                 rules={[
                   {
                     required: disabled,
-                    message: "please enter password",
+                    message: "Please Enter Mail Id",
                   },
                 ]}
                 initialValue={""}
@@ -172,7 +172,7 @@ function ForgotPassword() {
                 rules={[
                   {
                     required: feed,
-                    message: "please enter password",
+                    message: "Please Enter OTP",
                   },
                 ]}
                 hasFeedback={feed}

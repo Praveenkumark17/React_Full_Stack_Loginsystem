@@ -1,13 +1,10 @@
-import { Button, Flex, Menu } from "antd";
+import { Button, Flex, Menu, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import "../Css/navbar.css";
 import { Link } from "react-router-dom";
 import Item from "antd/es/list/Item";
-import {
-  LoginOutlined,
-  UserAddOutlined,
-  UsergroupAddOutlined,
-} from "@ant-design/icons";
+import { FiLogIn } from "react-icons/fi";
+import { FaUserPlus } from "react-icons/fa";
 
 function Navbar() {
   const [time, setTime] = useState(new Date());
@@ -39,16 +36,28 @@ function Navbar() {
           <Item key="1">
             <Link to="/">
               <Button type="link" className="navbutsub">
-                <LoginOutlined />
-                Sign In
+                <Flex>
+                  <Space>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <FiLogIn size={15} />
+                    </div>
+                    Sign In
+                  </Space>
+                </Flex>
               </Button>
             </Link>
           </Item>
           <Item key="2">
             <Link to="/register">
               <Button type="link" className="navbut">
-                <UsergroupAddOutlined />
-                Sign Up
+                <Flex>
+                  <Space>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <FaUserPlus size={15} />
+                    </div>
+                    Sign Up
+                  </Space>
+                </Flex>
               </Button>
             </Link>
           </Item>

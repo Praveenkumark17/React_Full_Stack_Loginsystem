@@ -18,6 +18,7 @@ import Upimages from "./Components/Pages/Upimages";
 import ForgotPassword from "./Components/Pages/ForgotPassword";
 import Demo from "./Components/Pages/Demo";
 import ResetPassword from "./Components/Pages/ResetPassword";
+import ErrorPage from "./Components/Pages/ErrorPage";
 
 function Apps() {
   let routes = useRoutes([
@@ -58,6 +59,10 @@ function Apps() {
         { path: "changepass", element: <Changepassword /> },
         { path: "listUser", element: <ListUser /> },
       ],
+    },
+    {
+      path: "error",
+      element: <ErrorPage />,
     },
   ]);
 

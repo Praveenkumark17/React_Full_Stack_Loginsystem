@@ -77,6 +77,8 @@ function Dashboard() {
 
   let getUserList;
 
+  const error = "Access denied due to invalid credentials";
+
   if (data?.authorities?.admin == 1) {
     getUserList = (
       <Menu.Item key="4">
@@ -196,7 +198,7 @@ function Dashboard() {
             <>
               <Space>
                 <ExclamationCircleOutlined style={{ color: "orange" }} /> Do You
-                want LogOut
+                Want To LogOut
               </Space>
             </>
           }
@@ -210,7 +212,7 @@ function Dashboard() {
       </>
     );
   } else {
-    return <ErrorPage />;
+    return <ErrorPage error={error} />;
   }
 }
 

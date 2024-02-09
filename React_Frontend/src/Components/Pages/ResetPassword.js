@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ErrorPage from "./ErrorPage";
+import { useNavigate } from "react-router-dom";
 
 function ResetPassword() {
   const [data, setData] = useState();
@@ -14,10 +15,22 @@ function ResetPassword() {
     }
   }, [sessiondata]);
 
-  window.onbeforeunload = function() {
+  const navigate = useNavigate();
+
+  window.onbeforeunload = function () {
     sessionStorage.clear();
   };
-  
+  window.onpopstate = function () {
+    sessionStorage.clear();
+    navigate("/");
+  };
+  const error = "Access Denied to Reset the Password";
+
+  useEffect(() => {
+    if (!sessiondata) {
+      navigate("/error");
+    }
+  }, [!sessiondata]);
 
   if (sessiondata) {
     return (
@@ -25,8 +38,6 @@ function ResetPassword() {
         <h1>ResetPassword {data?.email}</h1>
       </div>
     );
-  } else {
-    return <ErrorPage />;
   }
 }
 
