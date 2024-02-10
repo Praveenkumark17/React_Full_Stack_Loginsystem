@@ -72,7 +72,7 @@ public class UserController {
 //        return  service.GetImgId(id);
 //    }
 
-    @GetMapping(path = "/findemail/{email}")git add
+    @GetMapping(path = "/findemail/{email}")
     public ResponseEntity<?> findEmail(@PathVariable String email){
         return service.findEmail(email);
     }
