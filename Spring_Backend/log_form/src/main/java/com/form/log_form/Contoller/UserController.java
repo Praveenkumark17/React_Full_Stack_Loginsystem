@@ -1,5 +1,6 @@
 package com.form.log_form.Contoller;
 
+import com.form.log_form.Model.Authorities;
 import com.form.log_form.Model.Image;
 import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
@@ -71,9 +72,15 @@ public class UserController {
 //        return  service.GetImgId(id);
 //    }
 
-    @GetMapping(path = "/findemail/{email}")
+    @GetMapping(path = "/findemail/{email}")git add
     public ResponseEntity<?> findEmail(@PathVariable String email){
         return service.findEmail(email);
+    }
+
+    @PutMapping(path = "/staffauth/{id}")
+    public Authorities putAuth(@PathVariable Long id,@RequestBody Authorities auth)
+    {
+        return service.putAuth(id,auth);
     }
 
 }

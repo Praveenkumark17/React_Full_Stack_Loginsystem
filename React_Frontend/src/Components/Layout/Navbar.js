@@ -19,49 +19,68 @@ function Navbar() {
     };
   }, []);
 
+  const formatAMPM = (date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    let ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    let strTime = hours + ":" + minutes + ":" + seconds + " " + ampm;
+    return strTime;
+  };
+
   return (
     <>
-      <Flex justify="space-between">
-        <Menu mode="horizontal" theme="dark">
-          <Link to={"/"}>
-            <Item className="menuitem1">User Logs</Item>
-          </Link>
-        </Menu>
-        <Menu mode="horizontal" theme="dark">
-          <Item>
-            <div className="time">{time.toLocaleTimeString()}</div>
-          </Item>
-        </Menu>
-        <Menu mode="horizontal" theme="dark">
-          <Item key="1">
-            <Link to="/">
-              <Button type="link" className="navbutsub">
-                <Flex>
-                  <Space>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <FiLogIn size={15} />
-                    </div>
-                    Sign In
-                  </Space>
-                </Flex>
-              </Button>
+      <Flex>
+        <Flex style={{ width: "100%" }} justify="start">
+          <Menu mode="horizontal" theme="dark">
+            <Link to={"/"}>
+              <Item className="menuitem1">User Logs</Item>
             </Link>
-          </Item>
-          <Item key="2">
-            <Link to="/register">
-              <Button type="link" className="navbut">
-                <Flex>
-                  <Space>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <FaUserPlus size={15} />
-                    </div>
-                    Sign Up
-                  </Space>
-                </Flex>
-              </Button>
-            </Link>
-          </Item>
-        </Menu>
+          </Menu>
+        </Flex>
+        <Flex style={{ width: "100%" }} justify="center">
+          <Menu mode="horizontal" theme="dark">
+            <Item>
+              <div className="time">{formatAMPM(time)}</div>
+            </Item>
+          </Menu>
+        </Flex>
+        <Flex style={{ width: "100%" }} justify="end">
+          <Menu mode="horizontal" theme="dark">
+            <Item key="1">
+              <Link to="/">
+                <Button type="link" className="navbutsub">
+                  <Flex>
+                    <Space>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <FiLogIn size={15} />
+                      </div>
+                      Sign In
+                    </Space>
+                  </Flex>
+                </Button>
+              </Link>
+            </Item>
+            <Item key="2">
+              <Link to="/register">
+                <Button type="link" className="navbut">
+                  <Flex>
+                    <Space>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <FaUserPlus size={15} />
+                      </div>
+                      Sign Up
+                    </Space>
+                  </Flex>
+                </Button>
+              </Link>
+            </Item>
+          </Menu>
+        </Flex>
       </Flex>
     </>
   );

@@ -3,7 +3,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { HashLoader } from "react-spinners";
 import "../Css/listuser.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { GiCheckMark } from "react-icons/gi";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 
 function ListUser() {
   const [user, setUser] = useState();
@@ -22,10 +24,20 @@ function ListUser() {
 
   const navigate = useNavigate();
 
+  const location = useLocation();
+  const userType = location.state;
+
+  useEffect(() => {
+    console.log("states:", userType);
+  }, [userType]);
+
   const onView = async (id) => {
     await axios
       .get(`http://localhost:8080/user/getuserid/${id}`)
-      .then((res) => {console.log(res.data); Setselectuser(res.data)})
+      .then((res) => {
+        console.log(res.data);
+        Setselectuser(res.data);
+      })
       .catch((err) => console.log(err));
     console.log(id);
 
@@ -43,7 +55,7 @@ function ListUser() {
 
   const onOk = () => {
     setIsModalOpen(false);
-    Setselectuser(null);     //use for security purpose
+    Setselectuser(null); //use for security purpose
   };
 
   const onRemove = async (id) => {
@@ -56,20 +68,53 @@ function ListUser() {
       .catch((err) => console.log(err));
   };
 
+  const onaction = async (id,val) => {
+    console.log("action_val", val);
+    const acceptdata = { staff_admin: val };
+    await axios
+      .put(`http://localhost:8080/user/staffauth/${id}`, acceptdata)
+      .then((res) => {
+        console.log("accept-back:", res.data);
+        Settrigger(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     const updateuser = async () => {
       await axios
         .get("http://localhost:8080/user/getuser")
         .then((res) => {
           const result = res.data;
-          const users = result.filter((user) => user.authorities.admin !== 1);
-          Setgetusers(users);
-          console.log("final list:", users);
+          if (userType == 0) {
+            const users = result.filter(
+              (user) =>
+                user.authorities.staff_admin == 0 && user.authorities.admin == 0
+            );
+            Setgetusers(users);
+            console.log("final list:", users);
+          }
+          if (userType == 2) {
+            const users = result.filter(
+              (user) =>
+                user.authorities.staff_admin == 2 && user.authorities.admin == 0
+            );
+            Setgetusers(users);
+            console.log("final list:", users);
+          }
+          if (userType == 1) {
+            const users = result.filter(
+              (user) =>
+                user.authorities.staff_admin == 1 && user.authorities.admin == 0
+            );
+            Setgetusers(users);
+            console.log("final list:", users);
+          }
         })
         .catch((err) => console.log(err.data));
     };
     updateuser();
-  }, [trigger]);
+  }, [trigger, userType]);
 
   useEffect(() => {
     if (selectuser) {
@@ -93,39 +138,85 @@ function ListUser() {
           </Space>
         </div>
       ),
+      request_but: (
+        <div style={{ textAlign: "center" }}>
+          <Space size={"middle"}>
+            <Button
+              type="primary"
+              icon={<CheckOutlined />}
+              style={{ backgroundColor: "rgb(42, 153, 12)" }}
+              onClick={() => onaction(user.id,1)}
+            >
+              Accept
+            </Button>
+            <Button
+              type="primary"
+              icon={<CloseOutlined />}
+              onClick={() => onaction(user.id,3)}
+              danger
+            >
+              Reject
+            </Button>
+          </Space>
+        </div>
+      ),
     }));
     setUser(final);
   }, [getusers]);
 
   const columns = [
     {
-      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">FirstName</p></div>,
+      title: () => (
+        <div style={{ textAlign: "center" }}>
+          <p className="table-col-style">FirstName</p>
+        </div>
+      ),
       dataIndex: "firstname",
       key: "name",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">LastName</p></div>,
+      title: () => (
+        <div style={{ textAlign: "center" }}>
+          <p className="table-col-style">LastName</p>
+        </div>
+      ),
       dataIndex: "lastname",
       key: "lastname",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">Age</p></div>,
+      title: () => (
+        <div style={{ textAlign: "center" }}>
+          <p className="table-col-style">Age</p>
+        </div>
+      ),
       dataIndex: "age",
       key: "age",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">Email</p></div>,
+      title: () => (
+        <div style={{ textAlign: "center" }}>
+          <p className="table-col-style">Email</p>
+        </div>
+      ),
       dataIndex: "email",
       key: "email",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">Mobile</p></div>,
+      title: () => (
+        <div style={{ textAlign: "center" }}>
+          <p className="table-col-style">Mobile</p>
+        </div>
+      ),
       dataIndex: "mobile",
       key: "mobile",
     },
     {
-      title: () => <div style={{ textAlign: "center" }}><p className="table-col-style">Action</p></div>,
-      dataIndex: "but",
+      title: () => (
+        <div style={{ textAlign: "center" }}>
+          <p className="table-col-style">Action</p>
+        </div>
+      ),
+      dataIndex: userType == 0 || userType == 1 ? "but" : "request_but",
       key: "action",
     },
   ];
@@ -155,20 +246,30 @@ function ListUser() {
             ) : (
               <div className="list-avathar">
                 <div style={{ marginTop: "25px", marginLeft: "25px" }}>
-                  <HashLoader color="#0e1630" loading size={100}/>
+                  <HashLoader color="#0e1630" loading size={100} />
                 </div>
               </div>
             )}
           </Flex>
         </Modal>
         <Row className="list-row">
-          <Col span={14} offset={5}>
-            <Table style={{fontWeight:"bold"}}
+          <Flex justify="center" style={{ width: "100%" }}>
+            <Table
+              title={() => (
+                <div className="table-title">
+                  {userType == 0
+                    ? "STUDENT LIST"
+                    : userType == 2
+                    ? "STAFF REQUEST"
+                    : "STAFF LIST"}
+                </div>
+              )}
+              style={{ fontWeight: "bold" }}
               dataSource={user}
               columns={columns}
               pagination={{ pageSize: 5 }}
             />
-          </Col>
+          </Flex>
         </Row>
       </>
     );

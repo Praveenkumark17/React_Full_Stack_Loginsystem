@@ -2,8 +2,10 @@ package com.form.log_form.ServiceImp;
 
 import com.form.log_form.Exception.Usernotfoundexception;
 //import com.form.log_form.Model.Image;
+import com.form.log_form.Model.Authorities;
 import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
+import com.form.log_form.Repository.AutoritiesReapository;
 import com.form.log_form.Repository.ImageRepo;
 import com.form.log_form.Repository.UserRepository;
 import com.form.log_form.Service.Userservice;
@@ -28,6 +30,9 @@ public class UserserviceImp implements Userservice {
 
     @Autowired
     public ImageRepo imagerepo;
+
+    @Autowired
+    public AutoritiesReapository authreposity;
 
     @Override
     public List<User> getUser(){
@@ -155,5 +160,12 @@ public class UserserviceImp implements Userservice {
         }
     }
 
-
+    @Override
+    public Authorities putAuth(@PathVariable Long id,@RequestBody Authorities auth){
+        return authreposity.findById(id)
+                .map(auths->{
+                     auths.setStaff_admin(auth.getStaff_admin());
+                     return authreposity.save(auths);
+                }).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
+    }
 }

@@ -107,7 +107,7 @@ function Registration() {
 
     e["password"] = encrypted;
     e["userid"] = userid;
-    e["authorities"] = { admin: 0 };
+    e["authorities"] = { admin: 0, staff_admin: e['category'] };
 
     console.log("Register data:", e);
 
@@ -258,6 +258,9 @@ function Registration() {
                       rules={[
                         {
                           required: true,
+                          message: "please enter the age",
+                        },
+                        {
                           message: "Age between 20 - 60",
                           pattern: /^[2-6]\d{1}$/,
                         },
@@ -330,6 +333,25 @@ function Registration() {
                       />
                     </Form.Item>
                     <Form.Item
+                      name={"category"}
+                      label={"Category"}
+                      rules={[
+                        {
+                          required: true,
+                          message: "please select category",
+                        },
+                      ]}
+                      hasFeedback
+                    >
+                      <Select
+                        placeholder="Select category"
+                        style={{ width: "250px" }}
+                      >
+                        <Option value={2}>Staff Request</Option>
+                        <Option value={0}>Student</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item
                       name={"password"}
                       label={"Password"}
                       rules={[
@@ -351,7 +373,7 @@ function Registration() {
                     <Form.Item
                       name={"cpassword"}
                       dependencies={["password"]}
-                      label={"Confirm Password"}
+                      label={"Repeat Password"}
                       rules={[
                         {
                           required: true,

@@ -55,18 +55,27 @@ function Home() {
     if (getdata) {
       console.log("last id:", getdata.userid);
       console.log("last pass:", getdata.password);
+      console.log("staff admin:", getdata?.authorities?.staff_admin);
       if (
         data.userid === getdata.userid &&
         data.password === getdata.password
       ) {
-        console.log("Log success:", getdata.password, data.userid);
-        message.open({
-          type: "success",
-          content: "Login success",
-          duration: 1,
-        });
-        sessionStorage.setItem("userdata", JSON.stringify(getdata));
-        navigate("/dashboard");
+        if (getdata?.authorities?.staff_admin !== 2) {
+          console.log("Log success:", getdata.password, data.userid);
+          message.open({
+            type: "success",
+            content: "Login success",
+            duration: 1,
+          });
+          sessionStorage.setItem("userdata", JSON.stringify(getdata));
+          navigate("/dashboard");
+        } else {
+          message.open({
+            type: "error",
+            content: "Admin Not Accept in your request",
+            duration: 2,
+          });
+        }
       } else {
         console.log("Log error:");
         message.open({

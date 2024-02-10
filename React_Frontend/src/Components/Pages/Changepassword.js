@@ -110,7 +110,7 @@ function Changepassword() {
                     rules={[
                       {
                         required: true,
-                        message: "please enter password",
+                        message: "please enter old password",
                         pattern:
                           /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
                       },
@@ -130,7 +130,7 @@ function Changepassword() {
                     rules={[
                       {
                         required: true,
-                        message: "please enter password",
+                        message: "please enter new password",
                         pattern:
                           /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
                       },
@@ -145,12 +145,12 @@ function Changepassword() {
                   </Form.Item>
                   <Form.Item
                     name={"cpassword"}
-                    label={"Confirm new Password"}
+                    label={"Repeat New Password"}
                     dependencies={["password"]}
                     rules={[
                       {
                         required: true,
-                        message: "please enter password",
+                        message: "please enter new re-password",
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {

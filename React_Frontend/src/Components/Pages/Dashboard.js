@@ -23,6 +23,7 @@ import ErrorPage from "./ErrorPage";
 import {
   ExclamationCircleOutlined,
   PoweroffOutlined,
+  ReconciliationOutlined,
   TeamOutlined,
   UnlockOutlined,
   UserAddOutlined,
@@ -33,12 +34,16 @@ import ListUser from "./ListUser";
 import { LuUser2 } from "react-icons/lu";
 import { LuUsers2 } from "react-icons/lu";
 import { MdLockOpen } from "react-icons/md";
-import { FaPowerOff } from "react-icons/fa6";
+import { FaPowerOff, FaUserClock } from "react-icons/fa6";
+import { LiaUserTieSolid } from "react-icons/lia";
+import axios from "axios";
 
 function Dashboard() {
   const [data, setData] = useState([]);
 
   const [model, setModel] = useState(false);
+
+  const [trigger, SetTrigger] = useState(false);
 
   const navigate = useNavigate();
 
@@ -57,13 +62,29 @@ function Dashboard() {
   const sessiondata = sessionStorage.getItem("userdata");
 
   useEffect(() => {
-    if (sessiondata) {
+    if (sessiondata || trigger) {
+      console.log("value triger !!", trigger);
       const datas = sessiondata ? JSON.parse(sessiondata) : {};
-      setData(datas);
-      console.log(datas);
-      console.log("session admin:", datas.authorities.admin);
+      const getuserdata = async () => {
+        await axios
+          .get(`http://localhost:8080/user/getuserid/${datas.id}`)
+          .then((res) => {
+            console.log("dash-data:", res.data);
+            const getdata = res.data;
+            setData(getdata);
+            console.log(getdata);
+            console.log("session admin:", getdata?.authorities?.admin);
+          })
+          .catch((err) => console.log(err));
+      };
+      getuserdata();
     }
-  }, [sessiondata]);
+  }, [sessiondata, trigger]);
+
+  const onrefresh = (val) => {
+    const triger = val;
+    SetTrigger(triger);
+  };
 
   const onlogout = () => {
     sessionStorage.clear();
@@ -76,20 +97,98 @@ function Dashboard() {
   };
 
   let getUserList;
+  let staffList;
+  let staffrequestList;
 
   const error = "Access denied due to invalid credentials";
 
-  if (data?.authorities?.admin == 1) {
+  const formatAMPM = (date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    let ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    let strTime = hours + ":" + minutes + ":" + seconds + " " + ampm;
+    return strTime;
+  };
+
+  const Student = "0";
+  if (data?.authorities?.admin == 1 || data?.authorities?.staff_admin == 1) {
     getUserList = (
       <Menu.Item key="4">
-        <Link to={"listUser"}>
+        <Link
+          to={"listUser"}
+          state={Student}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+          }}
+        >
           <Button type="link" className="dash-but">
             <Flex>
               <Space>
                 <Flex align="center">
                   <LuUsers2 size={18} />
                 </Flex>
-                <div>Get User List</div>
+                <div>Students List</div>
+              </Space>
+            </Flex>
+          </Button>
+        </Link>
+      </Menu.Item>
+    );
+  }
+
+  const staff_request = 2;
+  if (data?.authorities?.admin == 1) {
+    staffrequestList = (
+      <Menu.Item key="5">
+        <Link
+          to={"listUser"}
+          state={staff_request}
+          style={{ marginLeft: "3px" }}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+          }}
+        >
+          <Button type="link" className="dash-but">
+            <Flex>
+              <Space>
+                <Flex align="center">
+                  <ReconciliationOutlined />
+                </Flex>
+                <div>Staff Request</div>
+              </Space>
+            </Flex>
+          </Button>
+        </Link>
+      </Menu.Item>
+    );
+  }
+
+  const staff_admins = 1;
+  if (data?.authorities?.admin == 1) {
+    staffList = (
+      <Menu.Item key="6">
+        <Link
+          to={"listUser"}
+          state={staff_admins}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+          }}
+        >
+          <Button type="link" className="dash-but">
+            <Flex>
+              <Space>
+                <Flex align="center">
+                  <LiaUserTieSolid size={20} />
+                </Flex>
+                <div>Staff List</div>
               </Space>
             </Flex>
           </Button>
@@ -102,22 +201,38 @@ function Dashboard() {
     <Menu>
       <Menu.Item key="1">
         <Link to={`edit/${data.id}`}>
-          <Button type="link" className="dash-but">
+          <Button
+            type="link"
+            className="dash-but"
+            onClick={() => {
+              onrefresh(trigger);
+              SetTrigger(!trigger);
+            }}
+          >
             <Flex>
               <Space>
                 <Flex align="center">
                   <LuUser2 size={18} />
                 </Flex>
-                <div>Profile</div>
+                <div>My Profile</div>
               </Space>
             </Flex>
           </Button>
         </Link>
       </Menu.Item>
       {getUserList}
+      {staffList}
+      {staffrequestList}
       <Menu.Item key="2">
         <Link to="changepass">
-          <Button type="link" className="dash-but">
+          <Button
+            type="link"
+            className="dash-but"
+            onClick={() => {
+              onrefresh(trigger);
+              SetTrigger(!trigger);
+            }}
+          >
             <Flex>
               <Space>
                 <Flex align="center">
@@ -154,32 +269,45 @@ function Dashboard() {
       <>
         <Layout>
           <Header>
-            <Flex justify="space-between">
-              <Menu mode="horizontal" theme="dark">
-                <Item>
-                  <Link to={"/dashboard"} className="dash-menuitem1">
-                    Welcome Back!! {data.firstname} {data.lastname}
-                  </Link>
-                </Item>
-              </Menu>
-              <Menu mode="horizontal" theme="dark">
-                <Item>
-                  <div className="dash_time">{time.toLocaleTimeString()}</div>
-                </Item>
-              </Menu>
-              <Menu mode="horizontal" theme="dark">
-                <Item>
-                  <Dropdown
-                    overlay={menu}
-                    placement="bottomRight"
-                    className="dash-drop"
-                  >
-                    <Button type="link" style={{ color: "lightblue" }}>
-                      Menu
-                    </Button>
-                  </Dropdown>
-                </Item>
-              </Menu>
+            <Flex>
+              <Flex style={{ width: "100%" }} justify="start">
+                <Menu mode="horizontal" theme="dark">
+                  <Item>
+                    <Link
+                      to={"/dashboard"}
+                      className="dash-menuitem1"
+                      onClick={() => {
+                        onrefresh(trigger);
+                        SetTrigger(!trigger);
+                      }}
+                    >
+                      Welcome Back!! {data.firstname} {data.lastname}
+                    </Link>
+                  </Item>
+                </Menu>
+              </Flex>
+              <Flex style={{ width: "100%" }} justify="center">
+                <Menu mode="horizontal" theme="dark">
+                  <Item>
+                    <div className="dash_time">{formatAMPM(time)}</div>
+                  </Item>
+                </Menu>
+              </Flex>
+              <Flex style={{ width: "100%" }} justify="end">
+                <Menu mode="horizontal" theme="dark">
+                  <Item>
+                    <Dropdown
+                      overlay={menu}
+                      placement="bottomRight"
+                      className="dash-drop"
+                    >
+                      <Button type="link" style={{ color: "lightblue" }}>
+                        Menu
+                      </Button>
+                    </Dropdown>
+                  </Item>
+                </Menu>
+              </Flex>
             </Flex>
           </Header>
           <Content className="dash-content">

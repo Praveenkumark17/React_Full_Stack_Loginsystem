@@ -1,5 +1,5 @@
 .dash-footer {
-  background-color: rgb(27, 27, 44);
+  background-color: rgb(0, 21, 41) !important;
   position: fixed;
   bottom: 0;
   height: 50px;
@@ -49,10 +49,14 @@
 }
 .ant-dropdown-menu {
   background-color: rgb(
-    29,
-    29,
-    64
+    0,
+    21,
+    41
   ) !important; /* Change to your desired color */
+  border: 1px solid gray;
+}
+.ant-dropdown-menu-item:hover {
+  background-color: rgb(29, 29, 48) !important;
 }
 .dash-pass-row {
   margin-top: 130px;
@@ -71,6 +75,6 @@
 .dash_time {
   font-weight: 600;
   font-size: 16px;
-  margin-right: 210px;
+  /* margin-right: 210px; */
   color: rgb(165, 216, 165);
 }

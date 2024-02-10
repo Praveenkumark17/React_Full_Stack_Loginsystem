@@ -1,5 +1,6 @@
 package com.form.log_form.Service;
 
+import com.form.log_form.Model.Authorities;
 import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +33,5 @@ public interface Userservice {
 
     public ResponseEntity<?> findEmail(String email);
 
-
+    public Authorities putAuth (Long id,Authorities auth);
 }

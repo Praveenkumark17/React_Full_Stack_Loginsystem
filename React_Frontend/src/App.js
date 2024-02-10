@@ -34,8 +34,8 @@ function Apps() {
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Registration />} />
               <Route path="/i" element={<Demo />} />
-              <Route path="/forgot_Password" element={<ForgotPassword/>}/>
-              <Route path="/reset_Password" element={<ResetPassword/>}/>
+              <Route path="/forgot_Password" element={<ForgotPassword />} />
+              <Route path="/reset_Password" element={<ResetPassword />} />
             </Routes>
           </Content>
           <Footer className="footer">
@@ -63,6 +63,7 @@ function Apps() {
     {
       path: "error",
       element: <ErrorPage />,
+      children: [{ path: "error", element: <ErrorPage /> }],
     },
   ]);
 

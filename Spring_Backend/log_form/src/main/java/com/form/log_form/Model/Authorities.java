@@ -10,7 +10,9 @@ public class Authorities {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
     private Integer admin;
+    private Integer Staff_admin;
 
     @OneToOne(mappedBy = "authorities")
     @JsonBackReference
@@ -40,4 +42,11 @@ public class Authorities {
         this.admin = admin;
     }
 
+    public Integer getStaff_admin() {
+        return Staff_admin;
+    }
+
+    public void setStaff_admin(Integer staff_admin) {
+        Staff_admin = staff_admin;
+    }
 }
