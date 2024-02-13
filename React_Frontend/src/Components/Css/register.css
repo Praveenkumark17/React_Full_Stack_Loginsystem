@@ -6,8 +6,8 @@
 .input{
     width: 250px;
 }
-.row{
-    margin-top: 40px;
+.register-row{
+    height: 100%;
 }
 /* .logcard{
     height: 530px;

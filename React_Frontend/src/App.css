@@ -1,9 +1,4 @@
-/* html, */
 body {
-  background: linear-gradient(145deg, rgb(195, 240, 200), rgb(80, 155, 245));
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 100%;
   margin: 0;
   font-family: 'Open Sans', sans-serif;
 }
@@ -17,15 +12,17 @@ body {
   align-items: center;
   justify-content: center;
   color: azure;
+  height: 8vh;
 }
 .content {
   width: 100%;
   background: linear-gradient(145deg, rgb(195, 240, 200), rgb(80, 155, 245));
   background-size: cover;
   background-repeat: no-repeat;
-  height: 90vh;
+  height: 83vh;
 }
 .header{
     position: sticky;
     top: 0;
+    height: 9vh;
 }

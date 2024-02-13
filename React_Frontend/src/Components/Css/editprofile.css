@@ -10,7 +10,7 @@
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 .edit-row {
-  margin-top: 35px;
+  height: 100%;
 }
 .default_in{
   cursor: no-drop;

@@ -111,8 +111,8 @@ function EditProfile() {
 
   return (
     <>
-      <Row className="edit-row">
-        <Col span={9} offset={8}>
+      <Row className="edit-row" align={"middle"}>
+        <Col span={10} offset={7}>
           <Card
             title={
               <>

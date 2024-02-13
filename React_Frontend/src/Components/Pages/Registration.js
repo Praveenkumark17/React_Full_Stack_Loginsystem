@@ -5,6 +5,7 @@ import {
   DatePicker,
   Flex,
   Form,
+  Image,
   Input,
   InputNumber,
   Row,
@@ -82,9 +83,21 @@ function Registration() {
       setImageUrl(null);
     },
     beforeUpload: (file) => {
-      setFileList([file]);
-      setImageUrl(URL.createObjectURL(file));
-      return false;
+      // return false;
+      const isJpgOrPng =
+        file.type === "image/jpeg" || file.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJpgOrPng) {
+        message.error("You can only upload JPG/PNG file!");
+      } else {
+        if (!isLt2M) {
+          message.error("Image must smaller than 2MB!");
+        } else {
+          setFileList([file]);
+          setImageUrl(URL.createObjectURL(file));
+          return isJpgOrPng && isLt2M;
+        }
+      }
     },
     fileList,
   };
@@ -107,7 +120,7 @@ function Registration() {
 
     e["password"] = encrypted;
     e["userid"] = userid;
-    e["authorities"] = { admin: 0, staff_admin: e['category'] };
+    e["authorities"] = { admin: 0, staff_admin: e["category"] };
 
     console.log("Register data:", e);
 
@@ -172,9 +185,9 @@ function Registration() {
   };
 
   return (
-    <div>
-      <Row className="row">
-        <Col span={9} offset={8}>
+    <>
+      <Row className="register-row" align={"middle"}>
+        <Col span={8} offset={8}>
           <Card
             title={
               <div
@@ -192,7 +205,7 @@ function Registration() {
           >
             <div className="cardrow">
               <Row>
-                <Col span={19} offset={2} className="cardcol">
+                <Col span={20} offset={2} className="cardcol">
                   <Form
                     form={forms}
                     onFinish={onFinish}
@@ -373,11 +386,11 @@ function Registration() {
                     <Form.Item
                       name={"cpassword"}
                       dependencies={["password"]}
-                      label={"Repeat Password"}
+                      label={"Re-Password"}
                       rules={[
                         {
                           required: true,
-                          message: "please enter confirm password",
+                          message: "please enter re-password",
                         },
                         ({ getFieldValue }) => ({
                           validator(_, value) {
@@ -394,7 +407,7 @@ function Registration() {
                     >
                       <Input.Password
                         name="cpassword"
-                        placeholder="Enter the confirm password"
+                        placeholder="Enter the re-password"
                         className="input"
                       />
                     </Form.Item>
@@ -415,7 +428,18 @@ function Registration() {
                         </Button>
                       </Upload>
                       {imageUrl && (
-                        <img src={imageUrl} height={100} alt="preview" />
+                        <>
+                          <Image.PreviewGroup
+                            preview={{
+                              onChange: (current, prev) =>
+                                console.log(
+                                  `current index: ${current}, prev index: ${prev}`
+                                ),
+                            }}
+                          >
+                            <Image width={100} src={imageUrl} />
+                          </Image.PreviewGroup>
+                        </>
                       )}
                     </Form.Item>
                     <Flex justify="start">
@@ -438,7 +462,7 @@ function Registration() {
           </Card>
         </Col>
       </Row>
-    </div>
+    </>
   );
 }
 

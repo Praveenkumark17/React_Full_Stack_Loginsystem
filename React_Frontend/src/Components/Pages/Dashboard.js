@@ -11,22 +11,29 @@ import {
   Modal,
   Row,
   Space,
+  Tooltip,
   message,
 } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Item from "antd/es/list/Item";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, Route, Router, Routes, useNavigate } from "react-router-dom";
 import "../Css/dashboard.css";
 import Footers from "../Layout/Footers";
 import ErrorPage from "./ErrorPage";
 import {
+  DesktopOutlined,
   ExclamationCircleOutlined,
+  FileOutlined,
+  PieChartOutlined,
   PoweroffOutlined,
   ReconciliationOutlined,
   TeamOutlined,
   UnlockOutlined,
+  UploadOutlined,
   UserAddOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
 } from "@ant-design/icons";
 import Editprofile from "./Editprofile";
 import Changepassword from "./Changepassword";
@@ -34,9 +41,15 @@ import ListUser from "./ListUser";
 import { LuUser2 } from "react-icons/lu";
 import { LuUsers2 } from "react-icons/lu";
 import { MdLockOpen } from "react-icons/md";
-import { FaPowerOff, FaUserClock } from "react-icons/fa6";
+import {
+  FaChalkboardUser,
+  FaPowerOff,
+  FaUserClock,
+  FaUserTie,
+} from "react-icons/fa6";
 import { LiaUserTieSolid } from "react-icons/lia";
 import axios from "axios";
+import Sider from "antd/es/layout/Sider";
 
 function Dashboard() {
   const [data, setData] = useState([]);
@@ -49,6 +62,14 @@ function Dashboard() {
 
   const [time, setTime] = useState(new Date());
 
+  // const [collapsed, setCollapsed] = useState(false);
+
+  const siderStyle = {
+    lineHeight: "120px",
+    color: "#fff",
+    // backgroundColor: "#1677ff",
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
@@ -58,6 +79,8 @@ function Dashboard() {
       clearInterval(timer);
     };
   }, []);
+
+  // setTimeout(()=>{sessionStorage.clear()},1000*60)
 
   const sessiondata = sessionStorage.getItem("userdata");
 
@@ -116,162 +139,107 @@ function Dashboard() {
   };
 
   const Student = "0";
-  if (data?.authorities?.admin == 1 || data?.authorities?.staff_admin == 1) {
-    getUserList = (
-      <Menu.Item key="4">
-        <Link
-          to={"listUser"}
-          state={Student}
-          onClick={() => {
-            onrefresh(trigger);
-            SetTrigger(!trigger);
-          }}
-        >
-          <Button type="link" className="dash-but">
-            <Flex>
-              <Space>
-                <Flex align="center">
-                  <LuUsers2 size={18} />
-                </Flex>
-                <div>Students List</div>
-              </Space>
-            </Flex>
-          </Button>
-        </Link>
-      </Menu.Item>
-    );
-  }
-
   const staff_request = 2;
-  if (data?.authorities?.admin == 1) {
-    staffrequestList = (
-      <Menu.Item key="5">
-        <Link
-          to={"listUser"}
-          state={staff_request}
-          style={{ marginLeft: "3px" }}
-          onClick={() => {
-            onrefresh(trigger);
-            SetTrigger(!trigger);
-          }}
-        >
-          <Button type="link" className="dash-but">
-            <Flex>
-              <Space>
-                <Flex align="center">
-                  <ReconciliationOutlined />
-                </Flex>
-                <div>Staff Request</div>
-              </Space>
-            </Flex>
-          </Button>
-        </Link>
-      </Menu.Item>
-    );
-  }
-
   const staff_admins = 1;
-  if (data?.authorities?.admin == 1) {
-    staffList = (
-      <Menu.Item key="6">
-        <Link
-          to={"listUser"}
-          state={staff_admins}
-          onClick={() => {
-            onrefresh(trigger);
-            SetTrigger(!trigger);
-          }}
-        >
-          <Button type="link" className="dash-but">
-            <Flex>
-              <Space>
-                <Flex align="center">
-                  <LiaUserTieSolid size={20} />
-                </Flex>
-                <div>Staff List</div>
-              </Space>
-            </Flex>
-          </Button>
-        </Link>
-      </Menu.Item>
-    );
+
+  function getItem(label, key, icon, className) {
+    return {
+      key,
+      icon,
+      className,
+      label,
+    };
   }
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">
-        <Link to={`edit/${data.id}`}>
-          <Button
-            type="link"
-            className="dash-but"
-            onClick={() => {
-              onrefresh(trigger);
-              SetTrigger(!trigger);
-            }}
-          >
-            <Flex>
-              <Space>
-                <Flex align="center">
-                  <LuUser2 size={18} />
-                </Flex>
-                <div>My Profile</div>
-              </Space>
-            </Flex>
-          </Button>
-        </Link>
+  const items = [
+    getItem(
+      <Link to={`edit/${data.id}`}>MY PROFILE</Link>,
+      "1",
+      <LuUser2 size={18} />
+    ),
+  ];
+
+  const studentitem = [
+    getItem(
+      <Link
+        to={"listUser"}
+        state={Student}
+        onClick={() => {
+          onrefresh(trigger);
+          SetTrigger(!trigger);
+        }}
+      >
+        STUDENT LIST
+      </Link>,
+      "2",
+      <LuUsers2 size={18} />
+    ),
+  ];
+
+  const changepass = [
+    getItem(
+      <Link
+        to={"changepass"}
+        onClick={() => {
+          onrefresh(trigger);
+          SetTrigger(!trigger);
+        }}
+      >
+        CHANGE PASSWORD
+      </Link>,
+      "6",
+      <MdLockOpen size={19} />
+    ),
+  ];
+
+  const staffitem = [
+    getItem(
+      <Link
+        to={"listUser"}
+        state={staff_admins}
+        onClick={() => {
+          onrefresh(trigger);
+          SetTrigger(!trigger);
+        }}
+      >
+        STAFF LIST
+      </Link>,
+      "3",
+      <LiaUserTieSolid size={20} />
+    ),
+    getItem(
+      <Link
+        to={"listUser"}
+        state={staff_request}
+        onClick={() => {
+          onrefresh(trigger);
+          SetTrigger(!trigger);
+        }}
+      >
+        STAFF REQUEST
+      </Link>,
+      "4",
+      <ReconciliationOutlined />
+    ),
+  ];
+
+  const renderItem = useCallback(
+    (item) => (
+      <Menu.Item key={item.key} icon={item.icon} className={item.className}>
+        {item.label}
       </Menu.Item>
-      {getUserList}
-      {staffList}
-      {staffrequestList}
-      <Menu.Item key="2">
-        <Link to="changepass">
-          <Button
-            type="link"
-            className="dash-but"
-            onClick={() => {
-              onrefresh(trigger);
-              SetTrigger(!trigger);
-            }}
-          >
-            <Flex>
-              <Space>
-                <Flex align="center">
-                  <MdLockOpen size={19} />
-                </Flex>
-                <div>Change Password</div>
-              </Space>
-            </Flex>
-          </Button>
-        </Link>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <Button
-          type="link"
-          onClick={() => setModel(true)}
-          danger
-          className="dash-out-but"
-        >
-          <Flex>
-            <Space>
-              <Flex align="center">
-                <FaPowerOff size={18} />
-              </Flex>
-              <div>Log Out</div>
-            </Space>
-          </Flex>
-        </Button>
-      </Menu.Item>
-    </Menu>
+    ),
+    []
   );
 
   if (sessiondata) {
     return (
       <>
         <Layout>
-          <Header>
+          <Header className="dash-header">
             <Flex>
               <Flex style={{ width: "100%" }} justify="start">
-                <Menu mode="horizontal" theme="dark">
+                <Menu mode="horizontal" theme="dark" style={{height:"10px"}}> 
                   <Item>
                     <Link
                       to={"/dashboard"}
@@ -281,42 +249,88 @@ function Dashboard() {
                         SetTrigger(!trigger);
                       }}
                     >
-                      Welcome Back!! {data.firstname} {data.lastname}
+                      User Logs
                     </Link>
                   </Item>
                 </Menu>
               </Flex>
               <Flex style={{ width: "100%" }} justify="center">
-                <Menu mode="horizontal" theme="dark">
+                <Menu mode="horizontal" theme="dark" style={{height:"10px"}}>
                   <Item>
                     <div className="dash_time">{formatAMPM(time)}</div>
                   </Item>
                 </Menu>
               </Flex>
               <Flex style={{ width: "100%" }} justify="end">
-                <Menu mode="horizontal" theme="dark">
-                  <Item>
-                    <Dropdown
-                      overlay={menu}
-                      placement="bottomRight"
-                      className="dash-drop"
-                    >
-                      <Button type="link" style={{ color: "lightblue" }}>
-                        Menu
-                      </Button>
-                    </Dropdown>
-                  </Item>
-                </Menu>
+                <Flex justify="end" align="center" style={{marginTop:"3.5%"}}>
+                  <Button
+                    type="link"
+                    className="dash-menuitem2"
+                    style={{ color: "rgb(0, 191, 255)" }}
+                  >
+                    {data.firstname} {data.lastname}
+                    {data.authorities?.staff_admin == 1 &&
+                    data.authorities.admin == 0
+                      ? " (STAFF)"
+                      : data.authorities?.staff_admin == 0 &&
+                        data.authorities.admin == 0
+                      ? " (STUDENT)"
+                      : data.authorities?.staff_admin == 0 &&
+                        data.authorities.admin == 1
+                      ? " (ADMIN)"
+                      : ""}
+                  </Button>
+                  <Button
+                    type="link"
+                    style={{
+                      fontSize: "17px",
+                      fontWeight: "bold",
+                      color: "red",
+                    }}
+                    onClick={() => setModel(true)}
+                  >
+                    <FaPowerOff />
+                  </Button>
+                </Flex>
               </Flex>
             </Flex>
           </Header>
-          <Content className="dash-content">
-            <Routes>
-              <Route path="/edit/:id" element={<Editprofile />} />
-              <Route path="/changepass" element={<Changepassword />} />
-              <Route path="/listUser" element={<ListUser />} />
-            </Routes>
-          </Content>
+          <Layout className="layout">
+            <Sider width={"20%"} className="sider" theme="dark">
+              <Menu
+              theme="dark"
+                mode="inline"
+                defaultSelectedKeys={["1"]}
+                className="sider-menu"
+              >
+                {items.map(renderItem)}
+                {data?.authorities?.admin == 1 ||
+                data?.authorities?.staff_admin == 1
+                  ? studentitem.map(renderItem)
+                  : ""}
+                {data?.authorities?.admin == 1 ? (
+                  <Menu.SubMenu
+                    key="sub1"
+                    icon={<FaChalkboardUser size={18} />}
+                    title="STAFF"
+                    className="sider-sub-menu"
+                  >
+                    {staffitem.map(renderItem)}
+                  </Menu.SubMenu>
+                ) : (
+                  ""
+                )}
+                {changepass.map(renderItem)}
+              </Menu>
+            </Sider>
+            <Content className="dash-content-out">
+              <Routes>
+                <Route path="/edit/:id" element={<Editprofile />} />
+                <Route path="/changepass" element={<Changepassword />} />
+                <Route path="/listUser" element={<ListUser />} />
+              </Routes>
+            </Content>
+          </Layout>
           <Footer className="dash-footer">
             <Footers />
           </Footer>

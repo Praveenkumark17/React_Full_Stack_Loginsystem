@@ -34,7 +34,7 @@ function ResetPassword() {
   const navigate = useNavigate();
 
   window.onbeforeunload = function () {
-    // sessionStorage.clear();
+    sessionStorage.clear();
   };
   window.onpopstate = function () {
     sessionStorage.clear();
@@ -86,8 +86,8 @@ function ResetPassword() {
   if (sessiondata) {
     return (
       <>
-        <Row className="reset_row">
-          <Col span={9} offset={8}>
+        <Row className="reset_row" align={"middle"}>
+          <Col span={8} offset={8}>
             <Card
               title={
                 <Flex justify="center">
@@ -103,7 +103,7 @@ function ResetPassword() {
               }
             >
               <Row>
-                <Col span={20} offset={2}>
+                <Col span={22} offset={0}>
                   <Form
                     form={forms}
                     autoComplete="off"
@@ -137,7 +137,7 @@ function ResetPassword() {
                     </Form.Item>
                     <Form.Item
                       name={"cpassword"}
-                      label={"Repeat New Password"}
+                      label={"Re-New Password"}
                       dependencies={["password"]}
                       rules={[
                         {

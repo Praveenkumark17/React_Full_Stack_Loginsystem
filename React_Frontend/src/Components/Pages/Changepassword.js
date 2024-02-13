@@ -11,7 +11,6 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import "../Css/changepass.css";
-import { UnlockOutlined } from "@ant-design/icons";
 import CryptoJS from "crypto-js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -71,8 +70,8 @@ function Changepassword() {
 
   return (
     <>
-      <Row className="pass-row">
-        <Col span={9} offset={8}>
+      <Row className="pass-row" align={"middle"}>
+        <Col span={12} offset={6}>
           <Card
             title={
               <Flex justify="center">

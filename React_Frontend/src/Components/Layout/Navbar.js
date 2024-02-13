@@ -36,21 +36,21 @@ function Navbar() {
     <>
       <Flex>
         <Flex style={{ width: "100%" }} justify="start">
-          <Menu mode="horizontal" theme="dark">
+          <Menu mode="horizontal" theme="dark" className="nav-menus">
             <Link to={"/"}>
               <Item className="menuitem1">User Logs</Item>
             </Link>
           </Menu>
         </Flex>
         <Flex style={{ width: "100%" }} justify="center">
-          <Menu mode="horizontal" theme="dark">
+          <Menu mode="horizontal" theme="dark" className="nav-menus">
             <Item>
               <div className="time">{formatAMPM(time)}</div>
             </Item>
           </Menu>
         </Flex>
         <Flex style={{ width: "100%" }} justify="end">
-          <Menu mode="horizontal" theme="dark">
+          <Menu mode="horizontal" theme="dark" className="nav-menus">
             <Item key="1">
               <Link to="/">
                 <Button type="link" className="navbutsub">

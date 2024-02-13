@@ -253,7 +253,7 @@ function ListUser() {
           </Flex>
         </Modal>
         <Row className="list-row">
-          <Flex justify="center" style={{ width: "100%" }}>
+          <Flex justify="center" style={{ width: "100%" }} align="center">
             <Table
               title={() => (
                 <div className="table-title">

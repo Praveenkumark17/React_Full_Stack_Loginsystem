@@ -95,7 +95,7 @@ function Home() {
 
   return (
     <>
-      <Row className="rows">
+      <Row className="rows" align={"middle"}>
         <Col span={8} offset={8}>
           <Card
             title={

@@ -86,24 +86,24 @@ function ForgotPassword() {
         console.log("ids:", result.id);
         setSendData(result);
 
-        if (window.Email) {
-          window.Email.send(config)
-            .then((m) => {
-              message.open({ type: "success", content: "OTP Send" });
-              setSendData(result);
-              setDisabled(false);
-              setFeed(true);
-              setMail(e["mail"]);
-            })
-            .catch((err) => {
-              console.log(err);
-              message.open({ type: "error", content: "Server Error" });
-            });
-        }
+        // if (window.Email) {
+        //   window.Email.send(config)
+        //     .then((m) => {
+        //       message.open({ type: "success", content: "OTP Send" });
+        //       setSendData(result);
+        //       setDisabled(false);
+        //       setFeed(true);
+        //       setMail(e["mail"]);
+        //     })
+        //     .catch((err) => {
+        //       console.log(err);
+        //       message.open({ type: "error", content: "Server Error" });
+        //     });
+        // }
 
-        // setDisabled(false);
-        // setFeed(true);
-        // setMail(e["mail"]);
+        setDisabled(false);
+        setFeed(true);
+        setMail(e["mail"]);
       })
       .catch((err) => {
         console.log("error:", err);
@@ -113,7 +113,7 @@ function ForgotPassword() {
 
   return (
     <>
-      <Row className="pass-row">
+      <Row className="forgot-row" align={"middle"}>
         <Col span={8} offset={8}>
           <Card
             title={
