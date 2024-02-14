@@ -43,7 +43,12 @@ function ResetPassword() {
 
   useEffect(() => {
     if (!sessiondata) {
-      navigate("/error");
+      navigate("/error", {
+        state: {
+          message: "Sorry, the page you visited does not exist to reset your password.",
+          errorCode: 404,
+        },
+      })
     }
   }, [!sessiondata]);
 

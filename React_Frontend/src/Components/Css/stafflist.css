@@ -1,17 +1,17 @@
-.list-row {
+.staff-list-row {
   height: 100%;
 }
-.list-row-load {
+.staff-list-row-load {
   height: 100%;
   width: 100%;
 }
-.list-avathar {
+.staff-list-avathar {
   border-radius: 10px;
   border: 2px solid #0e1630;
   height: 157px;
   width: 147px;
 }
-.table-col-style {
+.staff-table-col-style {
   font-weight: bold;
   font-size: 16.5px;
   color: rgb(187, 0, 0);

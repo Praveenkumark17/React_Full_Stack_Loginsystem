@@ -1,15 +1,9 @@
 import {
   Button,
-  Card,
-  Col,
-  Dropdown,
   Flex,
-  Form,
-  Input,
   Layout,
   Menu,
   Modal,
-  Row,
   Space,
   Tooltip,
   message,
@@ -22,18 +16,9 @@ import "../Css/dashboard.css";
 import Footers from "../Layout/Footers";
 import ErrorPage from "./ErrorPage";
 import {
-  DesktopOutlined,
   ExclamationCircleOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  PoweroffOutlined,
+  HomeOutlined,
   ReconciliationOutlined,
-  TeamOutlined,
-  UnlockOutlined,
-  UploadOutlined,
-  UserAddOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
 import Editprofile from "./Editprofile";
 import Changepassword from "./Changepassword";
@@ -41,15 +26,12 @@ import ListUser from "./ListUser";
 import { LuUser2 } from "react-icons/lu";
 import { LuUsers2 } from "react-icons/lu";
 import { MdLockOpen } from "react-icons/md";
-import {
-  FaChalkboardUser,
-  FaPowerOff,
-  FaUserClock,
-  FaUserTie,
-} from "react-icons/fa6";
+import { FaChalkboardUser, FaPowerOff } from "react-icons/fa6";
 import { LiaUserTieSolid } from "react-icons/lia";
 import axios from "axios";
 import Sider from "antd/es/layout/Sider";
+import { AiOutlineHome } from "react-icons/ai";
+import StaffList from "./StaffList";
 
 function Dashboard() {
   const [data, setData] = useState([]);
@@ -138,7 +120,6 @@ function Dashboard() {
     return strTime;
   };
 
-  const Student = "0";
   const staff_request = 2;
   const staff_admins = 1;
 
@@ -153,8 +134,14 @@ function Dashboard() {
 
   const items = [
     getItem(
-      <Link to={`edit/${data.id}`}>MY PROFILE</Link>,
+      <Link to={``}>HOME</Link>,
       "1",
+      <AiOutlineHome size={18} />,
+      "item-profile"
+    ),
+    getItem(
+      <Link to={`edit/${data.id}`}>MY PROFILE</Link>,
+      "2",
       <LuUser2 size={18} />
     ),
   ];
@@ -163,7 +150,6 @@ function Dashboard() {
     getItem(
       <Link
         to={"listUser"}
-        state={Student}
         onClick={() => {
           onrefresh(trigger);
           SetTrigger(!trigger);
@@ -171,7 +157,7 @@ function Dashboard() {
       >
         STUDENT LIST
       </Link>,
-      "2",
+      "3",
       <LuUsers2 size={18} />
     ),
   ];
@@ -195,30 +181,30 @@ function Dashboard() {
   const staffitem = [
     getItem(
       <Link
-        to={"listUser"}
+      to={"staff_list"}
         state={staff_admins}
         onClick={() => {
-          onrefresh(trigger);
-          SetTrigger(!trigger);
+          // onrefresh(trigger);
+          // SetTrigger(!trigger);
         }}
       >
         STAFF LIST
       </Link>,
-      "3",
+      "4",
       <LiaUserTieSolid size={20} />
     ),
     getItem(
       <Link
-        to={"listUser"}
+        to={"staff_list"}
         state={staff_request}
         onClick={() => {
-          onrefresh(trigger);
-          SetTrigger(!trigger);
+          // onrefresh(trigger);
+          // SetTrigger(!trigger);
         }}
       >
         STAFF REQUEST
       </Link>,
-      "4",
+      "5",
       <ReconciliationOutlined />
     ),
   ];
@@ -239,7 +225,7 @@ function Dashboard() {
           <Header className="dash-header">
             <Flex>
               <Flex style={{ width: "100%" }} justify="start">
-                <Menu mode="horizontal" theme="dark" style={{height:"10px"}}> 
+                <Menu mode="horizontal" theme="dark" style={{ height: "10px" }}>
                   <Item>
                     <Link
                       to={"/dashboard"}
@@ -255,14 +241,18 @@ function Dashboard() {
                 </Menu>
               </Flex>
               <Flex style={{ width: "100%" }} justify="center">
-                <Menu mode="horizontal" theme="dark" style={{height:"10px"}}>
+                <Menu mode="horizontal" theme="dark" style={{ height: "10px" }}>
                   <Item>
                     <div className="dash_time">{formatAMPM(time)}</div>
                   </Item>
                 </Menu>
               </Flex>
               <Flex style={{ width: "100%" }} justify="end">
-                <Flex justify="end" align="center" style={{marginTop:"3.5%"}}>
+                <Flex
+                  justify="end"
+                  align="center"
+                  style={{ marginTop: "3.5%" }}
+                >
                   <Button
                     type="link"
                     className="dash-menuitem2"
@@ -280,17 +270,19 @@ function Dashboard() {
                       ? " (ADMIN)"
                       : ""}
                   </Button>
-                  <Button
-                    type="link"
-                    style={{
-                      fontSize: "17px",
-                      fontWeight: "bold",
-                      color: "red",
-                    }}
-                    onClick={() => setModel(true)}
-                  >
-                    <FaPowerOff />
-                  </Button>
+                  <Tooltip title={"LOG OUT"} placement="bottomRight">
+                    <Button
+                      type="link"
+                      style={{
+                        fontSize: "17px",
+                        fontWeight: "bold",
+                        color: "red",
+                      }}
+                      onClick={() => setModel(true)}
+                    >
+                      <FaPowerOff />
+                    </Button>
+                  </Tooltip>
                 </Flex>
               </Flex>
             </Flex>
@@ -298,7 +290,7 @@ function Dashboard() {
           <Layout className="layout">
             <Sider width={"20%"} className="sider" theme="dark">
               <Menu
-              theme="dark"
+                theme="dark"
                 mode="inline"
                 defaultSelectedKeys={["1"]}
                 className="sider-menu"
@@ -328,6 +320,7 @@ function Dashboard() {
                 <Route path="/edit/:id" element={<Editprofile />} />
                 <Route path="/changepass" element={<Changepassword />} />
                 <Route path="/listUser" element={<ListUser />} />
+                <Route path="/staff_list" element={<StaffList />} />
               </Routes>
             </Content>
           </Layout>
@@ -354,7 +347,12 @@ function Dashboard() {
       </>
     );
   } else {
-    return <ErrorPage error={error} />;
+    return navigate("/error", {
+      state: {
+        message: "Sorry, the page you visited does not exist to enter the dashboard.",
+        errorCode: 404,
+      },
+    });
   }
 }
 

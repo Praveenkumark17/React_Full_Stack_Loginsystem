@@ -1,11 +1,9 @@
-import { Button, Col, Flex, Modal, QRCode, Row, Space, Table } from "antd";
+import { Button, Flex, Modal, QRCode, Row, Space, Table } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { HashLoader } from "react-spinners";
 import "../Css/listuser.css";
-import { useLocation, useNavigate } from "react-router-dom";
-import { GiCheckMark } from "react-icons/gi";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import {  useNavigate } from "react-router-dom";
 
 function ListUser() {
   const [user, setUser] = useState();
@@ -23,13 +21,6 @@ function ListUser() {
   const [trigger, Settrigger] = useState();
 
   const navigate = useNavigate();
-
-  const location = useLocation();
-  const userType = location.state;
-
-  useEffect(() => {
-    console.log("states:", userType);
-  }, [userType]);
 
   const onView = async (id) => {
     await axios
@@ -50,6 +41,7 @@ function ListUser() {
     delete qrvalue["id"];
     delete qrvalue["authorities"];
     delete qrvalue["imagepath"];
+    qrvalue["roll"]= "Student";
     SetQrvalues(qrvalue);
   }, [selectuser]);
 
@@ -68,53 +60,23 @@ function ListUser() {
       .catch((err) => console.log(err));
   };
 
-  const onaction = async (id,val) => {
-    console.log("action_val", val);
-    const acceptdata = { staff_admin: val };
-    await axios
-      .put(`http://localhost:8080/user/staffauth/${id}`, acceptdata)
-      .then((res) => {
-        console.log("accept-back:", res.data);
-        Settrigger(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
   useEffect(() => {
     const updateuser = async () => {
       await axios
         .get("http://localhost:8080/user/getuser")
         .then((res) => {
           const result = res.data;
-          if (userType == 0) {
-            const users = result.filter(
-              (user) =>
-                user.authorities.staff_admin == 0 && user.authorities.admin == 0
-            );
-            Setgetusers(users);
-            console.log("final list:", users);
-          }
-          if (userType == 2) {
-            const users = result.filter(
-              (user) =>
-                user.authorities.staff_admin == 2 && user.authorities.admin == 0
-            );
-            Setgetusers(users);
-            console.log("final list:", users);
-          }
-          if (userType == 1) {
-            const users = result.filter(
-              (user) =>
-                user.authorities.staff_admin == 1 && user.authorities.admin == 0
-            );
-            Setgetusers(users);
-            console.log("final list:", users);
-          }
+          const users = result.filter(
+            (user) =>
+              user.authorities.staff_admin == 0 && user.authorities.admin == 0
+          );
+          Setgetusers(users);
+          console.log("final list:", users);
         })
         .catch((err) => console.log(err.data));
     };
     updateuser();
-  }, [trigger, userType]);
+  }, [trigger]);
 
   useEffect(() => {
     if (selectuser) {
@@ -134,28 +96,6 @@ function ListUser() {
             </Button>
             <Button type="primary" onClick={() => onRemove(user.id)} danger>
               Remove
-            </Button>
-          </Space>
-        </div>
-      ),
-      request_but: (
-        <div style={{ textAlign: "center" }}>
-          <Space size={"middle"}>
-            <Button
-              type="primary"
-              icon={<CheckOutlined />}
-              style={{ backgroundColor: "rgb(42, 153, 12)" }}
-              onClick={() => onaction(user.id,1)}
-            >
-              Accept
-            </Button>
-            <Button
-              type="primary"
-              icon={<CloseOutlined />}
-              onClick={() => onaction(user.id,3)}
-              danger
-            >
-              Reject
             </Button>
           </Space>
         </div>
@@ -216,7 +156,7 @@ function ListUser() {
           <p className="table-col-style">Action</p>
         </div>
       ),
-      dataIndex: userType == 0 || userType == 1 ? "but" : "request_but",
+      dataIndex: "but",
       key: "action",
     },
   ];
@@ -255,15 +195,7 @@ function ListUser() {
         <Row className="list-row">
           <Flex justify="center" style={{ width: "100%" }} align="center">
             <Table
-              title={() => (
-                <div className="table-title">
-                  {userType == 0
-                    ? "STUDENT LIST"
-                    : userType == 2
-                    ? "STAFF REQUEST"
-                    : "STAFF LIST"}
-                </div>
-              )}
+              title={() => <div className="table-title">STUDENT LIST</div>}
               style={{ fontWeight: "bold" }}
               dataSource={user}
               columns={columns}
@@ -276,12 +208,10 @@ function ListUser() {
   } else {
     return (
       <>
-        <Row className="list-row-load">
-          <Col span={8} offset={11}>
-            <div>
-              <HashLoader color="#0e1630" loading size={110} />
-            </div>
-          </Col>
+        <Row className="list-row-load" align={"middle"}>
+          <Flex justify="center" style={{ width: "100%" }}>
+            <HashLoader color="#0e1630" loading size={110} />
+          </Flex>
         </Row>
       </>
     );

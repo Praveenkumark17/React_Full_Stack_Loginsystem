@@ -93,7 +93,7 @@ function Changepassword() {
             className="pass-logcards"
           >
             <Row>
-              <Col span={20} offset={2}>
+              <Col span={18} offset={3}>
                 <Form
                   autoComplete="off"
                   style={{
@@ -144,7 +144,7 @@ function Changepassword() {
                   </Form.Item>
                   <Form.Item
                     name={"cpassword"}
-                    label={"Repeat New Password"}
+                    label={"Re-New Password"}
                     dependencies={["password"]}
                     rules={[
                       {

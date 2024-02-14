@@ -1,21 +1,6 @@
 /* ErrorPage.css */
 
-.error-page {
-    background-color: #951d1f; /* Red background */
-    color: white; /* White text */
-    height: 100vh; /* Full viewport height */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .error-code {
-    font-size: 6em;
-  }
-  
-  .error-message {
-    font-size: 2em;
-  }
-  
+.result {
+  height: 100vh;
+  width: 100%;
+}
