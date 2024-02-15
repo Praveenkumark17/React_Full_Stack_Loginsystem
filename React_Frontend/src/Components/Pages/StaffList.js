@@ -20,11 +20,20 @@ function StaffList() {
     const [imgurl, Setimgurl] = useState();
   
     const [trigger, Settrigger] = useState();
+
+    const [sessiondata,setSessiondata] = useState();
   
     const navigate = useNavigate();
   
     const location = useLocation();
     const userTypes = location.state;
+
+    useEffect(()=>{
+      const sessiondata = sessionStorage.getItem("userdata");
+      const datas = sessiondata ? JSON.parse(sessiondata) : {};
+      setSessiondata(datas);
+      console.log("staff session",datas)
+    },[])
   
     useEffect(() => {
       console.log("states:", userTypes);
@@ -49,6 +58,7 @@ function StaffList() {
       delete qrvalue["id"];
       delete qrvalue["authorities"];
       delete qrvalue["imagepath"];
+      qrvalue["roll"]= "Staff";
       SetQrvalues(qrvalue);
     }, [selectuser]);
   
@@ -212,66 +222,76 @@ function StaffList() {
       },
     ];
   
-    if (user) {
-      return (
-        <>
-          <Modal
-            title={
-              <div>
-                <h3>Mr. {selectuser?.firstname + " " + selectuser?.lastname}</h3>
-              </div>
-            }
-            open={isModalOpen}
-            onOk={onOk}
-            onCancel={onOk}
-          >
-            <Flex justify="space-between">
-              <QRCode value={JSON.stringify(qrvalues)} />
-              {imgurl ? (
-                <img
-                  className="staff-list-avathar"
-                  src={imgurl}
-                  height={157}
-                  width={147}
-                ></img>
-              ) : (
-                <div className="staff-list-avathar">
-                  <div style={{ marginTop: "25px", marginLeft: "25px" }}>
-                    <HashLoader color="#0e1630" loading size={100} />
-                  </div>
+    if(sessiondata?.authorities?.admin==1){
+      if (user) {
+        return (
+          <>
+            <Modal
+              title={
+                <div>
+                  <h3>Mr. {selectuser?.firstname + " " + selectuser?.lastname}</h3>
                 </div>
-              )}
-            </Flex>
-          </Modal>
-          <Row className="staff-list-row">
-            <Flex justify="center" style={{ width: "100%" }} align="center">
-              <Table
-                title={() => (
-                  <div className="table-title">
-                    {userTypes == 2
-                      ? "STAFF REQUEST"
-                      : "STAFF LIST"}
+              }
+              open={isModalOpen}
+              onOk={onOk}
+              onCancel={onOk}
+            >
+              <Flex justify="space-between">
+                <QRCode value={JSON.stringify(qrvalues)} />
+                {imgurl ? (
+                  <img
+                    className="staff-list-avathar"
+                    src={imgurl}
+                    height={157}
+                    width={147}
+                  ></img>
+                ) : (
+                  <div className="staff-list-avathar">
+                    <div style={{ marginTop: "25px", marginLeft: "25px" }}>
+                      <HashLoader color="#0e1630" loading size={100} />
+                    </div>
                   </div>
                 )}
-                style={{ fontWeight: "bold" }}
-                dataSource={user}
-                columns={columns}
-                pagination={{ pageSize: 5 }}
-              />
-            </Flex>
-          </Row>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <Row className="staff-list-row-load" align={"middle"}>
-            <Flex justify="center" style={{width:"100%"}}>
-                <HashLoader color="#0e1630" loading size={110} />
-            </Flex>
-          </Row>
-        </>
-      );
+              </Flex>
+            </Modal>
+            <Row className="staff-list-row">
+              <Flex justify="center" style={{ width: "100%" }} align="center">
+                <Table
+                  title={() => (
+                    <div className="table-title">
+                      {userTypes == 2
+                        ? "STAFF REQUEST"
+                        : "STAFF LIST"}
+                    </div>
+                  )}
+                  style={{ fontWeight: "bold" }}
+                  dataSource={user}
+                  columns={columns}
+                  pagination={{ pageSize: 5 }}
+                />
+              </Flex>
+            </Row>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Row className="staff-list-row-load" align={"middle"}>
+              <Flex justify="center" style={{width:"100%"}}>
+                  <HashLoader color="#0e1630" loading size={110} />
+              </Flex>
+            </Row>
+          </>
+        );
+      }
+    }else{
+      return navigate("/error", {
+        state: {
+          message: "Sorry, you are not authorized to access this page.",
+          errorCode: 403,
+          type:1
+        },
+      });
     }
   }
 

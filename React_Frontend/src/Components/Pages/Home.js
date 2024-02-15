@@ -35,11 +35,21 @@ function Home() {
       })
       .catch((err) => {
         console.log("backend error 3:", err);
-        message.open({
-          type: "error",
-          content: "Login error: Invalid Data",
-          duration: 2,
-        });
+        if (err.request) {
+          navigate("/error", {
+            state: {
+              message: "Sorry, something went wrong.(Server Error Try Later)",
+              errorCode: 500,
+              type: 2,
+            },
+          });
+        }else{
+          message.open({
+            type: "error",
+            content: "Wrong User Id",
+            duration: 2,
+          });
+        }
         setPass(null);
         setGetdata(null);
       });
@@ -80,7 +90,7 @@ function Home() {
         console.log("Log error:");
         message.open({
           type: "error",
-          content: "Login error in",
+          content: "Wrong Password",
           duration: 2,
         });
       }

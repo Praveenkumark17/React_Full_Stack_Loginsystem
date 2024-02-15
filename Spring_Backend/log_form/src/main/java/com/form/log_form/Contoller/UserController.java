@@ -1,7 +1,6 @@
 package com.form.log_form.Contoller;
 
 import com.form.log_form.Model.Authorities;
-import com.form.log_form.Model.Image;
 import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
 import com.form.log_form.Service.Userservice;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -57,20 +55,6 @@ public class UserController {
         return service.deleteUser(id);
     }
 
-//    @PostMapping("/uploads")
-//    public Image upload(@RequestParam("file") MultipartFile file){
-//        return  service.Upload(file);
-//    }
-//
-//    @GetMapping("/getimage")
-//    public List<Image> getimage(){
-//        return service.GetImage();
-//    }
-//
-//    @GetMapping("/getimageid/{id}")
-//    public Image getimgid(@PathVariable Long id){
-//        return  service.GetImgId(id);
-//    }
 
     @GetMapping(path = "/findemail/{email}")
     public ResponseEntity<?> findEmail(@PathVariable String email){

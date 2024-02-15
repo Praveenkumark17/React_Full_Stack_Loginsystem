@@ -25,12 +25,6 @@ public interface Userservice {
 
     public String deleteUser(Long id);
 
-//    public Image Upload(MultipartFile file);
-//
-//    public List<Image> GetImage();
-//
-//    public Image GetImgId(Long id);
-
     public ResponseEntity<?> findEmail(String email);
 
     public Authorities putAuth (Long id,Authorities auth);

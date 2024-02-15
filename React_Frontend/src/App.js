@@ -20,7 +20,6 @@ import Demo from "./Components/Pages/Demo";
 import ResetPassword from "./Components/Pages/ResetPassword";
 import ErrorPage from "./Components/Pages/ErrorPage";
 import StaffList from "./Components/Pages/StaffList";
-import ProtectedRoute from "./Components/Pages/ProtectedRoute";
 
 function Apps() {
   let routes = useRoutes([
@@ -61,7 +60,6 @@ function Apps() {
         { path: "changepass", element: <Changepassword /> },
         { path: "listUser", element: <ListUser /> },
         { path: "staff_list", element: <StaffList /> },
-        { path: "protect_rout", element: <ProtectedRoute /> },
       ],
     },
     {

@@ -20,7 +20,16 @@ function ListUser() {
 
   const [trigger, Settrigger] = useState();
 
+  const [sessiondata,setSessiondata] = useState();
+
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    const sessiondata = sessionStorage.getItem("userdata");
+    const datas = sessiondata ? JSON.parse(sessiondata) : {};
+    setSessiondata(datas);
+    console.log("staff session",datas)
+  },[])
 
   const onView = async (id) => {
     await axios
@@ -161,60 +170,70 @@ function ListUser() {
     },
   ];
 
-  if (user) {
-    return (
-      <>
-        <Modal
-          title={
-            <div>
-              <h3>Mr. {selectuser?.firstname + " " + selectuser?.lastname}</h3>
-            </div>
-          }
-          open={isModalOpen}
-          onOk={onOk}
-          onCancel={onOk}
-        >
-          <Flex justify="space-between">
-            <QRCode value={JSON.stringify(qrvalues)} />
-            {imgurl ? (
-              <img
-                className="list-avathar"
-                src={imgurl}
-                height={157}
-                width={147}
-              ></img>
-            ) : (
-              <div className="list-avathar">
-                <div style={{ marginTop: "25px", marginLeft: "25px" }}>
-                  <HashLoader color="#0e1630" loading size={100} />
-                </div>
+  if((sessiondata?.authorities?.admin==1) || (sessiondata?.authorities?.staff_admin==1)){
+    if (user) {
+      return (
+        <>
+          <Modal
+            title={
+              <div>
+                <h3>Mr. {selectuser?.firstname + " " + selectuser?.lastname}</h3>
               </div>
-            )}
-          </Flex>
-        </Modal>
-        <Row className="list-row">
-          <Flex justify="center" style={{ width: "100%" }} align="center">
-            <Table
-              title={() => <div className="table-title">STUDENT LIST</div>}
-              style={{ fontWeight: "bold" }}
-              dataSource={user}
-              columns={columns}
-              pagination={{ pageSize: 5 }}
-            />
-          </Flex>
-        </Row>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Row className="list-row-load" align={"middle"}>
-          <Flex justify="center" style={{ width: "100%" }}>
-            <HashLoader color="#0e1630" loading size={110} />
-          </Flex>
-        </Row>
-      </>
-    );
+            }
+            open={isModalOpen}
+            onOk={onOk}
+            onCancel={onOk}
+          >
+            <Flex justify="space-between">
+              <QRCode value={JSON.stringify(qrvalues)} />
+              {imgurl ? (
+                <img
+                  className="list-avathar"
+                  src={imgurl}
+                  height={157}
+                  width={147}
+                ></img>
+              ) : (
+                <div className="list-avathar">
+                  <div style={{ marginTop: "25px", marginLeft: "25px" }}>
+                    <HashLoader color="#0e1630" loading size={100} />
+                  </div>
+                </div>
+              )}
+            </Flex>
+          </Modal>
+          <Row className="list-row">
+            <Flex justify="center" style={{ width: "100%" }} align="center">
+              <Table
+                title={() => <div className="table-title">STUDENT LIST</div>}
+                style={{ fontWeight: "bold" }}
+                dataSource={user}
+                columns={columns}
+                pagination={{ pageSize: 5 }}
+              />
+            </Flex>
+          </Row>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Row className="list-row-load" align={"middle"}>
+            <Flex justify="center" style={{ width: "100%" }}>
+              <HashLoader color="#0e1630" loading size={110} />
+            </Flex>
+          </Row>
+        </>
+      );
+    }
+  }else{
+    return navigate("/error", {
+      state: {
+        message: "Sorry, you are not authorized to access this page.",
+        errorCode: 403,
+        type:1
+      },
+    });
   }
 }
 

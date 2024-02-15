@@ -11,7 +11,14 @@ import {
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Item from "antd/es/list/Item";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Route, Router, Routes, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  Route,
+  Router,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import "../Css/dashboard.css";
 import Footers from "../Layout/Footers";
 import ErrorPage from "./ErrorPage";
@@ -101,12 +108,6 @@ function Dashboard() {
     });
   };
 
-  let getUserList;
-  let staffList;
-  let staffrequestList;
-
-  const error = "Access denied due to invalid credentials";
-
   const formatAMPM = (date) => {
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -181,11 +182,11 @@ function Dashboard() {
   const staffitem = [
     getItem(
       <Link
-      to={"staff_list"}
+        to={"staff_list"}
         state={staff_admins}
         onClick={() => {
-          // onrefresh(trigger);
-          // SetTrigger(!trigger);
+          onrefresh(trigger);
+          SetTrigger(!trigger);
         }}
       >
         STAFF LIST
@@ -198,8 +199,8 @@ function Dashboard() {
         to={"staff_list"}
         state={staff_request}
         onClick={() => {
-          // onrefresh(trigger);
-          // SetTrigger(!trigger);
+          onrefresh(trigger);
+          SetTrigger(!trigger);
         }}
       >
         STAFF REQUEST
@@ -349,8 +350,10 @@ function Dashboard() {
   } else {
     return navigate("/error", {
       state: {
-        message: "Sorry, the page you visited does not exist to enter the dashboard.",
+        message:
+          "Sorry, the page you visited does not exist to enter the dashboard.",
         errorCode: 404,
+        type: 2,
       },
     });
   }

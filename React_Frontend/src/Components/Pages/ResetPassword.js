@@ -47,6 +47,7 @@ function ResetPassword() {
         state: {
           message: "Sorry, the page you visited does not exist to reset your password.",
           errorCode: 404,
+          type:3
         },
       })
     }

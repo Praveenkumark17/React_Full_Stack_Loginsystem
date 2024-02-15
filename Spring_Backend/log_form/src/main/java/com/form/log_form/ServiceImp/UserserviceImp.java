@@ -113,39 +113,6 @@ public class UserserviceImp implements Userservice {
         return "User id: "+ id +" has been deleted";
     }
 
-//    @Override
-//    public Image Upload(MultipartFile file){
-//        try {
-//            // Save the file locally
-//            byte[] bytes = file.getBytes();
-//            String File = file.getOriginalFilename();
-//            Path path = Paths.get("../React_Frontend/src/Images/" + File);
-//            Files.createDirectories(path.getParent()); //folder created When folder doesn't exist
-//            Files.write(path, bytes);
-//
-//            // Save the file path to the database
-//            Image image = new Image();
-//            image.setImagepath(File);
-//            imagerepo.save(image);
-//            return image;
-//        } catch (Exception e) {
-////            e.printStackTrace();
-//            System.out.println(e);
-//            System.out.println("Something wrong for upload file 😢😢");
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public List<Image> GetImage(){
-//        return imagerepo.findAll();
-//    }
-//
-//    @Override
-//    public Image GetImgId(Long id){
-//        return imagerepo.findById(id).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
-//    }
-
     @Override
     public ResponseEntity<?> findEmail(@PathVariable String email){
         try{
