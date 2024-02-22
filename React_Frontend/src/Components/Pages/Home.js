@@ -22,20 +22,20 @@ function Home() {
   const navigate = useNavigate();
 
   const sendData = async (value) => {
-    const datas = { userid: value.userid, password: value.password };
+    const datas = { email: value.email, password: value.password };
     await axios
       .post("http://localhost:8080/user/text", datas)
       .then((res) => {
         const resdata = res.data;
-        const passphrase = "Praveen12GmqG7Io";
-        const bytes = CryptoJS.AES.decrypt(resdata.password, passphrase);
-        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-        setGetdata({ ...resdata, password: decrypted });
+        // const passphrase = "Praveen12GmqG7Io";
+        // const bytes = CryptoJS.AES.decrypt(resdata.password, passphrase);
+        // const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+        setGetdata(resdata);
         console.log("back data 3:", resdata);
       })
       .catch((err) => {
         console.log("backend error 3:", err);
-        if (err.request) {
+        if (!err.response) {
           navigate("/error", {
             state: {
               message: "Sorry, something went wrong.(Server Error Try Later)",
@@ -63,22 +63,23 @@ function Home() {
 
   const validate = () => {
     if (getdata) {
-      console.log("last id:", getdata.userid);
-      console.log("last pass:", getdata.password);
+      console.log("last id:", getdata?.email);
+      console.log("last pass:", getdata?.password);
       console.log("staff admin:", getdata?.authorities?.staff_admin);
+      console.log(data);
       if (
-        data.userid === getdata.userid &&
+        data.email === getdata.email &&
         data.password === getdata.password
       ) {
-        if (getdata?.authorities?.staff_admin !== 2) {
-          console.log("Log success:", getdata.password, data.userid);
+        if (getdata?.authorities?.staff_admin == 1 || getdata?.authorities?.student == 1 || getdata?.authorities?.admin == 1) {
+          console.log("Log success:", getdata.password, data.email);
           message.open({
             type: "success",
             content: "Login success",
             duration: 1,
           });
           sessionStorage.setItem("userdata", JSON.stringify(getdata));
-          navigate("/dashboard");
+          navigate("/dashboard/home");
         } else {
           message.open({
             type: "error",
@@ -128,13 +129,13 @@ function Home() {
               style={{ marginTop: "20px" }}
             >
               <Form.Item
-                name={"userid"}
-                rules={[{ required: true, message: "please enter user id" }]}
+                name={"email"}
+                rules={[{ required: true, message: "please enter email id" }]}
               >
                 <Input
                   addonBefore={<LuUser2 size={20} />}
-                  name="userid"
-                  placeholder="Enter the user id"
+                  name="email"
+                  placeholder="Enter the email id"
                 />
               </Form.Item>
               <Form.Item

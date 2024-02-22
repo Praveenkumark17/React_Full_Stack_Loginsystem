@@ -13,6 +13,7 @@ public class Authorities {
 
     private Integer admin;
     private Integer Staff_admin;
+    private Integer student;
 
     @OneToOne(mappedBy = "authorities")
     @JsonBackReference
@@ -48,5 +49,13 @@ public class Authorities {
 
     public void setStaff_admin(Integer staff_admin) {
         Staff_admin = staff_admin;
+    }
+
+    public Integer getStudent() {
+        return student;
+    }
+
+    public void setStudent(Integer student) {
+        this.student = student;
     }
 }

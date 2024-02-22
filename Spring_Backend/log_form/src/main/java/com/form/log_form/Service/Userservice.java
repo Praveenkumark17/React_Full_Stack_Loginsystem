@@ -1,7 +1,6 @@
 package com.form.log_form.Service;
 
 import com.form.log_form.Model.Authorities;
-import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ public interface Userservice {
 
     public  User saveUser(User newuser,MultipartFile file);
 
-    public User passdata(PasswordData data);
+    public ResponseEntity<?> passdata(User data);
 
     public User updatedata(Long id, User user);
 
@@ -28,4 +27,6 @@ public interface Userservice {
     public ResponseEntity<?> findEmail(String email);
 
     public Authorities putAuth (Long id,Authorities auth);
+
+    public Authorities putAuthstudent(Long id,Authorities auth);
 }

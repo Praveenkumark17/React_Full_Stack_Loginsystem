@@ -1,9 +1,10 @@
-import { Button, Flex, Modal, QRCode, Row, Space, Table } from "antd";
+import { Button, Flex, Modal, QRCode, Row, Space, Table, Tag } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { HashLoader } from "react-spinners";
 import "../Css/listuser.css";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 
 function ListUser() {
   const [user, setUser] = useState();
@@ -20,16 +21,29 @@ function ListUser() {
 
   const [trigger, Settrigger] = useState();
 
-  const [sessiondata,setSessiondata] = useState();
+  const [sessiondata, setSessiondata] = useState();
 
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  const [data, setData] = useState();
+
+  const [title, setTitle] = useState();
+
+  const [loading, setLoading] = useState(true);
+
+  const userTypes = sessionStorage.getItem("list_user");
+
+  useEffect(() => {
+    console.log("student_type:", userTypes);
+    setLoading(true);
+  }, [userTypes]);
+
+  useEffect(() => {
     const sessiondata = sessionStorage.getItem("userdata");
     const datas = sessiondata ? JSON.parse(sessiondata) : {};
     setSessiondata(datas);
-    console.log("staff session",datas)
-  },[])
+    console.log("staff session", datas);
+  }, [userTypes]);
 
   const onView = async (id) => {
     await axios
@@ -50,7 +64,7 @@ function ListUser() {
     delete qrvalue["id"];
     delete qrvalue["authorities"];
     delete qrvalue["imagepath"];
-    qrvalue["roll"]= "Student";
+    qrvalue["roll"] = "Student";
     SetQrvalues(qrvalue);
   }, [selectuser]);
 
@@ -75,17 +89,33 @@ function ListUser() {
         .get("http://localhost:8080/user/getuser")
         .then((res) => {
           const result = res.data;
-          const users = result.filter(
-            (user) =>
-              user.authorities.staff_admin == 0 && user.authorities.admin == 0
-          );
-          Setgetusers(users);
-          console.log("final list:", users);
+          if (userTypes == 1) {
+            const users = result.filter(
+              (user) =>
+                user.authorities.student == 1 || user.authorities.student == 3
+            );
+            Setgetusers(users);
+            console.log("final list:", users);
+          }
+          if (userTypes == 2) {
+            const users = result.filter(
+              (user) => user.authorities.student == 2
+            );
+            Setgetusers(users);
+            console.log("final list:", users);
+          }
+          if (userTypes == 3) {
+            const users = result.filter(
+              (user) => user.authorities.student == 1
+            );
+            Setgetusers(users);
+            console.log("final list:", users);
+          }
         })
         .catch((err) => console.log(err.data));
     };
     updateuser();
-  }, [trigger]);
+  }, [trigger, userTypes]);
 
   useEffect(() => {
     if (selectuser) {
@@ -94,10 +124,31 @@ function ListUser() {
     }
   }, [selectuser]);
 
+  const onaction = async (id, val) => {
+    console.log("action_val", val);
+    const acceptdata = { student: val };
+    await axios
+      .put(`http://localhost:8080/user/studentauth/${id}`, acceptdata)
+      .then((res) => {
+        console.log("accept-back:", res.data);
+        Settrigger(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     const final = getusers?.map((user, index) => ({
       ...user,
       but: (
+        <div style={{ textAlign: "center" }}>
+          <Space size={"middle"}>
+            <Tag color={user.authorities.student == 1 ? "green" : "red"}>
+              {user.authorities.student == 1 ? "Accepted" : "Rejected"}
+            </Tag>
+          </Space>
+        </div>
+      ),
+      list_but: (
         <div style={{ textAlign: "center" }}>
           <Space size={"middle"}>
             <Button type="primary" onClick={() => onView(user.id)}>
@@ -109,9 +160,56 @@ function ListUser() {
           </Space>
         </div>
       ),
+      request_but: (
+        <div style={{ textAlign: "center" }}>
+          <Space size={"middle"}>
+            <Button
+              type="primary"
+              icon={<CheckOutlined />}
+              style={{ backgroundColor: "rgb(42, 153, 12)" }}
+              onClick={() => onaction(user.id, 1)}
+            >
+              Accept
+            </Button>
+            <Button
+              type="primary"
+              icon={<CloseOutlined />}
+              onClick={() => onaction(user.id, 3)}
+              danger
+            >
+              Reject
+            </Button>
+          </Space>
+        </div>
+      ),
     }));
     setUser(final);
   }, [getusers]);
+
+  useEffect(() => {
+    let action;
+    let title;
+    if (user == null) {
+      action = "";
+    }
+    if (userTypes == 1) {
+      action = "but";
+      title = "STUDENT LIST";
+    }
+    if (userTypes == 3) {
+      action = "list_but";
+      title = "STUDENT DETAILS";
+    }
+    if (userTypes == 2) {
+      action = "request_but";
+      title = "STUDENT REQUEST";
+    }
+    setData(action);
+    setTitle(title);
+    setInterval(() => {
+      setLoading(false);
+    }, 1000*5);
+  }, [user]);
 
   const columns = [
     {
@@ -165,19 +263,24 @@ function ListUser() {
           <p className="table-col-style">Action</p>
         </div>
       ),
-      dataIndex: "but",
+      dataIndex: data,
       key: "action",
     },
   ];
 
-  if((sessiondata?.authorities?.admin==1) || (sessiondata?.authorities?.staff_admin==1)){
+  if (
+    sessiondata?.authorities?.admin == 1 ||
+    sessiondata?.authorities?.staff_admin == 1
+  ) {
     if (user) {
       return (
         <>
           <Modal
             title={
               <div>
-                <h3>Mr. {selectuser?.firstname + " " + selectuser?.lastname}</h3>
+                <h3>
+                  Mr. {selectuser?.firstname + " " + selectuser?.lastname}
+                </h3>
               </div>
             }
             open={isModalOpen}
@@ -204,13 +307,23 @@ function ListUser() {
           </Modal>
           <Row className="list-row">
             <Flex justify="center" style={{ width: "100%" }} align="center">
-              <Table
-                title={() => <div className="table-title">STUDENT LIST</div>}
-                style={{ fontWeight: "bold" }}
-                dataSource={user}
-                columns={columns}
-                pagination={{ pageSize: 5 }}
-              />
+              {loading ? (
+                <>
+                  <Row className="staff-list-row-load" align={"middle"}>
+                    <Flex justify="center" style={{ width: "100%" }}>
+                      <HashLoader color="#0e1630" loading size={110} />
+                    </Flex>
+                  </Row>
+                </>
+              ) : (
+                <Table
+                  title={() => <div className="table-title">{title}</div>}
+                  style={{ fontWeight: "bold", width: "75%" }}
+                  dataSource={user}
+                  columns={columns}
+                  pagination={{ pageSize: 5 }}
+                />
+              )}
             </Flex>
           </Row>
         </>
@@ -226,12 +339,12 @@ function ListUser() {
         </>
       );
     }
-  }else{
+  } else {
     return navigate("/error", {
       state: {
         message: "Sorry, you are not authorized to access this page.",
         errorCode: 403,
-        type:1
+        type: 1,
       },
     });
   }

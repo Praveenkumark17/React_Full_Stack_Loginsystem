@@ -37,7 +37,7 @@ function Registration() {
 
   const [check, setCheck] = useState(false);
 
-  const [passhash, setPasshash] = useState();
+  const [trigger, SetTrigger] = useState(false);
 
   const [getdata, setGetdata] = useState();
 
@@ -50,13 +50,21 @@ function Registration() {
   };
 
   const onuser = (e) => {
-    console.log("name:", e.target.value);
-    Setuser(e.target.value);
+
+    console.log("name:", e);
+    if(e == 0){
+      Setuser("STUDENT-")
+    }
+    if(e == 1){
+      Setuser("STAFF-")
+    }
+    // Setuser(e.target.value);
   };
 
   useEffect(() => {
+    console.log(userids);
     SetuserId(userids);
-  }, [date]);
+  }, [date,user]);
 
   useEffect(() => {
     if (finaldatas) {
@@ -65,16 +73,18 @@ function Registration() {
   }, [finaldatas]);
 
   useEffect(() => {
-    const userdata = async () => {
-      await axios
-        .get("http://localhost:8080/user/getuser")
-        .then(
-          (res) => (console.log("get data:", res.data), setGetdata(res.data))
-        )
-        .catch((err) => console.log("get data error:", err));
-    };
-    userdata();
-  }, []);
+    if(trigger){
+      const userdata = async () => {
+        await axios
+          .get("http://localhost:8080/user/getuser")
+          .then(
+            (res) => (console.log("get data:", res.data), setGetdata(res.data))
+          )
+          .catch((err) => console.log("get data error:", err));
+      };
+      userdata();
+    }
+  }, [trigger]);
 
   const props = {
     name: "file",
@@ -105,6 +115,7 @@ function Registration() {
   const oncheck = (e) => {
     console.log("check box", e.target.checked);
     setCheck(e.target.checked);
+    SetTrigger(!trigger)
   };
 
   const onFinish = async (e) => {
@@ -112,15 +123,16 @@ function Registration() {
     delete e["remember"];
 
     //Password encrypted
-    const passphrase = "Praveen12GmqG7Io";
-    const encrypted = CryptoJS.AES.encrypt(
-      e["password"],
-      passphrase
-    ).toString();
+    // const passphrase = "Praveen12GmqG7Io";
+    // const encrypted = CryptoJS.AES.encrypt(
+    //   e["password"],
+    //   passphrase
+    // ).toString();
 
-    e["password"] = encrypted;
+    // e["password"] = encrypted;
+    const roll = e["category"];
     e["userid"] = userid;
-    e["authorities"] = { admin: 0, staff_admin: e["category"] };
+    e["authorities"] = { admin: 0, staff_admin: roll == 1 ? 2 : 0 ,student: roll == 0 ? 2 : 0 };
 
     console.log("Register data:", e);
 
@@ -169,7 +181,7 @@ function Registration() {
             setImageUrl(null);
             message.open({
               type: "success",
-              content: "Data Submitted Successfull",
+              content: user=="STAFF-"?"Your Request Submitted to Admin":"Data Submitted Successfull",
               duration: 2,
             });
           }
@@ -232,7 +244,6 @@ function Registration() {
                         name="firstname"
                         placeholder="Enter the Firstname"
                         className="input"
-                        onChange={onuser}
                       />
                     </Form.Item>
                     <Form.Item
@@ -359,11 +370,34 @@ function Registration() {
                       <Select
                         placeholder="Select category"
                         style={{ width: "250px" }}
+                        onChange={onuser}
                       >
-                        <Option value={2}>Staff Request</Option>
+                        <Option value={1}>Staff Request</Option>
                         <Option value={0}>Student</Option>
                       </Select>
                     </Form.Item>
+                    {/* <Form.Item
+                      name={"dept"}
+                      label={"Department"}
+                      rules={[
+                        {
+                          required: true,
+                          message: "please select department",
+                        },
+                      ]}
+                      hasFeedback
+                    >
+                      <Select
+                        placeholder="Select Department"
+                        style={{ width: "250px" }}
+                      >
+                        <Option value="A+">CSE</Option>
+                        <Option value="A-">EEE</Option>
+                        <Option value="B+">MECH</Option>
+                        <Option value="B-">ECE</Option>
+                        <Option value="AB+">CIVIL</Option>
+                      </Select>
+                    </Form.Item> */}
                     <Form.Item
                       name={"password"}
                       label={"Password"}

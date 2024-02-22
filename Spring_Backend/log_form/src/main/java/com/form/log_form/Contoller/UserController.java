@@ -1,7 +1,6 @@
 package com.form.log_form.Contoller;
 
 import com.form.log_form.Model.Authorities;
-import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +13,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin("http://localhost:3000/")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class UserController {
 
     @Autowired
     public Userservice service;
+
+    @GetMapping
+    public String hello(){
+        return "hello";
+    }
 
     @GetMapping("/getuser")
     public List<User> getUser(){
@@ -31,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/text")
-    public User passdata(@RequestBody PasswordData data){
+    public ResponseEntity<?> passdata(@RequestBody User data){
         return service.passdata(data);
     }
 
@@ -65,6 +69,12 @@ public class UserController {
     public Authorities putAuth(@PathVariable Long id,@RequestBody Authorities auth)
     {
         return service.putAuth(id,auth);
+    }
+
+    @PutMapping(path = "/studentauth/{id}")
+    public Authorities putAuthstudent(@PathVariable Long id,@RequestBody Authorities auth)
+    {
+        return service.putAuthstudent(id,auth);
     }
 
 }

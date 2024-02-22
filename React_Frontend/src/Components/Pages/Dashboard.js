@@ -1,9 +1,12 @@
 import {
+  Avatar,
   Button,
+  Empty,
   Flex,
   Layout,
   Menu,
   Modal,
+  Popover,
   Space,
   Tooltip,
   message,
@@ -11,20 +14,11 @@ import {
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Item from "antd/es/list/Item";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Link,
-  Navigate,
-  Route,
-  Router,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import "../Css/dashboard.css";
 import Footers from "../Layout/Footers";
-import ErrorPage from "./ErrorPage";
 import {
   ExclamationCircleOutlined,
-  HomeOutlined,
   ReconciliationOutlined,
 } from "@ant-design/icons";
 import Editprofile from "./Editprofile";
@@ -33,12 +27,14 @@ import ListUser from "./ListUser";
 import { LuUser2 } from "react-icons/lu";
 import { LuUsers2 } from "react-icons/lu";
 import { MdLockOpen } from "react-icons/md";
-import { FaChalkboardUser, FaPowerOff } from "react-icons/fa6";
+import { FaChalkboardUser, FaPowerOff, FaRegCircleUser } from "react-icons/fa6";
 import { LiaUserTieSolid } from "react-icons/lia";
 import axios from "axios";
 import Sider from "antd/es/layout/Sider";
 import { AiOutlineHome } from "react-icons/ai";
 import StaffList from "./StaffList";
+import Dashboardhome from "./Dashboardhome";
+import { RiUserSettingsLine } from "react-icons/ri";
 
 function Dashboard() {
   const [data, setData] = useState([]);
@@ -114,7 +110,7 @@ function Dashboard() {
     let seconds = date.getSeconds();
     let ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
+    hours = hours ? hours : 12;
     minutes = minutes < 10 ? "0" + minutes : minutes;
     seconds = seconds < 10 ? "0" + seconds : seconds;
     let strTime = hours + ":" + minutes + ":" + seconds + " " + ampm;
@@ -123,6 +119,7 @@ function Dashboard() {
 
   const staff_request = 2;
   const staff_admins = 1;
+  const staff_list = 3;
 
   function getItem(label, key, icon, className) {
     return {
@@ -135,7 +132,7 @@ function Dashboard() {
 
   const items = [
     getItem(
-      <Link to={``}>HOME</Link>,
+      <Link to={"home"}>HOME</Link>,
       "1",
       <AiOutlineHome size={18} />,
       "item-profile"
@@ -154,12 +151,95 @@ function Dashboard() {
         onClick={() => {
           onrefresh(trigger);
           SetTrigger(!trigger);
+          sessionStorage.setItem("list_user", JSON.stringify(1));
         }}
       >
         STUDENT LIST
       </Link>,
       "3",
       <LuUsers2 size={18} />
+    ),
+  ];
+
+  if (data.authorities?.admin == 1) {
+    studentitem.push(
+      getItem(
+        <Link
+          to={"listUser"}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+            sessionStorage.setItem("list_user", JSON.stringify(2));
+          }}
+        >
+          STUDENT REQUEST
+        </Link>,
+        "4",
+        <ReconciliationOutlined style={{ fontSize: "20px" }} />
+      ),
+      getItem(
+        <Link
+          to={"listUser"}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+            sessionStorage.setItem("list_user", JSON.stringify(3));
+          }}
+        >
+          STUDENT DETAILS
+        </Link>,
+        "5",
+        <RiUserSettingsLine size={20} />
+      )
+    );
+  }
+
+  const staffitem = [
+    getItem(
+      <Link
+        to={"staff_list"}
+        // state={staff_admins}
+        onClick={() => {
+          onrefresh(trigger);
+          SetTrigger(!trigger);
+          sessionStorage.setItem("Staff_user", JSON.stringify(1));
+        }}
+      >
+        STAFF LIST
+      </Link>,
+      "6",
+      <LiaUserTieSolid size={20} />
+    ),
+    getItem(
+      <Link
+        to={"staff_list"}
+        // state={staff_request}
+        onClick={() => {
+          onrefresh(trigger);
+          SetTrigger(!trigger);
+          sessionStorage.setItem("Staff_user", JSON.stringify(2));
+        }}
+      >
+        STAFF REQUEST
+      </Link>,
+      "7",
+      <ReconciliationOutlined style={{ fontSize: "20px" }} />
+    ),
+    ,
+    getItem(
+      <Link
+        to={"staff_list"}
+        // state={staff_list}
+        onClick={() => {
+          onrefresh(trigger);
+          SetTrigger(!trigger);
+          sessionStorage.setItem("Staff_user", JSON.stringify(3));
+        }}
+      >
+        STAFF DETAILS
+      </Link>,
+      "8",
+      <RiUserSettingsLine size={20} />
     ),
   ];
 
@@ -174,39 +254,8 @@ function Dashboard() {
       >
         CHANGE PASSWORD
       </Link>,
-      "6",
+      "9",
       <MdLockOpen size={19} />
-    ),
-  ];
-
-  const staffitem = [
-    getItem(
-      <Link
-        to={"staff_list"}
-        state={staff_admins}
-        onClick={() => {
-          onrefresh(trigger);
-          SetTrigger(!trigger);
-        }}
-      >
-        STAFF LIST
-      </Link>,
-      "4",
-      <LiaUserTieSolid size={20} />
-    ),
-    getItem(
-      <Link
-        to={"staff_list"}
-        state={staff_request}
-        onClick={() => {
-          onrefresh(trigger);
-          SetTrigger(!trigger);
-        }}
-      >
-        STAFF REQUEST
-      </Link>,
-      "5",
-      <ReconciliationOutlined />
     ),
   ];
 
@@ -219,6 +268,32 @@ function Dashboard() {
     []
   );
 
+  const img = require(`../../Images/${data?.imagepath || "wipib0dx.png"}`);
+
+  const popcontent = (
+    <>
+      <Flex>
+        <Space>
+          <Avatar size={60} src={img} />
+          <div className="pop-body">
+            <p className="pop-name">{data.firstname + " " + data.lastname}</p>
+            <p className="pop-roll">
+              {data.authorities?.staff_admin == 1 && data.authorities.admin == 0
+                ? "STAFF"
+                : data.authorities?.staff_admin == 0 &&
+                  data.authorities.admin == 0
+                ? "STUDENT"
+                : data.authorities?.staff_admin == 0 &&
+                  data.authorities.admin == 1
+                ? "ADMIN"
+                : ""}
+            </p>
+          </div>
+        </Space>
+      </Flex>
+    </>
+  );
+
   if (sessiondata) {
     return (
       <>
@@ -229,7 +304,7 @@ function Dashboard() {
                 <Menu mode="horizontal" theme="dark" style={{ height: "10px" }}>
                   <Item>
                     <Link
-                      to={"/dashboard"}
+                      to={"/dashboard/home"}
                       className="dash-menuitem1"
                       onClick={() => {
                         onrefresh(trigger);
@@ -248,43 +323,56 @@ function Dashboard() {
                   </Item>
                 </Menu>
               </Flex>
-              <Flex style={{ width: "100%" }} justify="end">
-                <Flex
-                  justify="end"
-                  align="center"
-                  style={{ marginTop: "3.5%" }}
-                >
-                  <Button
-                    type="link"
-                    className="dash-menuitem2"
-                    style={{ color: "rgb(0, 191, 255)" }}
-                  >
-                    {data.firstname} {data.lastname}
-                    {data.authorities?.staff_admin == 1 &&
-                    data.authorities.admin == 0
-                      ? " (STAFF)"
-                      : data.authorities?.staff_admin == 0 &&
-                        data.authorities.admin == 0
-                      ? " (STUDENT)"
-                      : data.authorities?.staff_admin == 0 &&
-                        data.authorities.admin == 1
-                      ? " (ADMIN)"
-                      : ""}
-                  </Button>
-                  <Tooltip title={"LOG OUT"} placement="bottomRight">
-                    <Button
-                      type="link"
-                      style={{
-                        fontSize: "17px",
-                        fontWeight: "bold",
-                        color: "red",
-                      }}
-                      onClick={() => setModel(true)}
-                    >
-                      <FaPowerOff />
-                    </Button>
-                  </Tooltip>
-                </Flex>
+              <Flex
+                style={{ width: "100%", height: "9vh" }}
+                justify="end"
+                align="center"
+              >
+                <Menu mode="horizontal" theme="dark">
+                  <Item>
+                    <Flex>
+                      <Popover
+                        placement="bottomRight"
+                        // title={<div style={{display:"flex",justifyContent:"center"}}>My Info</div>}
+                        content={popcontent}
+                      >
+                        <Button
+                          type="link"
+                          className="dash-menuitem2"
+                          style={{ color: "rgb(0, 191, 255)" }}
+                        >
+                          {data.firstname?.toUpperCase()}{" "}
+                          {data.lastname?.toUpperCase()}
+                          {data.authorities?.staff_admin == 1 &&
+                          data.authorities.admin == 0
+                            ? " (STAFF)"
+                            : data.authorities?.staff_admin == 0 &&
+                              data.authorities.admin == 0
+                            ? " (STUDENT)"
+                            : data.authorities?.staff_admin == 0 &&
+                              data.authorities.admin == 1
+                            ? " (ADMIN)"
+                            : ""}
+                        </Button>
+                      </Popover>
+                      <Flex align="end">
+                        <Tooltip title={"LOG OUT"} placement="bottomRight">
+                          <Button
+                            type="link"
+                            style={{
+                              fontSize: "17px",
+                              fontWeight: "bold",
+                              color: "red",
+                            }}
+                            onClick={() => setModel(true)}
+                            title="Log out"
+                            icon={<FaPowerOff />}
+                          ></Button>
+                        </Tooltip>
+                      </Flex>
+                    </Flex>
+                  </Item>
+                </Menu>
               </Flex>
             </Flex>
           </Header>
@@ -298,14 +386,23 @@ function Dashboard() {
               >
                 {items.map(renderItem)}
                 {data?.authorities?.admin == 1 ||
-                data?.authorities?.staff_admin == 1
-                  ? studentitem.map(renderItem)
-                  : ""}
+                data?.authorities?.staff_admin == 1 ? (
+                  <Menu.SubMenu
+                    key="sub2"
+                    icon={<FaRegCircleUser size={18} />}
+                    title="STUDENTS"
+                    className="sider-sub-menu"
+                  >
+                    {studentitem.map(renderItem)}
+                  </Menu.SubMenu>
+                ) : (
+                  ""
+                )}
                 {data?.authorities?.admin == 1 ? (
                   <Menu.SubMenu
                     key="sub1"
                     icon={<FaChalkboardUser size={18} />}
-                    title="STAFF"
+                    title="STAFFS"
                     className="sider-sub-menu"
                   >
                     {staffitem.map(renderItem)}
@@ -318,6 +415,7 @@ function Dashboard() {
             </Sider>
             <Content className="dash-content-out">
               <Routes>
+                <Route path="/home" element={<Dashboardhome />} />
                 <Route path="/edit/:id" element={<Editprofile />} />
                 <Route path="/changepass" element={<Changepassword />} />
                 <Route path="/listUser" element={<ListUser />} />

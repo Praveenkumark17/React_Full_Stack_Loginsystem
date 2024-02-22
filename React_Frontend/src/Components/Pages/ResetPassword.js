@@ -55,19 +55,19 @@ function ResetPassword() {
 
   const onfinish = async (e) => {
     console.log("reset_value:", e.password);
-    const passphrase = "Praveen12GmqG7Io";
-    const encrypted = CryptoJS.AES.encrypt(
-      e["password"],
-      passphrase
-    ).toString();
-    e["password"] = encrypted;
-    console.log("reset_encrypt:", e.password);
-    const send = { password: e.password };
+    console.log("reset_id:",data.id);
+    // const passphrase = "Praveen12GmqG7Io";
+    // const encrypted = CryptoJS.AES.encrypt(
+    //   e["password"],
+    //   passphrase
+    // ).toString();
+    // e["password"] = encrypted;
+    // console.log("reset_encrypt:", e.password);
     if (e.password) {
       await axios
-        .put(`http://localhost:8080/user/updatepass/${data.id}`, send)
+        .put(`http://localhost:8080/user/updatepass/${data.id}`, { password: e.password })
         .then((res) => {
-          console.log("put pass succ:", res);
+          console.log("put pass succ:", res.data);
           forms.resetFields();
           message.open({
             type: "success",
@@ -79,7 +79,7 @@ function ResetPassword() {
           }, 2000);
         })
         .catch((err) => {
-          console.log("put pass fail:", err);
+          console.log("put pass fail:", err.data);
           message.open({
             type: "error",
             content: "Server Error",

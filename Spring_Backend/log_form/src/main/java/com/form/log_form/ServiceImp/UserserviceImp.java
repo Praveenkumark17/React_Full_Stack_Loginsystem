@@ -1,12 +1,9 @@
 package com.form.log_form.ServiceImp;
 
 import com.form.log_form.Exception.Usernotfoundexception;
-//import com.form.log_form.Model.Image;
 import com.form.log_form.Model.Authorities;
-import com.form.log_form.Model.PasswordData;
 import com.form.log_form.Model.User;
 import com.form.log_form.Repository.AutoritiesReapository;
-import com.form.log_form.Repository.ImageRepo;
 import com.form.log_form.Repository.UserRepository;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +24,6 @@ public class UserserviceImp implements Userservice {
 
     @Autowired
     public UserRepository reposity;
-
-    @Autowired
-    public ImageRepo imagerepo;
 
     @Autowired
     public AutoritiesReapository authreposity;
@@ -61,18 +55,17 @@ public class UserserviceImp implements Userservice {
     }
 
     @Override
-    public User passdata(PasswordData data){
-        User userdata = null;
-        if(data.getUserid() != null) {
-            userdata = reposity.findByUserid(data.getUserid());
-            if(userdata == null) {
-                System.out.println("User Does not exist");
+    public ResponseEntity<?> passdata(User data){
+        try{
+            User user = reposity.findByEmail(data.getEmail());
+            if(user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Does not exist");
             }
-        }else {
-        	userdata = null;
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
-        System.out.println(data.getUserid());
-        return userdata;
     }
 
     @Override
@@ -92,7 +85,6 @@ public class UserserviceImp implements Userservice {
     }
     @Override
     public User updatepass(@PathVariable Long id,@RequestBody User user){
-        System.out.println(user.getDob());
         return reposity.findById(id)
                 .map(users -> {
                     users.setPassword(user.getPassword());
@@ -133,6 +125,15 @@ public class UserserviceImp implements Userservice {
                 .map(auths->{
                      auths.setStaff_admin(auth.getStaff_admin());
                      return authreposity.save(auths);
+                }).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
+    }
+
+    @Override
+    public Authorities putAuthstudent(@PathVariable Long id,@RequestBody Authorities auth){
+        return authreposity.findById(id)
+                .map(auths->{
+                    auths.setStudent(auth.getStudent());
+                    return authreposity.save(auths);
                 }).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
     }
 }
