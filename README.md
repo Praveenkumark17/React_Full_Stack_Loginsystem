@@ -1,6 +1,6 @@
 # Getting Started with Create React App with Spring Boot
 
-## React with Spring (Login System With Admin Control)
+## React with Spring (Attendance Management With Admin Control)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
