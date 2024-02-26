@@ -20,7 +20,6 @@ import { Option } from "antd/es/mentions";
 import axios from "axios";
 import CryptoJS from "crypto-js";
 import { UploadOutlined } from "@ant-design/icons";
-import { json } from "react-router-dom";
 
 function Registration() {
   const [finaldatas, setfinalDatas] = useState();
@@ -44,27 +43,73 @@ function Registration() {
   const [fileList, setFileList] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
 
+  const [deptdata, setDeptdata] = useState();
+
+  const [studentcount, setStudentcount] = useState();
+
+  const [deptno, setDeptno] = useState();
+
   const ondate = (dates) => {
     console.log("date:", String(dates.date()).padStart(2, "0"));
     SetDate(String(dates.date()).padStart(2, "0"));
   };
 
   const onuser = (e) => {
-
     console.log("name:", e);
-    if(e == 0){
-      Setuser("STUDENT-")
+    if (e == 0) {
+      Setuser("STUDENT-");
     }
-    if(e == 1){
-      Setuser("STAFF-")
+    if (e == 1) {
+      Setuser("STAFF-");
     }
     // Setuser(e.target.value);
+  };
+
+  const onCount = (e) => {
+    console.log("dept_input", e);
+    setDeptno(e);
   };
 
   useEffect(() => {
     console.log(userids);
     SetuserId(userids);
-  }, [date,user]);
+  }, [date, user]);
+
+  useEffect(() => {
+    const getdept = async () => {
+      await axios
+        .get("http://localhost:8080/user/getdept")
+        .then((res, index) => {
+          console.log("getdept_success", res.data);
+          const result = res.data;
+          setDeptdata(result);
+          console.log("dept_final", result);
+        })
+        .catch((err) => {
+          console.log("getdept_fail", err.data);
+        });
+    };
+    getdept();
+  }, [user, trigger]); //department data
+
+  useEffect(() => {
+    if (deptno) {
+      const getdeptno = async () => {
+        await axios
+          .get(`http://localhost:8080/user/getdeptno/${deptno}`)
+          .then((res, index) => {
+            console.log("getdeptno_success", res.data);
+            const result = res.data;
+            setStudentcount(result.studentcount);
+            console.log("student_count", result.studentcount);
+          })
+          .catch((err) => {
+            console.log("getdept_fail", err.data);
+          });
+      };
+      getdeptno();
+    }
+  }, [deptno]); //department value by depno
 
   useEffect(() => {
     if (finaldatas) {
@@ -73,7 +118,7 @@ function Registration() {
   }, [finaldatas]);
 
   useEffect(() => {
-    if(trigger){
+    if (trigger) {
       const userdata = async () => {
         await axios
           .get("http://localhost:8080/user/getuser")
@@ -115,7 +160,7 @@ function Registration() {
   const oncheck = (e) => {
     console.log("check box", e.target.checked);
     setCheck(e.target.checked);
-    SetTrigger(!trigger)
+    SetTrigger(!trigger);
   };
 
   const onFinish = async (e) => {
@@ -128,11 +173,15 @@ function Registration() {
     //   e["password"],
     //   passphrase
     // ).toString();
-
     // e["password"] = encrypted;
+
     const roll = e["category"];
     e["userid"] = userid;
-    e["authorities"] = { admin: 0, staff_admin: roll == 1 ? 2 : 0 ,student: roll == 0 ? 2 : 0 };
+    e["authorities"] = {
+      admin: 0,
+      staff_admin: roll == 1 ? 2 : 0,
+      student: roll == 0 ? 2 : 0,
+    };
 
     console.log("Register data:", e);
 
@@ -175,13 +224,27 @@ function Registration() {
               .then((res) => console.log("Backend_Success", res))
               .catch((err) => console.log("Backend_error", err));
 
+            const student = { studentcount: studentcount + 1 };
+
+            await axios
+              .put(
+                `http://localhost:8080/user/updatedept/${e["deptno"]}`,
+                student
+              )
+              .then((res) => console.log("dept_Backend_Success", res))
+              .catch((err) => console.log("dept_Backend_error", err));
+
             setCheck(false);
+            SetTrigger(!trigger);
             forms.resetFields();
             setFileList([]);
             setImageUrl(null);
             message.open({
               type: "success",
-              content: user=="STAFF-"?"Your Request Submitted to Admin":"Data Submitted Successfull",
+              content:
+                user == "STAFF-"
+                  ? "Your Request Submitted to Admin"
+                  : "Data Submitted Successfull",
               duration: 2,
             });
           }
@@ -376,28 +439,31 @@ function Registration() {
                         <Option value={0}>Student</Option>
                       </Select>
                     </Form.Item>
-                    {/* <Form.Item
-                      name={"dept"}
-                      label={"Department"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please select department",
-                        },
-                      ]}
-                      hasFeedback
-                    >
-                      <Select
-                        placeholder="Select Department"
-                        style={{ width: "250px" }}
+                    {user == "STUDENT-" ? (
+                      <Form.Item
+                        name={"deptno"}
+                        label={"Department"}
+                        rules={[
+                          {
+                            required: true,
+                            message: "please select department",
+                          },
+                        ]}
+                        hasFeedback
                       >
-                        <Option value="A+">CSE</Option>
-                        <Option value="A-">EEE</Option>
-                        <Option value="B+">MECH</Option>
-                        <Option value="B-">ECE</Option>
-                        <Option value="AB+">CIVIL</Option>
-                      </Select>
-                    </Form.Item> */}
+                        <Select
+                          placeholder="Select Department"
+                          style={{ width: "250px" }}
+                          onChange={onCount}
+                        >
+                          {deptdata.map((data, index) => (
+                            <Option value={data.deptno}>{data.deptname}</Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    ) : (
+                      ""
+                    )}
                     <Form.Item
                       name={"password"}
                       label={"Password"}

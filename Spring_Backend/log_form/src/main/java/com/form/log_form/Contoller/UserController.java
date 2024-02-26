@@ -1,6 +1,7 @@
 package com.form.log_form.Contoller;
 
 import com.form.log_form.Model.Authorities;
+import com.form.log_form.Model.Department;
 import com.form.log_form.Model.User;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -59,11 +61,17 @@ public class UserController {
         return service.deleteUser(id);
     }
 
-
     @GetMapping(path = "/findemail/{email}")
     public ResponseEntity<?> findEmail(@PathVariable String email){
         return service.findEmail(email);
     }
+
+    @GetMapping(path = "/userdeptno/{deptno}")
+    public ResponseEntity<?> finddeptno(@PathVariable Integer deptno){
+        return service.finddeptno(deptno);
+    }
+
+    // -----------> Authorities <----------- \\
 
     @PutMapping(path = "/staffauth/{id}")
     public Authorities putAuth(@PathVariable Long id,@RequestBody Authorities auth)
@@ -77,4 +85,35 @@ public class UserController {
         return service.putAuthstudent(id,auth);
     }
 
+    // --------->   Departments <--------- \\
+
+    @PostMapping(path = "/dept")
+    public ResponseEntity<?> postdept(@RequestBody Department dept){
+        return service.postdept(dept);
+    }
+
+    @GetMapping(path = "/getdept")
+    public  List<?> getdept(){
+        return service.getdept();
+    }
+
+    @GetMapping(path = "/getdeptid/{id}")
+    public Department getdeptid(@PathVariable Long id){
+        return service.getdeptid(id);
+    }
+
+    @GetMapping(path = "/getdeptno/{deptno}")
+    public Department getdeptno(@PathVariable Integer deptno){
+        return service.getdeptno(deptno);
+    }
+
+    @PutMapping(path = "/updatedept/{deptno}")
+    public Department putdept(@PathVariable Integer deptno, @RequestBody Department dept){
+        return service.putdept(deptno,dept);
+    }
+
+    @DeleteMapping(path = "/deletedept/{id}")
+    public String deletedpt(@PathVariable Long id){
+        return service.deletedpt(id);
+    }
 }

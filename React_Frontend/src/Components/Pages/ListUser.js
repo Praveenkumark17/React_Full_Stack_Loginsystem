@@ -211,58 +211,34 @@ function ListUser() {
     }, 1000*5);
   }, [user]);
 
-  const columns = [
+  const columns = [ //table-col-style
     {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="table-col-style">FirstName</p>
-        </div>
-      ),
+      title: () => <div className="table-col-style">Firstname</div>,
       dataIndex: "firstname",
       key: "name",
     },
     {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="table-col-style">LastName</p>
-        </div>
-      ),
+      title: () => <div className="table-col-style">Lastname</div>,
       dataIndex: "lastname",
       key: "lastname",
     },
     {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="table-col-style">Age</p>
-        </div>
-      ),
+      title: () => <div className="table-col-style">Age</div>,
       dataIndex: "age",
       key: "age",
     },
     {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="table-col-style">Email</p>
-        </div>
-      ),
+      title: () => <div className="table-col-style">Email</div>,
       dataIndex: "email",
       key: "email",
     },
     {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="table-col-style">Mobile</p>
-        </div>
-      ),
+      title: () => <div className="table-col-style">Mobile</div>,
       dataIndex: "mobile",
       key: "mobile",
     },
     {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="table-col-style">Action</p>
-        </div>
-      ),
+      title: () => <div className="table-col-style">Action</div>,
       dataIndex: data,
       key: "action",
     },

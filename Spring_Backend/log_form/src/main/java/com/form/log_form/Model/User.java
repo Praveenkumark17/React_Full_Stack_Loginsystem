@@ -23,6 +23,8 @@ public class User {
     private String  blood_group;
     private Long mobile;
     private String email;
+
+    private Integer deptno;
     private String password;
 
     private String imagepath;
@@ -130,5 +132,13 @@ public class User {
 
     public void setImagepath(String imagepath) {
         this.imagepath = imagepath;
+    }
+
+    public Integer getDeptno() {
+        return deptno;
+    }
+
+    public void setDeptno(Integer deptno) {
+        this.deptno = deptno;
     }
 }

@@ -5,15 +5,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-@Entity(name = "")
+@Entity(name = "department")
 public class Department {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    private Integer dept_no;
-    private Integer dept_name;
-    private Integer student_count;
+    private Integer deptno;
+    private String deptname;
+    private Integer studentcount;
 
     public Long getId() {
         return id;
@@ -23,27 +23,27 @@ public class Department {
         this.id = id;
     }
 
-    public Integer getDept_no() {
-        return dept_no;
+    public Integer getDeptno() {
+        return deptno;
     }
 
-    public void setDept_no(Integer dept_no) {
-        this.dept_no = dept_no;
+    public void setDeptno(Integer deptno) {
+        this.deptno = deptno;
     }
 
-    public Integer getDept_name() {
-        return dept_name;
+    public String getDeptname() {
+        return deptname;
     }
 
-    public void setDept_name(Integer dept_name) {
-        this.dept_name = dept_name;
+    public void setDeptname(String deptname) {
+        this.deptname = deptname;
     }
 
-    public Integer getStudent_count() {
-        return student_count;
+    public Integer getStudentcount() {
+        return studentcount;
     }
 
-    public void setStudent_count(Integer student_count) {
-        this.student_count = student_count;
+    public void setStudentcount(Integer studentcount) {
+        this.studentcount = studentcount;
     }
 }

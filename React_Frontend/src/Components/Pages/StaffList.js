@@ -218,61 +218,37 @@ function StaffList() {
     }, 5000);
   }, [user]);
 
-  const columns = [
-    {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="staff-table-col-style">FirstName</p>
-        </div>
-      ),
-      dataIndex: "firstname",
-      key: "name",
-    },
-    {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="staff-table-col-style">LastName</p>
-        </div>
-      ),
-      dataIndex: "lastname",
-      key: "lastname",
-    },
-    {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="staff-table-col-style">Age</p>
-        </div>
-      ),
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="staff-table-col-style">Email</p>
-        </div>
-      ),
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="staff-table-col-style">Mobile</p>
-        </div>
-      ),
-      dataIndex: "mobile",
-      key: "mobile",
-    },
-    {
-      title: () => (
-        <div style={{ textAlign: "center" }}>
-          <p className="staff-table-col-style">Action</p>
-        </div>
-      ),
-      dataIndex: data,
-      key: "action",
-    },
+  const columns = [//staff-table-col-style
+  {
+    title: () => <div className="staff-table-col-style">Firstname</div>,
+    dataIndex: "firstname",
+    key: "name",
+  },
+  {
+    title: () => <div className="staff-table-col-style">Lastname</div>,
+    dataIndex: "lastname",
+    key: "lastname",
+  },
+  {
+    title: () => <div className="staff-table-col-style">Age</div>,
+    dataIndex: "age",
+    key: "age",
+  },
+  {
+    title: () => <div className="staff-table-col-style">Email</div>,
+    dataIndex: "email",
+    key: "email",
+  },
+  {
+    title: () => <div className="staff-table-col-style">Mobile</div>,
+    dataIndex: "mobile",
+    key: "mobile",
+  },
+  {
+    title: () => <div className="staff-table-col-style">Action</div>,
+    dataIndex: data,
+    key: "action",
+  },
   ];
 
   if (sessiondata?.authorities?.admin == 1) {

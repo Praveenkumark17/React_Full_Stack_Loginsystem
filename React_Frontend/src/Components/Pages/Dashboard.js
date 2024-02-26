@@ -35,6 +35,8 @@ import { AiOutlineHome } from "react-icons/ai";
 import StaffList from "./StaffList";
 import Dashboardhome from "./Dashboardhome";
 import { RiUserSettingsLine } from "react-icons/ri";
+import { PiTreeStructureBold } from "react-icons/pi";
+import Department from "./Department";
 
 function Dashboard() {
   const [data, setData] = useState([]);
@@ -243,6 +245,22 @@ function Dashboard() {
     ),
   ];
 
+  const department = [
+    getItem(
+      <Link
+        to={"dept"}
+        onClick={() => {
+          onrefresh(trigger);
+          SetTrigger(!trigger);
+        }}
+      >
+        DEPARTMENT
+      </Link>,
+      "9",
+      <PiTreeStructureBold size={20} />
+    ),
+  ];
+
   const changepass = [
     getItem(
       <Link
@@ -254,7 +272,7 @@ function Dashboard() {
       >
         CHANGE PASSWORD
       </Link>,
-      "9",
+      "10",
       <MdLockOpen size={19} />
     ),
   ];
@@ -410,6 +428,7 @@ function Dashboard() {
                 ) : (
                   ""
                 )}
+                {data?.authorities?.admin == 1?department.map(renderItem):""}
                 {changepass.map(renderItem)}
               </Menu>
             </Sider>
@@ -420,6 +439,7 @@ function Dashboard() {
                 <Route path="/changepass" element={<Changepassword />} />
                 <Route path="/listUser" element={<ListUser />} />
                 <Route path="/staff_list" element={<StaffList />} />
+                <Route path="/dept" element={<Department />} />
               </Routes>
             </Content>
           </Layout>

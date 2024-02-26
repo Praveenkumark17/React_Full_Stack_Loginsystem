@@ -2,8 +2,10 @@ package com.form.log_form.ServiceImp;
 
 import com.form.log_form.Exception.Usernotfoundexception;
 import com.form.log_form.Model.Authorities;
+import com.form.log_form.Model.Department;
 import com.form.log_form.Model.User;
 import com.form.log_form.Repository.AutoritiesReapository;
+import com.form.log_form.Repository.DepartmentRepository;
 import com.form.log_form.Repository.UserRepository;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
 
 @Service
 public class UserserviceImp implements Userservice {
@@ -27,6 +31,9 @@ public class UserserviceImp implements Userservice {
 
     @Autowired
     public AutoritiesReapository authreposity;
+
+    @Autowired
+    public DepartmentRepository deptreposity;
 
     @Override
     public List<User> getUser(){
@@ -120,6 +127,24 @@ public class UserserviceImp implements Userservice {
     }
 
     @Override
+    public ResponseEntity<?> finddeptno(@PathVariable Integer deptno){
+        try {
+            List<User> users = reposity.findByDeptno(deptno);
+            if(users !=null){
+                return ResponseEntity.ok(users);
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Does not exist");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
+    }
+
+
+
+    // -----------> Authorities <----------- \\
+
+    @Override
     public Authorities putAuth(@PathVariable Long id,@RequestBody Authorities auth){
         return authreposity.findById(id)
                 .map(auths->{
@@ -135,5 +160,46 @@ public class UserserviceImp implements Userservice {
                     auths.setStudent(auth.getStudent());
                     return authreposity.save(auths);
                 }).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
+    }
+
+    // --------->   Departments <--------- \\
+
+    @Override
+    public ResponseEntity<?> postdept(@RequestBody Department dept) {
+        Department saveDept =  deptreposity.save(dept);
+        return new ResponseEntity<>(saveDept,HttpStatus.CREATED);
+    }
+
+    @Override
+    public List<?> getdept(){
+        return deptreposity.findAll();
+    }
+
+    @Override
+    public Department getdeptid(@PathVariable Long id){
+        return deptreposity.findById(id).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
+    }
+
+    @Override
+    public Department getdeptno(@PathVariable Integer deptno){
+        return deptreposity.findByDeptno(deptno).orElseThrow(()->new Usernotfoundexception("User not found:"+deptno));
+    }
+
+    @Override
+    public Department putdept(@PathVariable Integer deptno, @RequestBody Department dept){
+        return  deptreposity.findByDeptno(deptno)
+                .map(user ->{
+                    user.setStudentcount(dept.getStudentcount());
+                    return deptreposity.save(user);
+                }).orElseThrow(()->new Usernotfoundexception("User not found:"+deptno));
+    }
+
+    @Override
+    public String deletedpt(@PathVariable Long id){
+        if(!deptreposity.existsById(id)){
+            throw new Usernotfoundexception("User id not found: "+ id);
+        }
+        deptreposity.deleteById(id);
+        return "User id: "+ id +" has been deleted";
     }
 }

@@ -13,11 +13,12 @@
 }
 .staff-table-col-style {
   font-weight: bold;
-  font-size: 16.5px;
-  color: rgb(187, 0, 0);
+  font-size: 15px;
+  color: rgb(255, 0, 51);
+  text-align: center;
 }
 .table-title {
-  color: #0e3bcf;
+  color: blue;
   font-size: 20px;
   display: flex;
   align-items: center;

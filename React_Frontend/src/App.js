@@ -21,6 +21,7 @@ import ResetPassword from "./Components/Pages/ResetPassword";
 import ErrorPage from "./Components/Pages/ErrorPage";
 import StaffList from "./Components/Pages/StaffList";
 import Dashboardhome from "./Components/Pages/Dashboardhome";
+import Department from "./Components/Pages/Department";
 
 function Apps() {
   let routes = useRoutes([
@@ -62,6 +63,7 @@ function Apps() {
         { path: "changepass", element: <Changepassword /> },
         { path: "listUser", element: <ListUser /> },
         { path: "staff_list", element: <StaffList /> },
+        { path: "dept", element: <Department /> },
       ],
     },
     {

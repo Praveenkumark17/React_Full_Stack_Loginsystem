@@ -1,0 +1,31 @@
+.input-box {
+  height: 20vh;
+  width: 100%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.output-box {
+  height: 60.7vh;
+  width: 100%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+.dept-card {
+  height: 11vh;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+}
+.dept-table {
+  width: 60vw;
+  font-weight: bold;
+  text-align: center;
+}
+.dept-table-col {
+  font-weight: bold;
+  font-size: 15px;
+  color: blue;
+  text-align: center;
+}
+.ant-table-cell {
+  text-align: center;
+}
