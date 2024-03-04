@@ -1,8 +1,6 @@
 package com.form.log_form.Contoller;
 
-import com.form.log_form.Model.Authorities;
-import com.form.log_form.Model.Department;
-import com.form.log_form.Model.User;
+import com.form.log_form.Model.*;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -20,6 +17,8 @@ public class UserController {
 
     @Autowired
     public Userservice service;
+
+    // --------->   User   <--------- \\
 
     @GetMapping
     public String hello(){
@@ -71,7 +70,7 @@ public class UserController {
         return service.finddeptno(deptno);
     }
 
-    // -----------> Authorities <----------- \\
+    // ----------->   Authorities  <----------- \\
 
     @PutMapping(path = "/staffauth/{id}")
     public Authorities putAuth(@PathVariable Long id,@RequestBody Authorities auth)
@@ -85,7 +84,7 @@ public class UserController {
         return service.putAuthstudent(id,auth);
     }
 
-    // --------->   Departments <--------- \\
+    // --------->   Departments   <--------- \\
 
     @PostMapping(path = "/dept")
     public ResponseEntity<?> postdept(@RequestBody Department dept){
@@ -115,5 +114,49 @@ public class UserController {
     @DeleteMapping(path = "/deletedept/{id}")
     public String deletedpt(@PathVariable Long id){
         return service.deletedpt(id);
+    }
+
+    // --------->   Course   <--------- \\
+
+    @PostMapping(path = "/course")
+    public ResponseEntity<?> postcourse(@RequestBody Course course){
+        return service.postcourse(course);
+    }
+
+    @GetMapping(path = "/getcourse")
+    public List<?> getcourse(){
+        return service.getcourse();
+    }
+
+    @GetMapping(path = "/getcourseid/{id}")
+    public Course getcourseid(@PathVariable Long id){
+        return service.getcourseid(id);
+    }
+
+    @GetMapping(path = "/findcoursebystaffkey/{id}")
+    public List<Course> findcoursebykey(@PathVariable Long id){
+        return service.findcoursebykey(id);
+    }
+
+    @GetMapping(path = "/findcoursebystaffkeyin/{id}")
+    public List<Course> findcoursebykeyin(@PathVariable Long id){
+        return service.findcoursebykeyin(id);
+    }
+
+    @DeleteMapping(path = "/deletecourse/{id}")
+    public String deletecourse(@PathVariable Long id){
+        return service.deletecourse(id);
+    }
+
+    // --------->  Staff Course   <--------- \\
+
+    @PostMapping(path = "/poststaffcourse")
+    public ResponseEntity<?> poststaffcourse(@RequestBody Staffcourse course){
+        return service.poststaffcourse(course);
+    }
+
+    @GetMapping(path = "/getstaffcourseid/{staffid}")
+    public List<Staffcourse> getstaffcoursebyid(@PathVariable Integer staffid){
+        return service.getstaffcoursebyid(staffid);
     }
 }

@@ -1,0 +1,29 @@
+.input-box-course {
+    height: 20vh;
+    width: 100%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.outer-box-course{
+    height: 60.7vh;
+    width: 100%;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+.course-card{
+    height: 11vh;
+}
+.course-table {
+    width: 60vw;
+    font-weight: bold;
+    text-align: center;
+  }
+  .course-table-col {
+    font-weight: bold;
+    font-size: 15px;
+    color: blue;
+    text-align: center;
+  }
+  .ant-table-cell {
+    text-align: center;
+  }

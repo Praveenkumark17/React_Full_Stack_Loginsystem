@@ -7,7 +7,7 @@ const ErrorPage = (props) => {
   let location = useLocation();
   let message = location.state;
   let navigate = useNavigate();
-  let path = message?.type == 1 ? "/dashboard" : "/";
+  let path = message?.type == 1 ? "/dashboard/home" : "/";
   return (
     <Flex className="result" justify="center" align="center">
       <Result

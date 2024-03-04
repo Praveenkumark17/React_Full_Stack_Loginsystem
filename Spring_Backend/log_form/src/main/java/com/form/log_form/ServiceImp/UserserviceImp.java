@@ -1,12 +1,8 @@
 package com.form.log_form.ServiceImp;
 
 import com.form.log_form.Exception.Usernotfoundexception;
-import com.form.log_form.Model.Authorities;
-import com.form.log_form.Model.Department;
-import com.form.log_form.Model.User;
-import com.form.log_form.Repository.AutoritiesReapository;
-import com.form.log_form.Repository.DepartmentRepository;
-import com.form.log_form.Repository.UserRepository;
+import com.form.log_form.Model.*;
+import com.form.log_form.Repository.*;
 import com.form.log_form.Service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,6 +29,14 @@ public class UserserviceImp implements Userservice {
 
     @Autowired
     public DepartmentRepository deptreposity;
+
+    @Autowired
+    public CourseRepository courseRepository;
+
+    @Autowired
+    public StaffcourseRepository staffcourseRepository;
+
+    // --------->   User   <--------- \\
 
     @Override
     public List<User> getUser(){
@@ -201,5 +204,55 @@ public class UserserviceImp implements Userservice {
         }
         deptreposity.deleteById(id);
         return "User id: "+ id +" has been deleted";
+    }
+
+    // --------->   Course   <--------- \\
+
+    @Override
+    public ResponseEntity<?> postcourse(@RequestBody Course course){
+        Course value =  courseRepository.save(course);
+        return new ResponseEntity<>(value,HttpStatus.CREATED);
+    }
+
+    @Override
+    public List<?> getcourse() {
+        return courseRepository.findAll();
+    }
+
+    @Override
+    public Course getcourseid(@PathVariable Long id) {
+        return courseRepository.findById(id).orElseThrow(()->new Usernotfoundexception("User not found:"+id));
+    }
+
+    @Override
+    public List<Course> findcoursebykey(Long id) {
+        return courseRepository.findCoursesNotInStaffcourseByStaffid(id);
+    }
+
+    @Override
+    public List<Course> findcoursebykeyin(Long id) {
+        return courseRepository.findCoursesInStaffcourseByStaffid(id);
+    }
+
+    @Override
+    public String deletecourse(@PathVariable Long id) {
+        if(!courseRepository.existsById(id)){
+            throw new Usernotfoundexception("User id not found: "+ id);
+        }
+        courseRepository.deleteById(id);
+        return "User id: "+ id +" has been deleted";
+    }
+
+    // --------->   Staff Course   <--------- \\
+
+    @Override
+    public ResponseEntity<?> poststaffcourse(@RequestBody Staffcourse course){
+        Staffcourse value =  staffcourseRepository.save(course);
+        return new ResponseEntity<>(value,HttpStatus.CREATED);
+    }
+
+    @Override
+    public List<Staffcourse> getstaffcoursebyid(@PathVariable Integer staffid) {
+        return staffcourseRepository.findByStaffid(staffid);
     }
 }

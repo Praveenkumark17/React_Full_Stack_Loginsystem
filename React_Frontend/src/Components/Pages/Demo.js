@@ -1,20 +1,35 @@
-import { Flex } from "antd";
+import { Col, Flex, Row } from "antd";
 import React from "react";
-import "../Css/email.css";
+import "../Css/mycourse.css";
 
 function Demo() {
+  const style = {
+    background: "red",
+    height: "70px",
+  };
   return (
-    <html>
-      <head>
-        <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-      </head>
-      <body>
-        <div>
-          <p style={{ color: "blue" }}>User Logs</p>
-        </div>
-      </body>
-    </html>
+    <>
+      <div
+        style={{
+          height: "90%",
+          width: "90%",
+          marginLeft: "5%",
+          marginTop: "5%",
+        }}
+      >
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <div style={style}>col-6</div>
+          </Col>
+          <Col span={12}>
+            <div style={style}>col-6</div>
+          </Col>
+          <Col span={12}>
+            <div style={style}>col-6</div>
+          </Col>
+        </Row>
+      </div>
+    </>
   );
 }
 

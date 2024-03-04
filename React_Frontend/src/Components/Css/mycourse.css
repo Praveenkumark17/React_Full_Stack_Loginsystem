@@ -1,0 +1,7 @@
+.course-card {
+  height: 14vh;
+  cursor: pointer;
+}
+.mycourse-box::-webkit-scrollbar {
+  display: none;
+}

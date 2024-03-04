@@ -4,11 +4,48 @@
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
-.output-box {
+.outer-box {
+  position: relative;
+  overflow: hidden;
   height: 60.7vh;
   width: 100%;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
+}
+.output-box {
+  position: absolute;
+  height: 60.7vh;
+  width: 100%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  /* background-color: brown; */
+  transition: 1s;
+  opacity: 1;
+}
+.output-boxs{
+  opacity: 0;
+  transition: 1s;
+}
+.output-box2 {
+  position: absolute;
+  height: 60.7vh;
+  width: 100%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  /* background-color: blueviolet; */
+  transform: translateX(-0%);
+  transition: 1s;
+  opacity: 1;
+}
+.output-boxs2{
+  height: 60.7vh;
+  width: 100%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  /* background-color: blueviolet; */
+  transform: translateX(-100%);
+  transition: 1s;
+  opacity: 0;
 }
 .dept-card {
   height: 11vh;

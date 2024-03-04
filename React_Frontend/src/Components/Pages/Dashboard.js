@@ -26,8 +26,8 @@ import Changepassword from "./Changepassword";
 import ListUser from "./ListUser";
 import { LuUser2 } from "react-icons/lu";
 import { LuUsers2 } from "react-icons/lu";
-import { MdLockOpen } from "react-icons/md";
-import { FaChalkboardUser, FaPowerOff, FaRegCircleUser } from "react-icons/fa6";
+import { MdLibraryBooks, MdLockOpen, MdOutlineCollectionsBookmark } from "react-icons/md";
+import { FaChalkboardUser, FaPowerOff, FaReadme, FaRegCircleUser } from "react-icons/fa6";
 import { LiaUserTieSolid } from "react-icons/lia";
 import axios from "axios";
 import Sider from "antd/es/layout/Sider";
@@ -37,6 +37,11 @@ import Dashboardhome from "./Dashboardhome";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { PiTreeStructureBold } from "react-icons/pi";
 import Department from "./Department";
+import Course from "./Course";
+import { CgReadme } from "react-icons/cg";
+import Staffcourse from "./Staffcourse";
+import Mycourse from "./Mycourse";
+import Demo from "./Demo";
 
 function Dashboard() {
   const [data, setData] = useState([]);
@@ -245,21 +250,71 @@ function Dashboard() {
     ),
   ];
 
-  const department = [
-    getItem(
-      <Link
-        to={"dept"}
-        onClick={() => {
-          onrefresh(trigger);
-          SetTrigger(!trigger);
-        }}
-      >
-        DEPARTMENT
-      </Link>,
-      "9",
-      <PiTreeStructureBold size={20} />
-    ),
-  ];
+  const manage = [];
+
+  if (data?.authorities?.admin == 1) {
+    manage.push(
+      getItem(
+        <Link
+          to={"dept"}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+          }}
+        >
+          DEPARTMENT
+        </Link>,
+        "9",
+        <PiTreeStructureBold size={20} />
+      ),
+      getItem(
+        <Link
+          to={"course"}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+          }}
+        >
+          COURSE
+        </Link>,
+        "10",
+        <CgReadme size={20} />
+      )
+    );
+  }
+
+  const course =[];
+
+  if(data?.authorities?.staff_admin == 1){
+    course.push(
+      getItem(
+        <Link
+          to={"staff_course"}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+          }}
+        >
+          LIST COURSE 
+        </Link>,
+        "11",
+        <MdLibraryBooks size={20}/>
+      ),
+      getItem(
+        <Link
+          to={"my_course"}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+          }}
+        >
+          MY COURSE
+        </Link>,
+        "12",
+        <MdOutlineCollectionsBookmark size={20}/>
+      )
+    )
+  }
 
   const changepass = [
     getItem(
@@ -272,7 +327,7 @@ function Dashboard() {
       >
         CHANGE PASSWORD
       </Link>,
-      "10",
+      "13",
       <MdLockOpen size={19} />
     ),
   ];
@@ -428,7 +483,19 @@ function Dashboard() {
                 ) : (
                   ""
                 )}
-                {data?.authorities?.admin == 1?department.map(renderItem):""}
+                {manage.map(renderItem)}
+                {data?.authorities?.staff_admin == 1 ? (
+                  <Menu.SubMenu
+                    key="sub3"
+                    icon={<CgReadme size={20} />}
+                    title="COURSE"
+                    className="sider-sub-menu"
+                  >
+                    {course.map(renderItem)}
+                  </Menu.SubMenu>
+                ) : (
+                  ""
+                )}
                 {changepass.map(renderItem)}
               </Menu>
             </Sider>
@@ -440,6 +507,9 @@ function Dashboard() {
                 <Route path="/listUser" element={<ListUser />} />
                 <Route path="/staff_list" element={<StaffList />} />
                 <Route path="/dept" element={<Department />} />
+                <Route path="/course" element={<Course />} />
+                <Route path="/staff_course" element={<Staffcourse />} />
+                <Route path="/my_course" element={<Mycourse />} />
               </Routes>
             </Content>
           </Layout>
@@ -466,14 +536,7 @@ function Dashboard() {
       </>
     );
   } else {
-    return navigate("/error", {
-      state: {
-        message:
-          "Sorry, the page you visited does not exist to enter the dashboard.",
-        errorCode: 404,
-        type: 2,
-      },
-    });
+    return navigate("/");
   }
 }
 

@@ -22,6 +22,9 @@ import ErrorPage from "./Components/Pages/ErrorPage";
 import StaffList from "./Components/Pages/StaffList";
 import Dashboardhome from "./Components/Pages/Dashboardhome";
 import Department from "./Components/Pages/Department";
+import Course from "./Components/Pages/Course";
+import Staffcourse from "./Components/Pages/Staffcourse";
+import Mycourse from "./Components/Pages/Mycourse";
 
 function Apps() {
   let routes = useRoutes([
@@ -64,6 +67,9 @@ function Apps() {
         { path: "listUser", element: <ListUser /> },
         { path: "staff_list", element: <StaffList /> },
         { path: "dept", element: <Department /> },
+        { path: "course", element: <Course /> },
+        { path: "staff_course", element: <Staffcourse /> },
+        { path: "my_course", element: <Mycourse /> },
       ],
     },
     {

@@ -5,7 +5,6 @@ import {
   Form,
   Input,
   InputNumber,
-  Row,
   Space,
   Table,
 } from "antd";
@@ -14,13 +13,32 @@ import "../Css/department.css";
 import { PiTreeStructureBold } from "react-icons/pi";
 import axios from "axios";
 import { HashLoader } from "react-spinners";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 function Department() {
   const [trigger, setTrigger] = useState(false);
 
   const [getdept, setgetDept] = useState();
 
+  const [selecteddept, setSelecteddept] = useState([]);
+
+  const [selected, setSelected] = useState([]);
+
+  const [openmodel, setOpenmodel] = useState(false);
+
+  const [sessiondata, setSessiondata] = useState();
+
   const [forms] = Form.useForm();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const sessiondata = sessionStorage.getItem("userdata");
+    const datas = sessiondata ? JSON.parse(sessiondata) : {};
+    setSessiondata(datas);
+    console.log("admin session", datas);
+  }, []);
 
   const onremove = async (id) => {
     await axios
@@ -29,22 +47,28 @@ function Department() {
       .catch((err) => console.log(err.data));
   };
 
-  const onview = async (id) =>{
+  const onview = async (deptno, id) => {
     await axios
-      .get(`http://localhost:8080/user/userdeptno/${id}`)
-      .then((res) => {(console.log("deptno",res.data));})
-      .catch((err) => console.log("dept_err",err.data));
-  }
+      .get(`http://localhost:8080/user/userdeptno/${deptno}`)
+      .then((res) => {
+        console.log("deptno", res.data);
+        setSelecteddept(res.data);
+        setOpenmodel(true);
+      })
+      .catch((err) => console.log("dept_err", err.data));
 
-  // useEffect(()=>{
-  //   const getdeptno = async () =>{
-  //     await axios
-  //     .get(`http://localhost:8080/user/userdeptno/${109}`)
-  //     .then((res) => {(console.log("deptno",res.data));})
-  //     .catch((err) => console.log("dept_err",err.data));
-  //   }
-  //   getdeptno();
-  // },[getdept])
+    await axios
+      .get(`http://localhost:8080/user/getdeptid/${id}`)
+      .then((res) => {
+        console.log("id", res.data);
+        setSelected(res.data);
+      })
+      .catch((err) => console.log("dept_err", err.data));
+  };
+
+  const onclosemodel = () => {
+    setOpenmodel(false);
+  };
 
   useEffect(() => {
     const getdept = async () => {
@@ -59,7 +83,14 @@ function Department() {
             action: (
               <>
                 <Space>
-                  <Button type="primary" onClick={() => onview(user.id)}>View</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      onview(user.deptno, user.id);
+                    }}
+                  >
+                    View
+                  </Button>
                   <Button
                     type="primary"
                     danger
@@ -124,109 +155,192 @@ function Department() {
     },
   ];
 
-  return (
-    <>
-      <Flex className="input-box" justify="center" align="center">
-        <Form onFinish={onfinish} form={forms}>
-          <Flex justify="center" align="center">
-            <Card className="dept-card">
-              <Space size={"middle"}>
-                <Form.Item
-                  name={"dept_name"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "please enter department",
-                      pattern: /^[A-Za-z\s]+$/,
-                    },
-                  ]}
-                  hasFeedback
-                >
-                  <Input
-                    style={{
-                      width: "20vw",
-                    }}
-                    addonBefore={<PiTreeStructureBold size={20} />}
-                    placeholder="Department Name"
-                  />
-                </Form.Item>
-                <Space.Compact size="middle">
+  const columns_student = [
+    //dept-table-col
+    {
+      title: () => <div className="dept-table-col">Firstname</div>,
+      dataIndex: "firstname",
+      key: "name",
+    },
+    {
+      title: () => <div className="dept-table-col">Lastname</div>,
+      dataIndex: "lastname",
+      key: "lastname",
+    },
+    {
+      title: () => <div className="dept-table-col">Age</div>,
+      dataIndex: "age",
+      key: "age",
+    },
+    {
+      title: () => <div className="dept-table-col">Email</div>,
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: () => <div className="dept-table-col">Mobile</div>,
+      dataIndex: "mobile",
+      key: "mobile",
+    },
+    {
+      title: () => <div className="dept-table-col">Dept.no</div>,
+      dataIndex: "deptno",
+      key: "deptno",
+    },
+  ];
+
+  if (sessiondata?.authorities?.admin == 1) {
+    return (
+      <>
+        <Flex className="input-box" justify="center" align="center">
+          <Form onFinish={onfinish} form={forms}>
+            <Flex justify="center" align="center">
+              <Card className="dept-card">
+                <Space size={"middle"}>
                   <Form.Item
-                    name={"dept_num"}
+                    name={"dept_name"}
                     rules={[
                       {
                         required: true,
-                        message: "please enter department_num",
-                      },
-                      {
-                        pattern: /^[1-9]\d{2}$/,
-                        message: "please valid code",
+                        message: "please enter department",
+                        pattern: /^[A-Za-z\s]+$/,
                       },
                     ]}
                     hasFeedback
                   >
-                    <InputNumber
+                    <Input
                       style={{
-                        width: "15vw",
+                        width: "20vw",
                       }}
-                      placeholder="Department Code"
+                      addonBefore={<PiTreeStructureBold size={20} />}
+                      placeholder="Department Name"
                     />
                   </Form.Item>
-                  <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{
-                        backgroundColor: "rgb(29, 226, 196)",
-                        color: "black",
-                        fontWeight: "bold",
-                      }}
+                  <Space.Compact size="middle">
+                    <Form.Item
+                      name={"dept_num"}
+                      rules={[
+                        {
+                          required: true,
+                          message: "please enter department_num",
+                        },
+                        {
+                          pattern: /^[1-9]\d{2}$/,
+                          message: "please valid code",
+                        },
+                      ]}
+                      hasFeedback
                     >
-                      ADD
-                    </Button>
-                  </Form.Item>
-                </Space.Compact>
-              </Space>
-            </Card>
-          </Flex>
-        </Form>
-      </Flex>
-      <div
-        style={{
-          width: "100%",
-          height: "3px",
-          backgroundColor: "rgb(0, 21, 41)",
-        }}
-      ></div>
-      {getdept ? (
-        <Flex className="output-box" justify="center">
-          <Flex vertical>
-            <Flex justify="center">
-              <h2 style={{ color: "white" }}>DEPARTMENT LIST</h2>
+                      <InputNumber
+                        style={{
+                          width: "15vw",
+                        }}
+                        placeholder="Department Code"
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{
+                          backgroundColor: "rgb(29, 226, 196)",
+                          color: "black",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ADD
+                      </Button>
+                    </Form.Item>
+                  </Space.Compact>
+                </Space>
+              </Card>
             </Flex>
-            <Flex>
-              <Table
-                columns={columns}
-                dataSource={getdept}
-                className="dept-table"
-                pagination={{ pageSize: 4 }}
-              />
+          </Form>
+        </Flex>
+        <div
+          style={{
+            width: "100%",
+            height: "3px",
+            backgroundColor: "rgb(0, 21, 41)",
+          }}
+        ></div>
+        <Flex vertical className="outer-box">
+          <Flex
+            className={openmodel ? "output-boxs" : "output-box"}
+            justify="center"
+          >
+            <Flex vertical>
+              <Flex justify="center">
+                <h2 style={{ color: "rgb(0, 21, 41)" }}>DEPARTMENT LIST</h2>
+              </Flex>
+              {getdept ? (
+                <Flex justify="center">
+                  <Table
+                    columns={columns}
+                    dataSource={getdept}
+                    className="dept-table"
+                    pagination={{ pageSize: 4 }}
+                  />
+                </Flex>
+              ) : (
+                <>
+                  <Flex
+                    justify="center"
+                    style={{ height: "100%" }}
+                    align="center"
+                  >
+                    <HashLoader color="#0e1630" loading size={110} />
+                  </Flex>
+                </>
+              )}
+            </Flex>
+          </Flex>
+          <Flex
+            className={openmodel ? "output-box2" : "output-boxs2"}
+            justify="center"
+          >
+            <Flex vertical>
+              <Flex
+                justify="center"
+                style={{ position: "relative", height: "9vh", width: "100%" }}
+              >
+                <Flex align="center">
+                  <Button
+                    style={{ position: "absolute", left: "-100px" }}
+                    icon={<ArrowLeftOutlined />}
+                    shape="circle"
+                    onClick={onclosemodel}
+                  />
+                </Flex>
+                <h2 style={{ color: "rgb(0, 21, 41)", position: "absolute" }}>
+                  {selected && selected.deptname
+                    ? selected.deptname.toUpperCase()
+                    : ""}
+                </h2>
+              </Flex>
+              <Flex>
+                <Table
+                  columns={columns_student}
+                  dataSource={selecteddept}
+                  className="dept-table"
+                  pagination={{ pageSize: 4 }}
+                />
+              </Flex>
             </Flex>
           </Flex>
         </Flex>
-      ) : (
-        <>
-          <Flex
-            justify="center"
-            style={{ width: "100%", height: "60.7vh" }}
-            align="center"
-          >
-            <HashLoader color="#0e1630" loading size={110} />
-          </Flex>
-        </>
-      )}
-    </>
-  );
+      </>
+    );
+  } else {
+    return navigate("/error", {
+      state: {
+        message:
+          "Sorry, you are not authorized to access department page. Go back",
+        errorCode: 403,
+        type: 1,
+      },
+    });
+  }
 }
 
 export default Department;
