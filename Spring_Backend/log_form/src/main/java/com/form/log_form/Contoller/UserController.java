@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -155,8 +156,28 @@ public class UserController {
         return service.poststaffcourse(course);
     }
 
+    @GetMapping(path = "/getstaffcourse")
+    public List<Staffcourse> getstaffcourseby(){
+        return service.getstaffcourseby();
+    }
+
     @GetMapping(path = "/getstaffcourseid/{staffid}")
     public List<Staffcourse> getstaffcoursebyid(@PathVariable Integer staffid){
         return service.getstaffcoursebyid(staffid);
+    }
+
+    @GetMapping(path = "/getstaffcoursebydeptno/{deptno}")
+    public List<Staffcourse> getstaffcoursebydeptno(@PathVariable Integer deptno){
+        return service.getstaffcoursebydeptno(deptno);
+    }
+
+    @GetMapping(path = "/getstaffcoursecourseno/{courseno}/{staffid}")
+    public Staffcourse getstaffcoursebycourseno(@PathVariable Integer courseno, @PathVariable Integer staffid){
+        return service.getstaffcoursebycourseno(courseno,staffid);
+    }
+
+    @PutMapping(path = "/putstaffcoursecount/{courseno}/{staffid}")
+    public Staffcourse putstaffcoursebycourseno(@PathVariable Integer courseno,@PathVariable Integer staffid, @RequestBody Staffcourse staff ){
+        return service.putstaffcoursebycourseno(courseno,staffid,staff);
     }
 }

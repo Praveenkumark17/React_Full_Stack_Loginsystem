@@ -25,6 +25,8 @@ import Department from "./Components/Pages/Department";
 import Course from "./Components/Pages/Course";
 import Staffcourse from "./Components/Pages/Staffcourse";
 import Mycourse from "./Components/Pages/Mycourse";
+import Studentscourse from "./Components/Pages/Studentscourse";
+import Mystucourse from "./Components/Pages/Mystucourse";
 
 function Apps() {
   let routes = useRoutes([
@@ -70,6 +72,8 @@ function Apps() {
         { path: "course", element: <Course /> },
         { path: "staff_course", element: <Staffcourse /> },
         { path: "my_course", element: <Mycourse /> },
+        { path: "student_course", element: <Studentscourse /> },
+        { path: "my_stu_course", element: <Mystucourse /> },
       ],
     },
     {

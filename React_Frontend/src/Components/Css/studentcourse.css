@@ -1,0 +1,6 @@
+.stu-course-card {
+  height: 16vh;
+}
+.mycourse-box::-webkit-scrollbar {
+  display: none;
+}

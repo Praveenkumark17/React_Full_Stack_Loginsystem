@@ -56,7 +56,7 @@ function Changepassword() {
           const cdata = res.data;
           const getdata = { ...data, password: cdata.password };
           sessionStorage.setItem("userdata", JSON.stringify(getdata));
-          navigate("/dashboard");
+          navigate("/dashboard/home");
         })
         .catch((err) => console.log("put pass fail:", err));
     } else {

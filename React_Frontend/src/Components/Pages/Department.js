@@ -8,13 +8,14 @@ import {
   Space,
   Table,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../Css/department.css";
 import { PiTreeStructureBold } from "react-icons/pi";
 import axios from "axios";
 import { HashLoader } from "react-spinners";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import Highlighter from "react-highlight-words";
 
 function Department() {
   const [trigger, setTrigger] = useState(false);
@@ -32,6 +33,128 @@ function Department() {
   const [forms] = Form.useForm();
 
   const navigate = useNavigate();
+
+  // table filter start
+
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  //table filter end
 
   useEffect(() => {
     const sessiondata = sessionStorage.getItem("userdata");
@@ -137,11 +260,13 @@ function Department() {
       title: () => <div className="dept-table-col">Department_Name</div>,
       dataIndex: "deptname",
       key: "department_name",
+      ...getColumnSearchProps("deptname")
     },
     {
       title: () => <div className="dept-table-col">Department_No</div>,
       dataIndex: "deptno",
       key: "department_no",
+      ...getColumnSearchProps("deptno")
     },
     {
       title: () => <div className="dept-table-col">Student_Count</div>,
@@ -161,6 +286,7 @@ function Department() {
       title: () => <div className="dept-table-col">Firstname</div>,
       dataIndex: "firstname",
       key: "name",
+      ...getColumnSearchProps("firstname")
     },
     {
       title: () => <div className="dept-table-col">Lastname</div>,
@@ -171,16 +297,21 @@ function Department() {
       title: () => <div className="dept-table-col">Age</div>,
       dataIndex: "age",
       key: "age",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => a.age - b.age,
+      ...getColumnSearchProps("age"),
     },
     {
       title: () => <div className="dept-table-col">Email</div>,
       dataIndex: "email",
       key: "email",
+      ...getColumnSearchProps("email"),
     },
     {
       title: () => <div className="dept-table-col">Mobile</div>,
       dataIndex: "mobile",
       key: "mobile",
+      ...getColumnSearchProps("mobile"),
     },
     {
       title: () => <div className="dept-table-col">Dept.no</div>,

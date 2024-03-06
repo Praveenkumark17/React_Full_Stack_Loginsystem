@@ -1,5 +1,5 @@
-.course-card {
-  height: 14vh;
+.course-cards {
+  /* height: 16vh; */
   cursor: pointer;
 }
 .mycourse-box::-webkit-scrollbar {

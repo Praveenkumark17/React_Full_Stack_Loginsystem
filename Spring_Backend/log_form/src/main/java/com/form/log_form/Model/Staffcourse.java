@@ -23,6 +23,8 @@ public class Staffcourse {
 
     private Integer staffid;
 
+    private String imgpath;
+
     private String staffname;
 
     public Long getId() {
@@ -79,6 +81,14 @@ public class Staffcourse {
 
     public void setStaffid(Integer staffid) {
         this.staffid = staffid;
+    }
+
+    public String getImgpath() {
+        return imgpath;
+    }
+
+    public void setImgpath(String imgpath) {
+        this.imgpath = imgpath;
     }
 
     public String getStaffname() {

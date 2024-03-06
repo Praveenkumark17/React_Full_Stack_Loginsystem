@@ -7,14 +7,12 @@ import {
   Tooltip,
   Row,
   Col,
-  InputNumber,
   Select,
   DatePicker,
   message,
   Flex,
   Space,
 } from "antd";
-import { EditOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -69,7 +67,7 @@ function EditProfile() {
     });
     setEnables(false);
     setEnable(true);
-    navigate("/dashboard");
+    navigate("/dashboard/home");
   };
 
   const onenable = () => {

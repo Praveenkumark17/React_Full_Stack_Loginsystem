@@ -42,6 +42,8 @@ import { CgReadme } from "react-icons/cg";
 import Staffcourse from "./Staffcourse";
 import Mycourse from "./Mycourse";
 import Demo from "./Demo";
+import Studentscourse from "./Studentscourse";
+import Mystucourse from "./Mystucourse";
 
 function Dashboard() {
   const [data, setData] = useState([]);
@@ -152,24 +154,25 @@ function Dashboard() {
   ];
 
   const studentitem = [
-    getItem(
-      <Link
-        to={"listUser"}
-        onClick={() => {
-          onrefresh(trigger);
-          SetTrigger(!trigger);
-          sessionStorage.setItem("list_user", JSON.stringify(1));
-        }}
-      >
-        STUDENT LIST
-      </Link>,
-      "3",
-      <LuUsers2 size={18} />
-    ),
+    
   ];
 
   if (data.authorities?.admin == 1) {
     studentitem.push(
+      getItem(
+        <Link
+          to={"listUser"}
+          onClick={() => {
+            onrefresh(trigger);
+            SetTrigger(!trigger);
+            sessionStorage.setItem("list_user", JSON.stringify(1));
+          }}
+        >
+          STUDENT LIST
+        </Link>,
+        "3",
+        <LuUsers2 size={18} />
+      ),
       getItem(
         <Link
           to={"listUser"}
@@ -285,11 +288,11 @@ function Dashboard() {
 
   const course =[];
 
-  if(data?.authorities?.staff_admin == 1){
+  if(data?.authorities?.staff_admin == 1 || data?.authorities?.student == 1 ){
     course.push(
       getItem(
         <Link
-          to={"staff_course"}
+          to={data?.authorities?.staff_admin == 1?"staff_course":"student_course"}
           onClick={() => {
             onrefresh(trigger);
             SetTrigger(!trigger);
@@ -302,7 +305,7 @@ function Dashboard() {
       ),
       getItem(
         <Link
-          to={"my_course"}
+          to={data?.authorities?.staff_admin == 1?"my_course":"my_stu_course"}
           onClick={() => {
             onrefresh(trigger);
             SetTrigger(!trigger);
@@ -458,8 +461,7 @@ function Dashboard() {
                 className="sider-menu"
               >
                 {items.map(renderItem)}
-                {data?.authorities?.admin == 1 ||
-                data?.authorities?.staff_admin == 1 ? (
+                {data?.authorities?.admin == 1  ? (
                   <Menu.SubMenu
                     key="sub2"
                     icon={<FaRegCircleUser size={18} />}
@@ -484,7 +486,7 @@ function Dashboard() {
                   ""
                 )}
                 {manage.map(renderItem)}
-                {data?.authorities?.staff_admin == 1 ? (
+                {data?.authorities?.staff_admin == 1 || data?.authorities?.student == 1 ? (
                   <Menu.SubMenu
                     key="sub3"
                     icon={<CgReadme size={20} />}
@@ -510,6 +512,8 @@ function Dashboard() {
                 <Route path="/course" element={<Course />} />
                 <Route path="/staff_course" element={<Staffcourse />} />
                 <Route path="/my_course" element={<Mycourse />} />
+                <Route path="/student_course" element={<Studentscourse />} />
+                <Route path="/my_stu_course" element={<Mystucourse />} />
               </Routes>
             </Content>
           </Layout>

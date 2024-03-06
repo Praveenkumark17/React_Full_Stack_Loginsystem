@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -252,7 +253,33 @@ public class UserserviceImp implements Userservice {
     }
 
     @Override
+    public List<Staffcourse> getstaffcourseby() {
+        return staffcourseRepository.findAll();
+    }
+
+    @Override
     public List<Staffcourse> getstaffcoursebyid(@PathVariable Integer staffid) {
         return staffcourseRepository.findByStaffid(staffid);
     }
+
+    @Override
+    public List<Staffcourse> getstaffcoursebydeptno(@PathVariable Integer deptno) {
+        return staffcourseRepository.findByDeptno(deptno);
+    }
+
+    @Override
+    public Staffcourse getstaffcoursebycourseno(Integer courseno, Integer staffid) {
+        return staffcourseRepository.findByCourseno(courseno,staffid).orElseThrow(() -> new Usernotfoundexception("User not found with courseno: " + courseno + " and staffid: " + staffid));
+    }
+
+    @Override
+    public Staffcourse putstaffcoursebycourseno(@PathVariable Integer courseno, @PathVariable Integer staffid, @RequestBody Staffcourse staff) {
+        return staffcourseRepository.findByCourseno(courseno, staffid)
+                .map(user -> {
+                    user.setStudentcount(staff.getStudentcount());
+                    return staffcourseRepository.save(user);
+                })
+                .orElseThrow(() -> new Usernotfoundexception("User not found with courseno: " + courseno + " and staffid: " + staffid));
+    }
+
 }

@@ -1,14 +1,16 @@
-import { Card, Col, Flex, Row, Space, message } from "antd";
+import { Avatar, Button, Card, Col, Flex, Row, Space, message } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../Css/mycourse.css";
 import { HashLoader } from "react-spinners";
+import "../Css/studentcourse.css";
 
-function Mycourse() {
+function Studentscourse() {
   const [sessiondata, setSessiondata] = useState();
 
   const [getcourse, setGetcourse] = useState([]);
+
+  const [trigger, setTrigger] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,7 +25,9 @@ function Mycourse() {
     if (sessiondata) {
       const getcourse = async () => {
         await axios
-          .get(`http://localhost:8080/user/getstaffcourseid/${sessiondata.id}`)
+          .get(
+            `http://localhost:8080/user/getstaffcoursebydeptno/${sessiondata.deptno}`
+          )
           .then((res) => {
             console.log("get_mycourse", res.data);
             const result = res.data;
@@ -38,11 +42,36 @@ function Mycourse() {
     }
   }, [sessiondata]);
 
-  if (sessiondata?.authorities?.staff_admin == 1) {
+  const onregister = async (id, no) => {
+    console.log("student_course", id + "-" + no);
+    const sendvalue = { studentcount: 1 };
+    await axios
+      .get(`http://localhost:8080/user/getstaffcoursecourseno/${no}/${id}`)
+      .then((res) => {
+        console.log("getcourse_no_id_D", res.data);
+        const result = res.data;
+        const sendvalue = { studentcount: result.studentcount + 1 };
+
+        axios
+          .put(
+            `http://localhost:8080/user/putstaffcoursecount/${no}/${id}`,
+            sendvalue
+          )
+          .then((res) => {
+            console.log("putcourse_no_id_D", res.data);
+          })
+          .catch((err) => {
+            console.log("putcourse_no_id_F", err);
+          });
+      })
+      .catch((err) => console.log("getcourse_no_id_F", err.data));
+  };
+
+  if (sessiondata?.authorities?.student == 1) {
     return (
       <>
         <Flex style={{ height: "5%", width: "100%" }} justify="center">
-          <h2 style={{ color: "rgb(0, 21, 41)" }}>MY COURSE</h2>
+          <h2 style={{ color: "rgb(0, 21, 41)" }}>COURSE LIST</h2>
         </Flex>
         <div
           style={{
@@ -57,48 +86,48 @@ function Mycourse() {
             <Row gutter={[16, 16]}>
               {getcourse?.map((user, index) => (
                 <Col span={24} key={index}>
-                  <Card
-                    className="course-cards"
-                    onClick={() =>
-                      message.open({
-                        type: "success",
-                        content: `card work ${index + 1}`,
-                      })
-                    }
-                  >
+                  <Card className="stu-course-card">
                     <Flex
                       style={{ fontWeight: "bold", fontSize: "15px" }}
                       justify="space-between"
                     >
                       <Flex>
                         <Space size={"middle"}>
+                          <Avatar
+                            size={70}
+                            src={require(`../../Images/${
+                              user?.imgpath || "wipib0dx.png"
+                            }`)}
+                          />
                           <Flex vertical>
                             <Space>
-                              <div style={{ width: "6vw" }}>Course</div>
+                              <div style={{ width: "5.5vw" }}>Staff Name</div>
                               <div>:</div>
                               <div style={{ color: "red" }}>
-                                {user.coursename}
+                                {user.staffname}
                               </div>
                             </Space>
                             <div style={{ height: "2vh" }}></div>
                             <Space>
-                              <div style={{ width: "6vw" }}>Department</div>
+                              <div style={{ width: "5.5vw" }}>Course</div>
                               <div>:</div>
                               <div style={{ color: "blue" }}>
-                                {user.deptname}
+                                {user.coursename}
                               </div>
                             </Space>
                           </Flex>
                         </Space>
                       </Flex>
                       <Flex>
-                        <Space>
-                          <div style={{ width: "7vw" }}>Student Count</div>
-                          <div>:</div>
-                          <div style={{ color: "red" }}>
-                            {user.studentcount}
-                          </div>
-                        </Space>
+                        <Button
+                          style={{ top: "3vh" }}
+                          type="primary"
+                          onClick={() =>
+                            onregister(user.staffid, user.courseno)
+                          }
+                        >
+                          Register
+                        </Button>
                       </Flex>
                     </Flex>
                   </Card>
@@ -119,7 +148,7 @@ function Mycourse() {
     return navigate("/error", {
       state: {
         message:
-          "Sorry, you are not authorized to access staff course page. Go back",
+          "Sorry, you are not authorized to access student course page. Go back",
         errorCode: 403,
         type: 1,
       },
@@ -127,4 +156,4 @@ function Mycourse() {
   }
 }
 
-export default Mycourse;
+export default Studentscourse;

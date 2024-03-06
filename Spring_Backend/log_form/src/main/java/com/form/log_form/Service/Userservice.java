@@ -3,9 +3,12 @@ package com.form.log_form.Service;
 import com.form.log_form.Model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface Userservice {
@@ -68,5 +71,13 @@ public interface Userservice {
 
     public ResponseEntity<?> poststaffcourse(Staffcourse course);
 
+    public List<Staffcourse> getstaffcourseby();
+
     public List<Staffcourse> getstaffcoursebyid(Integer staffid);
+
+    public List<Staffcourse> getstaffcoursebydeptno(Integer deptno);
+
+    public Staffcourse getstaffcoursebycourseno(Integer courseno, Integer staffid);
+
+    public Staffcourse putstaffcoursebycourseno( Integer courseno, Integer staffid, Staffcourse staff );
 }
