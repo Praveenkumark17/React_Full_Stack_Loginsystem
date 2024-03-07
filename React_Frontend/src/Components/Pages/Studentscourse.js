@@ -26,7 +26,7 @@ function Studentscourse() {
       const getcourse = async () => {
         await axios
           .get(
-            `http://localhost:8080/user/getstaffcoursebydeptno/${sessiondata.deptno}`
+            `http://localhost:8080/user/getstaffcoursebystuid/${sessiondata.id}/${sessiondata.deptno}`
           )
           .then((res) => {
             console.log("get_mycourse", res.data);
@@ -40,11 +40,20 @@ function Studentscourse() {
       };
       getcourse();
     }
-  }, [sessiondata]);
+  }, [sessiondata, trigger]);
 
-  const onregister = async (id, no) => {
+  const onregister = async (id, no, cname, cno, dno, sname, path,sid) => {
     console.log("student_course", id + "-" + no);
     const sendvalue = { studentcount: 1 };
+    const postvalue = {
+      coursename: cname,
+      courseno: cno,
+      deptno: dno,
+      staffname: sname,
+      studentid: sessiondata.id,
+      imgpath: path,
+      staffid:sid,
+    };
     await axios
       .get(`http://localhost:8080/user/getstaffcoursecourseno/${no}/${id}`)
       .then((res) => {
@@ -65,6 +74,17 @@ function Studentscourse() {
           });
       })
       .catch((err) => console.log("getcourse_no_id_F", err.data));
+
+    await axios
+      .post(`http://localhost:8080/user/poststucourse`, postvalue)
+      .then((res) => {
+        console.log("post_stucourse", res);
+        setTrigger(!trigger);
+      })
+      .catch((err) => {
+        console.log("post_stucourse_err", err);
+      });
+    // console.log("post_stucourse", postvalue);
   };
 
   if (sessiondata?.authorities?.student == 1) {
@@ -122,8 +142,17 @@ function Studentscourse() {
                         <Button
                           style={{ top: "3vh" }}
                           type="primary"
-                          onClick={() =>
-                            onregister(user.staffid, user.courseno)
+                          onClick={() => 
+                            onregister(
+                              user.staffid,
+                              user.courseno,
+                              user.coursename,
+                              user.courseno,
+                              user.deptno,
+                              user.staffname,
+                              user.imgpath,
+                              user.staffid
+                            )
                           }
                         >
                           Register

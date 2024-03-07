@@ -22,6 +22,10 @@ public class Studentscourse {
 
     private String staffname;
 
+    private String imgpath;
+
+    private Integer staffid;
+
     public Long getId() {
         return id;
     }
@@ -68,5 +72,21 @@ public class Studentscourse {
 
     public void setStaffname(String staffname) {
         this.staffname = staffname;
+    }
+
+    public String getImgpath() {
+        return imgpath;
+    }
+
+    public void setImgpath(String imgpath) {
+        this.imgpath = imgpath;
+    }
+
+    public Integer getStaffid() {
+        return staffid;
+    }
+
+    public void setStaffid(Integer staffid) {
+        this.staffid = staffid;
     }
 }

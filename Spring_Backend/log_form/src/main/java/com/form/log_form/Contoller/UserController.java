@@ -26,7 +26,7 @@ public class UserController {
         return "hello";
     }
 
-    @GetMapping("/getuser")
+    @GetMapping(path = "/getuser")
     public List<User> getUser(){
         return service.getUser();
     }
@@ -36,27 +36,27 @@ public class UserController {
         return service.saveUser(newuser,file);
     }
 
-    @PostMapping("/text")
+    @PostMapping(path = "/text")
     public ResponseEntity<?> passdata(@RequestBody User data){
         return service.passdata(data);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping(path = "/update/{id}")
     public User updatedata(@PathVariable Long id,@RequestBody User user){
         return  service.updatedata(id,user);
     }
 
-    @PutMapping("/updatepass/{id}")
+    @PutMapping(path = "/updatepass/{id}")
     public User updatepass(@PathVariable Long id,@RequestBody User user){
         return  service.updatepass(id,user);
     }
 
-    @GetMapping("/getuserid/{id}")
+    @GetMapping(path = "/getuserid/{id}")
     public User getbyid(@PathVariable Long id){
         return service.getId(id);
     }
 
-    @DeleteMapping("/deleteuser/{id}")
+    @DeleteMapping(path = "/deleteuser/{id}")
     public String deleteuser(@PathVariable Long id){
         return service.deleteUser(id);
     }
@@ -69,6 +69,11 @@ public class UserController {
     @GetMapping(path = "/userdeptno/{deptno}")
     public ResponseEntity<?> finddeptno(@PathVariable Integer deptno){
         return service.finddeptno(deptno);
+    }
+
+    @GetMapping(path = "/getuserbystaffidcourseid/{courseno}/{staffid}")
+    public List<User> getuserbystaffidcourseid(@PathVariable Integer courseno,@PathVariable Integer staffid){
+        return service.getuserbystaffidcourseid(courseno,staffid);
     }
 
     // ----------->   Authorities  <----------- \\
@@ -179,5 +184,22 @@ public class UserController {
     @PutMapping(path = "/putstaffcoursecount/{courseno}/{staffid}")
     public Staffcourse putstaffcoursebycourseno(@PathVariable Integer courseno,@PathVariable Integer staffid, @RequestBody Staffcourse staff ){
         return service.putstaffcoursebycourseno(courseno,staffid,staff);
+    }
+
+    @GetMapping(path = "/getstaffcoursebystuid/{studentid}/{deptno}")
+    public List<Staffcourse> getstaffcoursebystuid(@PathVariable Integer studentid,@PathVariable Integer deptno){
+        return service.getstaffcoursebystuid(studentid,deptno);
+    }
+
+    // --------->  Student Course   <--------- \\
+
+    @PostMapping(path = "/poststucourse")
+    public ResponseEntity<?> poststucourse(@RequestBody Studentscourse stucourse){
+        return service.poststucourse(stucourse);
+    }
+
+    @GetMapping(path = "/getstudentcoursebyid/{studentid}")
+    public List<Studentscourse> getstudentcoursebystudentid(@PathVariable Integer studentid){
+        return service.getstudentcoursebystudentid(studentid);
     }
 }

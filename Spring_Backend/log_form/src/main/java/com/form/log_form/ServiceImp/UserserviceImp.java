@@ -37,6 +37,9 @@ public class UserserviceImp implements Userservice {
     @Autowired
     public StaffcourseRepository staffcourseRepository;
 
+    @Autowired
+    public StudentRepository studentRepository;
+
     // --------->   User   <--------- \\
 
     @Override
@@ -144,7 +147,10 @@ public class UserserviceImp implements Userservice {
         }
     }
 
-
+    @Override
+    public List<User> getuserbystaffidcourseid(@PathVariable Integer courseno,@PathVariable Integer staffid) {
+        return reposity.findUserByStaffidAndCourseno(courseno,staffid);
+    }
 
     // -----------> Authorities <----------- \\
 
@@ -282,4 +288,22 @@ public class UserserviceImp implements Userservice {
                 .orElseThrow(() -> new Usernotfoundexception("User not found with courseno: " + courseno + " and staffid: " + staffid));
     }
 
+    @Override
+    public List<Staffcourse> getstaffcoursebystuid(@PathVariable Integer studentid,@PathVariable Integer deptno) {
+        return staffcourseRepository.findByStudentid(studentid,deptno);
+    }
+
+    // --------->  Student Course   <--------- \\
+
+
+    @Override
+    public ResponseEntity<?> poststucourse(@RequestBody Studentscourse stucourse) {
+        Studentscourse value =  studentRepository.save(stucourse);
+        return new ResponseEntity<>(value,HttpStatus.CREATED);
+    }
+
+    @Override
+    public List<Studentscourse> getstudentcoursebystudentid(@PathVariable Integer studentid) {
+        return studentRepository.findStudentscourseByStudentid(studentid);
+    }
 }

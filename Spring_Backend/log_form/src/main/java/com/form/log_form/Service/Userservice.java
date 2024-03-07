@@ -33,6 +33,8 @@ public interface Userservice {
 
     public ResponseEntity<?> finddeptno(Integer deptno);
 
+    public List<User> getuserbystaffidcourseid( Integer courseno, Integer staffid);
+
     // -----------> Authorities <----------- \\
 
     public Authorities putAuth (Long id,Authorities auth);
@@ -80,4 +82,12 @@ public interface Userservice {
     public Staffcourse getstaffcoursebycourseno(Integer courseno, Integer staffid);
 
     public Staffcourse putstaffcoursebycourseno( Integer courseno, Integer staffid, Staffcourse staff );
+
+    public List<Staffcourse> getstaffcoursebystuid( Integer studentid,Integer deptno);
+
+    // --------->  Student Course   <--------- \\
+
+    public ResponseEntity<?> poststucourse(Studentscourse stucourse);
+
+    public List<Studentscourse> getstudentcoursebystudentid( Integer studentid);
 }

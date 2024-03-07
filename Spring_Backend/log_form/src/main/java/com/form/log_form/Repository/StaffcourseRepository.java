@@ -15,6 +15,9 @@ public interface StaffcourseRepository extends JpaRepository<Staffcourse,Long> {
     public List<Staffcourse> findByDeptno(Integer deptno);
 
 
-    @Query(value = "select * from staffcourse where staffid= :staffid and courseno= :courseno", nativeQuery = true)
+    @Query(value = "select staffcourse.* from staffcourse where staffid= :staffid and courseno= :courseno", nativeQuery = true)
     public Optional<Staffcourse> findByCourseno(@Param("courseno") Integer courseno, @Param("staffid") Integer staffid);
+
+    @Query(value = "select staffcourse.* from staffcourse where deptno = :depno and courseno not  in (select courseno from studentcourse where studentid = :stuid)",nativeQuery = true)
+    public List<Staffcourse> findByStudentid(@Param("stuid") Integer studentid,@Param("depno") Integer deptno);
 }

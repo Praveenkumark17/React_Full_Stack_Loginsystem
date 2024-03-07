@@ -86,20 +86,20 @@ function ForgotPassword() {
         console.log("ids:", result.id);
         setSendData(result);
 
-        // if (window.Email) {
-        //   window.Email.send(config)
-        //     .then((m) => {
-        //       message.open({ type: "success", content: "OTP Send" });
-        //       setSendData(result);
-        //       setDisabled(false);
-        //       setFeed(true);
-        //       setMail(e["mail"]);
-        //     })
-        //     .catch((err) => {
-        //       console.log(err);
-        //       message.open({ type: "error", content: "Server Error" });
-        //     });
-        // }
+        if (window.Email) {
+          window.Email.send(config)
+            .then((m) => {
+              message.open({ type: "success", content: "OTP Send" });
+              setSendData(result);
+              setDisabled(false);
+              setFeed(true);
+              setMail(e["mail"]);
+            })
+            .catch((err) => {
+              console.log(err);
+              message.open({ type: "error", content: "Server Error" });
+            });
+        }
 
         setDisabled(false);
         setFeed(true);
