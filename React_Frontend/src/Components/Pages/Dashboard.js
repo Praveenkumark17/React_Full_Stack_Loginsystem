@@ -56,6 +56,8 @@ function Dashboard(props) {
 
   const [time, setTime] = useState(new Date());
 
+  let ip = props.ip; 
+
   // const [collapsed, setCollapsed] = useState(false);
 
   const siderStyle = {
@@ -503,17 +505,17 @@ function Dashboard(props) {
             </Sider>
             <Content className="dash-content-out">
               <Routes>
-                <Route path="/home" element={<Dashboardhome />} />
-                <Route path="/edit/:id" element={<Editprofile />} />
-                <Route path="/changepass" element={<Changepassword />} />
-                <Route path="/listUser" element={<ListUser />} />
-                <Route path="/staff_list" element={<StaffList />} />
-                <Route path="/dept" element={<Department />} />
-                <Route path="/course" element={<Course />} />
-                <Route path="/staff_course" element={<Staffcourse />} />
-                <Route path="/my_course" element={<Mycourse />} />
-                <Route path="/student_course" element={<Studentscourse />} />
-                <Route path="/my_stu_course" element={<Mystucourse />} />
+                <Route path="/home" element={<Dashboardhome ip={ip}/>} />
+                <Route path="/edit/:id" element={<Editprofile ip={ip}/>} />
+                <Route path="/changepass" element={<Changepassword ip={ip}/>} />
+                <Route path="/listUser" element={<ListUser ip={ip}/>} />
+                <Route path="/staff_list" element={<StaffList ip={ip}/>} />
+                <Route path="/dept" element={<Department ip={ip}/>} />
+                <Route path="/course" element={<Course ip={ip}/>} />
+                <Route path="/staff_course" element={<Staffcourse ip={ip}/>} />
+                <Route path="/my_course" element={<Mycourse ip={ip}/>} />
+                <Route path="/student_course" element={<Studentscourse ip={ip}/>} />
+                <Route path="/my_stu_course" element={<Mystucourse ip={ip}/>} />
               </Routes>
             </Content>
           </Layout>
