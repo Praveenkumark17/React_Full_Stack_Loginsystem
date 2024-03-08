@@ -24,7 +24,7 @@ import { HashLoader } from "react-spinners";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 
-function Course() {
+function Course(props) {
   const [sessiondata, setSessiondata] = useState();
 
   const [deptdata, setDeptdata] = useState();
@@ -169,7 +169,7 @@ function Course() {
   useEffect(() => {
     const getdept = async () => {
       await axios
-        .get("http://localhost:8080/user/getdept")
+        .get(`http://${props.ip}:8080/user/getdept`)
         .then((res, index) => {
           console.log("getdept_success", res.data);
           const result = res.data;
@@ -185,7 +185,7 @@ function Course() {
 
   const onremove = async (id) => {
     await axios
-      .delete(`http://localhost:8080/user/deletecourse/${id}`)
+      .delete(`http://${props.ip}:8080/user/deletecourse/${id}`)
       .then((res) => (console.log(res.data), setTrigger(!trigger)))
       .catch((err) => console.log(err.data));
   };
@@ -193,7 +193,7 @@ function Course() {
   useEffect(() => {
     const getcourse = async () => {
       await axios
-        .get("http://localhost:8080/user/getcourse")
+        .get(`http://${props.ip}:8080/user/getcourse`)
         .then((res) => {
           console.log("get_course_success", res);
           const result = res.data;
@@ -229,7 +229,7 @@ function Course() {
   const onfinish = async (e) => {
     console.log("course_value", e);
     await axios
-      .post("http://localhost:8080/user/course", e)
+      .post(`http://${props.ip}:8080/user/course`, e)
       .then((res) => {
         console.log("postsuccess_course");
         form.resetFields();

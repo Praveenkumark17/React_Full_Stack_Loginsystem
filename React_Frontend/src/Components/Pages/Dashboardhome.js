@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRoutes } from "react-router-dom";
 import '../Css/dashhome.css';
 
-function Dashboardhome() {
+function Dashboardhome(props) {
   const [data, setData] = useState();
 
   const sessiondata = sessionStorage.getItem("userdata");
@@ -15,7 +15,7 @@ function Dashboardhome() {
       const datas = sessiondata ? JSON.parse(sessiondata) : {};
       const getuserdata = async () => {
         await axios
-          .get(`http://localhost:8080/user/getuserid/${datas.id}`)
+          .get(`http://${props.ip}:8080/user/getuserid/${datas.id}`)
           .then((res) => {
             console.log("dash-data:", res.data);
             const getdata = res.data;

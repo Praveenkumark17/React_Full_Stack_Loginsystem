@@ -6,7 +6,7 @@ import Highlighter from "react-highlight-words";
 import { useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 
-function Staffcourse() {
+function Staffcourse(props) {
   const [sessiondata, setSessiondata] = useState();
 
   const [getcourse, setGetcourse] = useState();
@@ -148,14 +148,14 @@ function Staffcourse() {
 
   const onregister = async (id) => {
     await axios
-      .get(`http://localhost:8080/user/getcourseid/${id}`)
+      .get(`http://${props.ip}:8080/user/getcourseid/${id}`)
       .then((res) => {
         console.log("course_byid", res.data);
         setGetcourseid(res.data);
         const mycourse = res.data;
 
         axios
-          .get(`http://localhost:8080/user/getdeptno/${mycourse?.deptno}`)
+          .get(`http://${props.ip}:8080/user/getdeptno/${mycourse?.deptno}`)
           .then((res) => {
             console.log("dept_no", res.data);
             const final = res.data;
@@ -172,7 +172,7 @@ function Staffcourse() {
             };
 
             axios
-              .post(`http://localhost:8080/user/poststaffcourse`, sendData)
+              .post(`http://${props.ip}:8080/user/poststaffcourse`, sendData)
               .then((res) => {
                 console.log("staffcourse_success", res.data);
                 setTrigger(!trigger);
@@ -195,7 +195,7 @@ function Staffcourse() {
       const getcourse = async () => {
         await axios
           .get(
-            `http://localhost:8080/user/findcoursebystaffkey/${sessiondata.id}`
+            `http://${props.ip}:8080/user/findcoursebystaffkey/${sessiondata.id}`
           )
           .then((res) => {
             console.log("get_course_success", res.data);

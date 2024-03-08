@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { HashLoader } from 'react-spinners';
 
-function Mystucourse() {
+function Mystucourse(props) {
   const [sessiondata, setSessiondata] = useState();
 
   const [getcourse, setGetcourse] = useState([]);
@@ -25,7 +25,7 @@ function Mystucourse() {
       const getcourse = async () => {
         await axios
           .get(
-            `http://localhost:8080/user/getstudentcoursebyid/${sessiondata.id}`
+            `http://${props.ip}:8080/user/getstudentcoursebyid/${sessiondata.id}`
           )
           .then((res) => {
             console.log("get_mycourse", res.data);

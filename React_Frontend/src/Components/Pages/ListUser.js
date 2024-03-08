@@ -21,7 +21,7 @@ import {
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
-function ListUser() {
+function ListUser(props) {
   const [user, setUser] = useState();
 
   const [getusers, Setgetusers] = useState();
@@ -184,7 +184,7 @@ function ListUser() {
 
   const onView = async (id) => {
     await axios
-      .get(`http://localhost:8080/user/getuserid/${id}`)
+      .get(`http://${props.ip}:8080/user/getuserid/${id}`)
       .then((res) => {
         console.log(res.data);
         Setselectuser(res.data);
@@ -212,7 +212,7 @@ function ListUser() {
 
   const onRemove = async (id) => {
     await axios
-      .delete(`http://localhost:8080/user/deleteuser/${id}`)
+      .delete(`http://${props.ip}:8080/user/deleteuser/${id}`)
       .then((res) => {
         console.log(res.data);
         Settrigger(res.data);
@@ -223,7 +223,7 @@ function ListUser() {
   useEffect(() => {
     const updateuser = async () => {
       await axios
-        .get("http://localhost:8080/user/getuser")
+        .get(`http://${props.ip}:8080/user/getuser`)
         .then((res) => {
           const result = res.data;
           if (userTypes == 1) {
@@ -265,7 +265,7 @@ function ListUser() {
     console.log("action_val", val);
     const acceptdata = { student: val };
     await axios
-      .put(`http://localhost:8080/user/studentauth/${id}`, acceptdata)
+      .put(`http://${props.ip}:8080/user/studentauth/${id}`, acceptdata)
       .then((res) => {
         console.log("accept-back:", res.data);
         Settrigger(res.data);

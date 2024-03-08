@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LuUser2 } from "react-icons/lu";
 import { MdLockOutline } from "react-icons/md";
 
-function Home() {
+function Home(props) {
   const [data, setData] = useState();
 
   const [getsdata, setgetsData] = useState();
@@ -24,7 +24,7 @@ function Home() {
   const sendData = async (value) => {
     const datas = { email: value.email, password: value.password };
     await axios
-      .post("http://localhost:8080/user/text", datas)
+      .post(`http://${props.ip}:8080/user/text`, datas)
       .then((res) => {
         const resdata = res.data;
         // const passphrase = "Praveen12GmqG7Io";
@@ -43,7 +43,7 @@ function Home() {
               type: 2,
             },
           });
-        }else{
+        } else {
           message.open({
             type: "error",
             content: "Wrong User Id",
@@ -67,11 +67,12 @@ function Home() {
       console.log("last pass:", getdata?.password);
       console.log("staff admin:", getdata?.authorities?.staff_admin);
       console.log(data);
-      if (
-        data.email === getdata.email &&
-        data.password === getdata.password
-      ) {
-        if (getdata?.authorities?.staff_admin == 1 || getdata?.authorities?.student == 1 || getdata?.authorities?.admin == 1) {
+      if (data.email === getdata.email && data.password === getdata.password) {
+        if (
+          getdata?.authorities?.staff_admin == 1 ||
+          getdata?.authorities?.student == 1 ||
+          getdata?.authorities?.admin == 1
+        ) {
           console.log("Log success:", getdata.password, data.email);
           message.open({
             type: "success",
@@ -106,75 +107,73 @@ function Home() {
 
   return (
     <>
-      <Row className="rows" align={"middle"}>
-        <Col span={8} offset={8}>
-          <Card
-            title={
-              <div
-                style={{
-                  textAlign: "center",
-                  fontSize: 18,
-                  fontWeight: "600",
-                  color: "rgb(16, 127, 253)",
-                }}
-              >
-                Sign In
-              </div>
-            }
-            className="logcards"
-          >
-            <Form
-              onFinish={onfinished}
-              autoComplete="off"
-              style={{ marginTop: "20px" }}
+      <Flex className="log-main" align="center" justify="center">
+        <Card
+          title={
+            <div
+              style={{
+                textAlign: "center",
+                fontSize: 18,
+                fontWeight: "600",
+                color: "rgb(16, 127, 253)",
+              }}
             >
-              <Form.Item
-                name={"email"}
-                rules={[{ required: true, message: "please enter email id" }]}
-              >
-                <Input
-                  addonBefore={<LuUser2 size={20} />}
-                  name="email"
-                  placeholder="Enter the email id"
-                />
-              </Form.Item>
-              <Form.Item
-                name={"password"}
-                rules={[{ required: true, message: "please enter password" }]}
-              >
-                <Input.Password
-                  addonBefore={<MdLockOutline size={20} />}
-                  name="password"
-                  placeholder="Enter the user password"
-                />
-              </Form.Item>
-              <Flex justify="space-between" className="but_flex">
-                <Flex vertical>
-                  <Form.Item>
-                    <p className="new_user_but">
-                      <Link to={"/register"} className="but_newuser">
-                        New User? Sign Up
-                      </Link>
-                    </p>
-                    <p className="new_user_but">
-                      <Link to={"/forgot_Password"} className="but_forgotuser">
-                        Forgot Password?
-                      </Link>
-                    </p>
-                  </Form.Item>
-                </Flex>
-                <Flex justify="center" vertical>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Submit
-                    </Button>
-                  </Form.Item>
-                </Flex>
+              Sign In
+            </div>
+          }
+          className="logcards"
+        >
+          <Form
+            onFinish={onfinished}
+            autoComplete="off"
+            style={{ marginTop: "20px" }}
+          >
+            <Form.Item
+              name={"email"}
+              rules={[{ required: true, message: "please enter email id" }]}
+            >
+              <Input
+                addonBefore={<LuUser2 size={20} />}
+                name="email"
+                placeholder="Enter the email id"
+              />
+            </Form.Item>
+            <Form.Item
+              name={"password"}
+              rules={[{ required: true, message: "please enter password" }]}
+            >
+              <Input.Password
+                addonBefore={<MdLockOutline size={20} />}
+                name="password"
+                placeholder="Enter the user password"
+              />
+            </Form.Item>
+            <Flex justify="space-between" className="but_flex">
+              <Flex vertical>
+                <Form.Item>
+                  <p className="new_user_but">
+                    <Link to={"/register"} className="but_newuser">
+                      New User? Sign Up
+                    </Link>
+                  </p>
+                  <p className="new_user_but">
+                    <Link to={"/forgot_Password"} className="but_forgotuser">
+                      Forgot Password?
+                    </Link>
+                  </p>
+                </Form.Item>
               </Flex>
-            </Form>
-          </Card>
-        </Col>
-      </Row>
+              <Flex justify="center" vertical>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Flex>
+            </Flex>
+          </Form>
+        </Card>
+      </Flex>
     </>
   );
 }

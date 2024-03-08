@@ -6,7 +6,7 @@ import "../Css/mycourse.css";
 import { HashLoader } from "react-spinners";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
-function Mycourse() {
+function Mycourse(props) {
   const [sessiondata, setSessiondata] = useState();
 
   const [getcourse, setGetcourse] = useState([]);
@@ -28,7 +28,7 @@ function Mycourse() {
     if (sessiondata) {
       const getcourse = async () => {
         await axios
-          .get(`http://localhost:8080/user/getstaffcourseid/${sessiondata.id}`)
+          .get(`http://${props.ip}:8080/user/getstaffcourseid/${sessiondata.id}`)
           .then((res) => {
             console.log("get_mycourse", res.data);
             const result = res.data;
@@ -47,7 +47,7 @@ function Mycourse() {
     console.log("staff_value", cno + "-" + sessiondata.id);
     await axios
       .get(
-        `http://localhost:8080/user/getuserbystaffidcourseid/${cno}/${sessiondata.id}`
+        `http://${props.ip}:8080/user/getuserbystaffidcourseid/${cno}/${sessiondata.id}`
       )
       .then((res) => {
         console.log(res.data);

@@ -1,5 +1,9 @@
-.logcards {
+.log-main{
+  height: 100%;
   width: 100%;
+}
+.logcards {
+  width: 32vw;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 }
@@ -28,4 +32,13 @@
 }
 .but_forgotuser:hover {
   color: rgb(253, 129, 129);
+}
+
+@media only screen and (max-width: 426px) and (min-width: 0px) {
+  .log-main{
+    height: 90%;
+  }
+  .logcards{
+    width: 90vw;
+  }
 }

@@ -16,7 +16,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MdLockOpen } from "react-icons/md";
 
-function Changepassword() {
+function Changepassword(props) {
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ function Changepassword() {
     const send = { password: value.password };
     if (value.opassword == data.password) {
       await axios
-        .put(`http://localhost:8080/user/updatepass/${data.id}`, send)
+        .put(`http://${props.ip}:8080/user/updatepass/${data.id}`, send)
         .then((res) => {
           console.log("put pass succ:", res);
           message.open({

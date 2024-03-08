@@ -1,16 +1,18 @@
-.nav-menus{
-  height: 10px;
-}
-.menu {
-  display: flex;
+.nav-menus {
+  height: 8vh;
 }
 .menuitem1 {
   font-weight: bold;
   font-size: 17px;
   color: rgb(0, 191, 255);
+  height: 8vh;
+  display: flex;
+  align-items: center;
 }
 .menuitem2 {
-  justify-content: space-around;
+  height: 8vh;
+  display: flex;
+  align-items: center;
 }
 .navbut,
 .navbutsub {
@@ -24,6 +26,25 @@
 .time {
   font-weight: 600;
   font-size: 16px;
-  /* margin-left: 150px; */
   color: rgb(165, 216, 165);
+}
+.time-flex {
+  display: flex;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 426px) and (min-width: 0px) {
+  .time-flex {
+    display: none;
+  }
+  .menuitem2 {
+    margin-top: .5vh;
+  }
+}
+
+@media only screen and (min-width: 426px) {
+  .time-flex {
+    display: block;
+    margin-left: 21%;
+  }
 }

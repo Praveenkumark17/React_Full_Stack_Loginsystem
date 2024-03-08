@@ -16,7 +16,7 @@ import CryptoJS from "crypto-js";
 import "../Css/resetpass.css";
 import axios from "axios";
 
-function ResetPassword() {
+function ResetPassword(props) {
   const [data, setData] = useState();
 
   const [forms] = Form.useForm();
@@ -65,7 +65,7 @@ function ResetPassword() {
     // console.log("reset_encrypt:", e.password);
     if (e.password) {
       await axios
-        .put(`http://localhost:8080/user/updatepass/${data.id}`, { password: e.password })
+        .put(`http://${props.ip}:8080/user/updatepass/${data.id}`, { password: e.password })
         .then((res) => {
           console.log("put pass succ:", res.data);
           forms.resetFields();

@@ -17,7 +17,7 @@ import { ArrowLeftOutlined, SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 
-function Department() {
+function Department(props) {
   const [trigger, setTrigger] = useState(false);
 
   const [getdept, setgetDept] = useState();
@@ -165,14 +165,14 @@ function Department() {
 
   const onremove = async (id) => {
     await axios
-      .delete(`http://localhost:8080/user/deletedept/${id}`)
+      .delete(`http://${props.ip}:8080/user/deletedept/${id}`)
       .then((res) => (console.log(res.data), setTrigger(!trigger)))
       .catch((err) => console.log(err.data));
   };
 
   const onview = async (deptno, id) => {
     await axios
-      .get(`http://localhost:8080/user/userdeptno/${deptno}`)
+      .get(`http://${props.ip}:8080/user/userdeptno/${deptno}`)
       .then((res) => {
         console.log("deptno", res.data);
         setSelecteddept(res.data);
@@ -181,7 +181,7 @@ function Department() {
       .catch((err) => console.log("dept_err", err.data));
 
     await axios
-      .get(`http://localhost:8080/user/getdeptid/${id}`)
+      .get(`http://${props.ip}:8080/user/getdeptid/${id}`)
       .then((res) => {
         console.log("id", res.data);
         setSelected(res.data);
@@ -196,7 +196,7 @@ function Department() {
   useEffect(() => {
     const getdept = async () => {
       await axios
-        .get("http://localhost:8080/user/getdept")
+        .get(`http://${props.ip}:8080/user/getdept`)
         .then((res, index) => {
           console.log("getdept_success", res.data);
           const result = res.data;
@@ -240,7 +240,7 @@ function Department() {
     const num = e["dept_num"];
     const save_data = { deptname: dname, deptno: num, studentcount: 0 };
     await axios
-      .post("http://localhost:8080/user/dept", save_data)
+      .post(`http://${props.ip}:8080/user/dept`, save_data)
       .then((res) => {
         console.log("dept_success", res.data);
         forms.resetFields();

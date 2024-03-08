@@ -21,7 +21,7 @@ import axios from "axios";
 import { LiaUserEditSolid } from "react-icons/lia";
 import { LuUser2 } from "react-icons/lu";
 
-function EditProfile() {
+function EditProfile(props) {
   const [edata, setEData] = useState([]);
 
   const [enable, setEnable] = useState(true);
@@ -99,7 +99,7 @@ function EditProfile() {
     const newValue = { ...value, dob };
     console.log(value.dob);
     await axios
-      .put(`http://localhost:8080/user/update/${edata.id}`, newValue)
+      .put(`http://${props.ip}:8080/user/update/${edata.id}`, newValue)
       .then((res) => {
         console.log("put success:", res.data);
         setUpdate(res.data);

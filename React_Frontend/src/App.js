@@ -14,7 +14,6 @@ import Dashboard from "./Components/Pages/Dashboard";
 import Editprofile from "./Components/Pages/Editprofile";
 import Changepassword from "./Components/Pages/Changepassword";
 import ListUser from "./Components/Pages/ListUser";
-import Upimages from "./Components/Pages/Upimages";
 import ForgotPassword from "./Components/Pages/ForgotPassword";
 import Demo from "./Components/Pages/Demo";
 import ResetPassword from "./Components/Pages/ResetPassword";
@@ -29,6 +28,7 @@ import Studentscourse from "./Components/Pages/Studentscourse";
 import Mystucourse from "./Components/Pages/Mystucourse";
 
 function Apps() {
+  const ip = "192.168.236.79";
   let routes = useRoutes([
     {
       path: "/",
@@ -39,11 +39,11 @@ function Apps() {
           </Header>
           <Content className="content">
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/register" element={<Registration />} />
+              <Route path="/" element={<Home ip={ip}/>} />
+              <Route path="/register" element={<Registration ip={ip}/>} />
               <Route path="/i" element={<Demo />} />
-              <Route path="/forgot_Password" element={<ForgotPassword />} />
-              <Route path="/reset_Password" element={<ResetPassword />} />
+              <Route path="/forgot_Password" element={<ForgotPassword ip={ip}/>} />
+              <Route path="/reset_Password" element={<ResetPassword ip={ip}/>} />
             </Routes>
           </Content>
           <Footer className="footer">
@@ -52,28 +52,28 @@ function Apps() {
         </Layout>
       ),
       children: [
-        { path: "/", element: <Home /> },
-        { path: "register", element: <Registration /> },
+        { path: "/", element: <Home ip={ip}/> },
+        { path: "register", element: <Registration ip={ip}/> },
         { path: "i", element: <Demo /> },
-        { path: "forgot_Password", element: <ForgotPassword /> },
-        { path: "reset_Password", element: <ResetPassword /> },
+        { path: "forgot_Password", element: <ForgotPassword ip={ip}/> },
+        { path: "reset_Password", element: <ResetPassword ip={ip}/> },
       ],
     },
     {
       path: "dashboard",
-      element: <Dashboard />,
+      element: <Dashboard ip={ip}/>,
       children: [
-        { path: "home", element: <Dashboardhome /> },
-        { path: "edit/:id", element: <Editprofile /> },
-        { path: "changepass", element: <Changepassword /> },
-        { path: "listUser", element: <ListUser /> },
-        { path: "staff_list", element: <StaffList /> },
-        { path: "dept", element: <Department /> },
-        { path: "course", element: <Course /> },
-        { path: "staff_course", element: <Staffcourse /> },
-        { path: "my_course", element: <Mycourse /> },
-        { path: "student_course", element: <Studentscourse /> },
-        { path: "my_stu_course", element: <Mystucourse /> },
+        { path: "home", element: <Dashboardhome ip={ip}/> },
+        { path: "edit/:id", element: <Editprofile ip={ip}/> },
+        { path: "changepass", element: <Changepassword ip={ip}/> },
+        { path: "listUser", element: <ListUser ip={ip}/> },
+        { path: "staff_list", element: <StaffList ip={ip}/> },
+        { path: "dept", element: <Department ip={ip}/> },
+        { path: "course", element: <Course ip={ip}/> },
+        { path: "staff_course", element: <Staffcourse ip={ip}/> },
+        { path: "my_course", element: <Mycourse ip={ip}/> },
+        { path: "student_course", element: <Studentscourse ip={ip}/> },
+        { path: "my_stu_course", element: <Mystucourse ip={ip}/> },
       ],
     },
     {

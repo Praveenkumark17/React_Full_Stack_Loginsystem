@@ -10,6 +10,7 @@ import {
   InputNumber,
   Row,
   Select,
+  Space,
   Upload,
   message,
 } from "antd";
@@ -21,7 +22,7 @@ import axios from "axios";
 import CryptoJS from "crypto-js";
 import { UploadOutlined } from "@ant-design/icons";
 
-function Registration() {
+function Registration(props) {
   const [finaldatas, setfinalDatas] = useState();
 
   const dateFormatList = ["YYYY-MM-DD"];
@@ -78,7 +79,7 @@ function Registration() {
   useEffect(() => {
     const getdept = async () => {
       await axios
-        .get("http://localhost:8080/user/getdept")
+        .get(`http://${props.ip}:8080/user/getdept`)
         .then((res, index) => {
           console.log("getdept_success", res.data);
           const result = res.data;
@@ -96,7 +97,7 @@ function Registration() {
     if (deptno) {
       const getdeptno = async () => {
         await axios
-          .get(`http://localhost:8080/user/getdeptno/${deptno}`)
+          .get(`http://${props.ip}:8080/user/getdeptno/${deptno}`)
           .then((res, index) => {
             console.log("getdeptno_success", res.data);
             const result = res.data;
@@ -121,7 +122,7 @@ function Registration() {
     if (trigger) {
       const userdata = async () => {
         await axios
-          .get("http://localhost:8080/user/getuser")
+          .get(`http://${props.ip}:8080/user/getuser`)
           .then(
             (res) => (console.log("get data:", res.data), setGetdata(res.data))
           )
@@ -131,7 +132,7 @@ function Registration() {
     }
   }, [trigger]);
 
-  const props = {
+  const prop = {
     name: "file",
     onRemove: (file) => {
       setFileList([]);
@@ -220,7 +221,7 @@ function Registration() {
             console.log("user", formData.getAll("user"));
 
             await axios
-              .post("http://localhost:8080/user/postuser", formData)
+              .post(`http://${props.ip}:8080/user/postuser`, formData)
               .then((res) => console.log("Backend_Success", res))
               .catch((err) => console.log("Backend_error", err));
 
@@ -228,7 +229,7 @@ function Registration() {
 
             await axios
               .put(
-                `http://localhost:8080/user/updatedept/${e["deptno"]}`,
+                `http://${props.ip}:8080/user/updatedept/${e["deptno"]}`,
                 student
               )
               .then((res) => console.log("dept_Backend_Success", res))
@@ -261,307 +262,307 @@ function Registration() {
 
   return (
     <>
-      <Row className="register-row" align={"middle"}>
-        <Col span={8} offset={8}>
-          <Card
-            title={
-              <div
-                style={{
-                  textAlign: "center",
-                  fontSize: 18,
-                  fontWeight: "600",
-                  color: "rgb(16, 127, 253)",
-                }}
-              >
-                Sign Up
-              </div>
-            }
-            className="logcard"
-          >
-            <div className="cardrow">
-              <Row>
-                <Col span={20} offset={2} className="cardcol">
-                  <Form
-                    form={forms}
-                    onFinish={onFinish}
-                    autoComplete="off"
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-end",
-                      flexDirection: "column",
-                    }}
+      <Flex className="register-row" align="center" justify="center">
+        <Card
+          title={
+            <div
+              style={{
+                textAlign: "center",
+                fontSize: 18,
+                fontWeight: "600",
+                color: "rgb(16, 127, 253)",
+              }}
+            >
+              Sign Up
+            </div>
+          }
+          className="reg-logcard"
+        >
+          <div className="cardrow">
+            <Row>
+              <Col span={20} offset={2} className="cardcol">
+                <Form
+                  form={forms}
+                  onFinish={onFinish}
+                  autoComplete="off"
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    flexDirection: "column",
+                  }}
+                  className="form-in"
+                >
+                  <Form.Item
+                    name={"firstname"}
+                    label={"FirstName"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please enter firstname",
+                        pattern: /^[A-Z][a-z]{2,20}$/,
+                      },
+                    ]}
+                    hasFeedback
                   >
+                    <Input
+                      name="firstname"
+                      placeholder="Enter the Firstname"
+                      className="input"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"lastname"}
+                    label={"LastName"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please enter lastname",
+                        pattern: /^[A-Za-z]{1,10}$/,
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input
+                      name="lastname"
+                      placeholder="Enter the Lastname"
+                      className="input"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"dob"}
+                    label={"Dob"}
+                    rules={[{ required: true, message: "please pick dob" }]}
+                    hasFeedback
+                  >
+                    <DatePicker
+                      format={dateFormatList}
+                      onChange={ondate}
+                      className="input"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"age"}
+                    label={"Age"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please enter the age",
+                      },
+                      {
+                        message: "Age between 20 - 60",
+                        pattern: /^[2-6]\d{1}$/,
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <InputNumber
+                      className="input"
+                      type="number"
+                      placeholder="Enter the age"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"blood_group"}
+                    label={"BloodGroup"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please select blood group",
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Select
+                      placeholder="Select Blood group"
+                      style={{ width: "250px" }}
+                    >
+                      <Option value="A+">A+</Option>
+                      <Option value="A-">A-</Option>
+                      <Option value="B+">B+</Option>
+                      <Option value="B-">B-</Option>
+                      <Option value="AB+">AB+</Option>
+                      <Option value="AB-">AB-</Option>
+                      <Option value="O+">O+</Option>
+                      <Option value="O-">O-</Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item
+                    name={"mobile"}
+                    label={"Mobile.No"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please Enter Mobile.no",
+                      },
+                      {
+                        pattern: /^[6-9]\d{9}$/,
+                        message: "Invalid Mobile Number",
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <InputNumber
+                      className="input"
+                      placeholder="Enter the mobile.no"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"email"}
+                    label={"Email"}
+                    rules={[{ required: true, message: "please enter email" }]}
+                    hasFeedback
+                  >
+                    <Input
+                      name="email"
+                      placeholder="Enter the email"
+                      className="input"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"category"}
+                    label={"Category"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please select category",
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Select
+                      placeholder="Select category"
+                      style={{ width: "250px" }}
+                      onChange={onuser}
+                    >
+                      <Option value={1}>Staff Request</Option>
+                      <Option value={0}>Student</Option>
+                    </Select>
+                  </Form.Item>
+                  {user == "STUDENT-" ? (
                     <Form.Item
-                      name={"firstname"}
-                      label={"FirstName"}
+                      name={"deptno"}
+                      label={"Department"}
                       rules={[
                         {
                           required: true,
-                          message: "please enter firstname",
-                          pattern: /^[A-Z][a-z]{2,20}$/,
-                        },
-                      ]}
-                      hasFeedback
-                    >
-                      <Input
-                        name="firstname"
-                        placeholder="Enter the Firstname"
-                        className="input"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={"lastname"}
-                      label={"LastName"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please enter lastname",
-                          pattern: /^[A-Za-z]{1,10}$/,
-                        },
-                      ]}
-                      hasFeedback
-                    >
-                      <Input
-                        name="lastname"
-                        placeholder="Enter the Lastname"
-                        className="input"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={"dob"}
-                      label={"Dob"}
-                      rules={[{ required: true, message: "please pick dob" }]}
-                      hasFeedback
-                    >
-                      <DatePicker
-                        format={dateFormatList}
-                        onChange={ondate}
-                        className="input"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={"age"}
-                      label={"Age"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please enter the age",
-                        },
-                        {
-                          message: "Age between 20 - 60",
-                          pattern: /^[2-6]\d{1}$/,
-                        },
-                      ]}
-                      hasFeedback
-                    >
-                      <InputNumber
-                        className="input"
-                        type="number"
-                        placeholder="Enter the age"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={"blood_group"}
-                      label={"BloodGroup"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please select blood group",
+                          message: "please select department",
                         },
                       ]}
                       hasFeedback
                     >
                       <Select
-                        placeholder="Select Blood group"
+                        placeholder="Select Department"
                         style={{ width: "250px" }}
+                        onChange={onCount}
                       >
-                        <Option value="A+">A+</Option>
-                        <Option value="A-">A-</Option>
-                        <Option value="B+">B+</Option>
-                        <Option value="B-">B-</Option>
-                        <Option value="AB+">AB+</Option>
-                        <Option value="AB-">AB-</Option>
-                        <Option value="O+">O+</Option>
-                        <Option value="O-">O-</Option>
+                        {deptdata.map((data, index) => (
+                          <Option value={data.deptno}>{data.deptname}</Option>
+                        ))}
                       </Select>
                     </Form.Item>
-                    <Form.Item
-                      name={"mobile"}
-                      label={"Mobile.No"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please Enter Mobile.no",
+                  ) : (
+                    ""
+                  )}
+                  <Form.Item
+                    name={"password"}
+                    label={"Password"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please enter password",
+                        pattern:
+                          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input.Password
+                      name="password"
+                      placeholder="Enter the password"
+                      className="input"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"cpassword"}
+                    dependencies={["password"]}
+                    label={"Re-Password"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please enter re-password",
+                      },
+                      ({ getFieldValue }) => ({
+                        validator(_, value) {
+                          if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                          }
+                          return Promise.reject(
+                            new Error(`Password Does't match!`)
+                          );
                         },
-                        {
-                          pattern: /^[6-9]\d{9}$/,
-                          message: "Invalid Mobile Number",
-                        },
-                      ]}
-                      hasFeedback
-                    >
-                      <InputNumber
-                        className="input"
-                        placeholder="Enter the mobile.no"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={"email"}
-                      label={"Email"}
-                      rules={[
-                        { required: true, message: "please enter email" },
-                      ]}
-                      hasFeedback
-                    >
-                      <Input
-                        name="email"
-                        placeholder="Enter the email"
-                        className="input"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={"category"}
-                      label={"Category"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please select category",
-                        },
-                      ]}
-                      hasFeedback
-                    >
-                      <Select
-                        placeholder="Select category"
-                        style={{ width: "250px" }}
-                        onChange={onuser}
-                      >
-                        <Option value={1}>Staff Request</Option>
-                        <Option value={0}>Student</Option>
-                      </Select>
-                    </Form.Item>
-                    {user == "STUDENT-" ? (
-                      <Form.Item
-                        name={"deptno"}
-                        label={"Department"}
-                        rules={[
-                          {
-                            required: true,
-                            message: "please select department",
-                          },
-                        ]}
-                        hasFeedback
-                      >
-                        <Select
-                          placeholder="Select Department"
-                          style={{ width: "250px" }}
-                          onChange={onCount}
+                      }),
+                    ]}
+                    hasFeedback
+                  >
+                    <Input.Password
+                      name="cpassword"
+                      placeholder="Enter the re-password"
+                      className="input"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name={"file"}
+                    label={"Images"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "please upload Image",
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Upload maxCount={1} {...prop}>
+                      <Button icon={<UploadOutlined />} className="input">
+                        Click to Upload
+                      </Button>
+                    </Upload>
+                    {imageUrl && (
+                      <>
+                        <Image.PreviewGroup
+                          preview={{
+                            onChange: (current, prev) =>
+                              console.log(
+                                `current index: ${current}, prev index: ${prev}`
+                              ),
+                          }}
                         >
-                          {deptdata.map((data, index) => (
-                            <Option value={data.deptno}>{data.deptname}</Option>
-                          ))}
-                        </Select>
-                      </Form.Item>
-                    ) : (
-                      ""
+                          <Image width={100} src={imageUrl} />
+                        </Image.PreviewGroup>
+                      </>
                     )}
-                    <Form.Item
-                      name={"password"}
-                      label={"Password"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please enter password",
-                          pattern:
-                            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/,
-                        },
-                      ]}
-                      hasFeedback
-                    >
-                      <Input.Password
-                        name="password"
-                        placeholder="Enter the password"
-                        className="input"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={"cpassword"}
-                      dependencies={["password"]}
-                      label={"Re-Password"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please enter re-password",
-                        },
-                        ({ getFieldValue }) => ({
-                          validator(_, value) {
-                            if (!value || getFieldValue("password") === value) {
-                              return Promise.resolve();
-                            }
-                            return Promise.reject(
-                              new Error(`Password Does't match!`)
-                            );
-                          },
-                        }),
-                      ]}
-                      hasFeedback
-                    >
-                      <Input.Password
-                        name="cpassword"
-                        placeholder="Enter the re-password"
-                        className="input"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name={"file"}
-                      label={"Images"}
-                      rules={[
-                        {
-                          required: true,
-                          message: "please upload Image",
-                        },
-                      ]}
-                      hasFeedback
-                    >
-                      <Upload maxCount={1} {...props}>
-                        <Button icon={<UploadOutlined />} className="input">
-                          Click to Upload
-                        </Button>
-                      </Upload>
-                      {imageUrl && (
-                        <>
-                          <Image.PreviewGroup
-                            preview={{
-                              onChange: (current, prev) =>
-                                console.log(
-                                  `current index: ${current}, prev index: ${prev}`
-                                ),
-                            }}
-                          >
-                            <Image width={100} src={imageUrl} />
-                          </Image.PreviewGroup>
-                        </>
-                      )}
-                    </Form.Item>
-                    <Flex justify="start">
+                  </Form.Item>
+                  <Flex justify="space-between">
+                    <Space size={"middle"}>
                       <Form.Item
                         name={"remember"}
-                        style={{ marginRight: "80px" }}
+                        // style={{ marginRight: "80px" }}
                       >
                         <Checkbox onChange={oncheck}>Remember me</Checkbox>
                       </Form.Item>
+                      <div className="buttons"></div>
                       <Form.Item>
                         <Button type="primary" htmlType="submit">
                           Submit
                         </Button>
                       </Form.Item>
-                    </Flex>
-                  </Form>
-                </Col>
-              </Row>
-            </div>
-          </Card>
-        </Col>
-      </Row>
+                    </Space>
+                  </Flex>
+                </Form>
+              </Col>
+            </Row>
+          </div>
+        </Card>
+      </Flex>
     </>
   );
 }

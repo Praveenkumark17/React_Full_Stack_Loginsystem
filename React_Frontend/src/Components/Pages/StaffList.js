@@ -7,7 +7,7 @@ import { HashLoader } from "react-spinners";
 import "../Css/stafflist.css";
 import Highlighter from "react-highlight-words";
 
-function StaffList() {
+function StaffList(props) {
   const [user, setUser] = useState();
 
   const [userlist, setUserList] = useState();
@@ -176,7 +176,7 @@ function StaffList() {
 
   const onView = async (id) => {
     await axios
-      .get(`http://localhost:8080/user/getuserid/${id}`)
+      .get(`http://${props.ip}:8080/user/getuserid/${id}`)
       .then((res) => {
         console.log(res.data);
         Setselectuser(res.data);
@@ -204,7 +204,7 @@ function StaffList() {
 
   const onRemove = async (id) => {
     await axios
-      .delete(`http://localhost:8080/user/deleteuser/${id}`)
+      .delete(`http://${props.ip}:8080/user/deleteuser/${id}`)
       .then((res) => {
         console.log(res.data);
         Settrigger(res.data);
@@ -216,7 +216,7 @@ function StaffList() {
     console.log("action_val", val);
     const acceptdata = { staff_admin: val };
     await axios
-      .put(`http://localhost:8080/user/staffauth/${id}`, acceptdata)
+      .put(`http://${props.ip}:8080/user/staffauth/${id}`, acceptdata)
       .then((res) => {
         console.log("accept-back:", res.data);
         Settrigger(res.data);
@@ -227,7 +227,7 @@ function StaffList() {
   useEffect(() => {
     const updateuser = async () => {
       await axios
-        .get("http://localhost:8080/user/getuser")
+        .get(`http://${props.ip}:8080/user/getuser`)
         .then((res) => {
           const result = res.data;
           if (userTypes == 2) {

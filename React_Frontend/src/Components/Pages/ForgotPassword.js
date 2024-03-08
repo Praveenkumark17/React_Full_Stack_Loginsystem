@@ -15,7 +15,7 @@ import { LuKeyRound, LuMail } from "react-icons/lu";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-function ForgotPassword() {
+function ForgotPassword(props) {
   const [disabled, setDisabled] = useState(true);
   const [feed, setFeed] = useState(false);
 
@@ -79,7 +79,7 @@ function ForgotPassword() {
     };
 
     await axios
-      .get(`http://localhost:8080/user/findemail/${e["mail"]}`)
+      .get(`http://${props.ip}:8080/user/findemail/${e["mail"]}`)
       .then((res) => {
         const result = res.data;
         console.log("success email:", result);

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import "../Css/studentcourse.css";
 
-function Studentscourse() {
+function Studentscourse(props) {
   const [sessiondata, setSessiondata] = useState();
 
   const [getcourse, setGetcourse] = useState([]);
@@ -26,7 +26,7 @@ function Studentscourse() {
       const getcourse = async () => {
         await axios
           .get(
-            `http://localhost:8080/user/getstaffcoursebystuid/${sessiondata.id}/${sessiondata.deptno}`
+            `http://${props.ip}:8080/user/getstaffcoursebystuid/${sessiondata.id}/${sessiondata.deptno}`
           )
           .then((res) => {
             console.log("get_mycourse", res.data);
@@ -55,7 +55,7 @@ function Studentscourse() {
       staffid:sid,
     };
     await axios
-      .get(`http://localhost:8080/user/getstaffcoursecourseno/${no}/${id}`)
+      .get(`http://${props.ip}:8080/user/getstaffcoursecourseno/${no}/${id}`)
       .then((res) => {
         console.log("getcourse_no_id_D", res.data);
         const result = res.data;
@@ -63,7 +63,7 @@ function Studentscourse() {
 
         axios
           .put(
-            `http://localhost:8080/user/putstaffcoursecount/${no}/${id}`,
+            `http://${props.ip}:8080/user/putstaffcoursecount/${no}/${id}`,
             sendvalue
           )
           .then((res) => {
@@ -76,7 +76,7 @@ function Studentscourse() {
       .catch((err) => console.log("getcourse_no_id_F", err.data));
 
     await axios
-      .post(`http://localhost:8080/user/poststucourse`, postvalue)
+      .post(`http://${props.ip}:8080/user/poststucourse`, postvalue)
       .then((res) => {
         console.log("post_stucourse", res);
         setTrigger(!trigger);

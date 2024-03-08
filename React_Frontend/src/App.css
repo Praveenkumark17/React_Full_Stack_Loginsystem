@@ -6,7 +6,6 @@ body {
   background-color: rgb(0, 21, 41) !important;
   position: fixed;
   bottom: 0;
-  height: 50px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -19,10 +18,16 @@ body {
   background: linear-gradient(145deg, rgb(195, 240, 200), rgb(80, 155, 245));
   background-size: cover;
   background-repeat: no-repeat;
-  height: 83vh;
+  height: 84vh;
 }
 .header{
     position: sticky;
     top: 0;
-    height: 9vh;
+    height: 8vh;
+}
+@media only screen and (max-width: 426px) and (min-width: 0px) {
+  .header{
+    padding: 0 20px;
+    /* height: 6vh; */
+  }
 }
